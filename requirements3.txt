@@ -27,7 +27,7 @@ pytest==3.1.1
 python-dateutil==2.8.0    # via botocore
 python-json-logger==0.1.11
 python-redis-lock==3.2.0
-pyyaml==3.12
+pyyaml==5.1
 rainbow-saddle==0.4.0
 redis==2.10.6
 requests==2.22.0          # via slackclient
