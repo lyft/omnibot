@@ -1,0 +1,69 @@
+version: "3.7"
+networks:
+  omnibot:
+    name: omnibot
+services:
+  omnibot-queuecreator:
+    image: lyft/omnibot
+    init: true
+    restart: on-failure
+    depends_on:
+      - sqs
+    env_file: ./config/development/omnibot.env
+    command: "python3 manage.py create-queues"
+    volumes:
+      - ./config/development/omnibot.conf:/etc/omnibot/omnibot.conf
+      - ./config/development/logging.conf:/etc/omnibot/logging.conf
+  omnibot:
+    image: lyft/omnibot
+    init: true
+    restart: on-failure
+    networks:
+      - default
+      - omnibot
+    ports:
+      - "80:80"
+    depends_on:
+      - redis
+      - sqs
+      - omnibot-queuecreator
+    env_file: ./config/development/omnibot.env
+    volumes:
+      - ./config/development/omnibot.conf:/etc/omnibot/omnibot.conf
+      - ./config/development/logging.conf:/etc/omnibot/logging.conf
+    command: "gunicorn --config /srv/omnibot/config/gunicorn.conf omnibot.wsgi:app --workers=2 -k gevent --access-logfile=- --error-logfile=-"
+  omnibot-webhook:
+    image: lyft/omnibot
+    init: true
+    restart: on-failure
+    networks:
+      - default
+      - omnibot
+    depends_on:
+     - redis
+     - sqs
+     - omnibot-queuecreator
+    env_file: ./config/development/omnibot.env
+    volumes:
+      - ./config/development/omnibot.conf:/etc/omnibot/omnibot.conf
+      - ./config/development/logging.conf:/etc/omnibot/logging.conf
+    command: "python3 -m omnibot.webhook_worker"
+  omnibot-watcher:
+    image: lyft/omnibot
+    restart: on-failure
+    init: true
+    depends_on:
+     - redis
+     - sqs
+     - omnibot-queuecreator
+    env_file: ./config/development/omnibot.env
+    volumes:
+      - ./config/development/omnibot.conf:/etc/omnibot/omnibot.conf
+      - ./config/development/logging.conf:/etc/omnibot/logging.conf
+    command: "python3 -m omnibot.watcher"
+  redis:
+    image: redis
+  sqs:
+    image: s12v/elasticmq
+    volumes:
+      - ./config/development/elasticmq.conf:/etc/elasticmq/elasticmq.conf

@@ -1,0 +1,87 @@
+# piptools: python3only
+
+
+# WSGI HTTP Server for UNIX
+# License: MIT
+gunicorn>=19.1.1,<20.0.0
+
+# A python library adding a json log formatter
+# License: BSD
+# Upstream url: http://github.com/madzak/python-json-logger
+python-json-logger==0.1.11
+
+# Flask service framework
+# License: BSD
+# Upstream url: http://github.com/mitsuhiko/flask/
+Flask>=1.0,<2.0
+
+# Scripting support for Flask
+# TODO: deprecated, replace with standard Flask scripting.
+# License: BSD
+# Upstream url: http://github.com/techniq/flask-script
+Flask-Script==2.0.5
+
+# Dispatching system for parties to subscribe to events
+# Supports per-endpoint timing in flask
+# License: MIT
+# Upstream url: https://pypi.python.org/pypi/blinker
+blinker==1.4
+
+# A wrapper around gunicorn to handle graceful restarts correctly
+# License: BSD
+rainbow-saddle>=0.4.0
+
+# A simple statsd client.
+# License: MIT
+# Upstream url: https://github.com/jsocol/pystatsd
+statsd==3.2.1
+
+# Coroutine-based network library
+# License: MIT
+# Upstream url: http://www.gevent.org/
+gevent==1.2.1
+
+# Lightweight in-process concurrent programming
+# License: MIT
+# Upstream url: https://github.com/python-greenlet/greenlet
+greenlet==0.4.12
+
+# YAML parser and emitter for Python
+# License: MIT
+# Upstream url: http://pyyaml.org/wiki/PyYAML
+PyYAML==3.12
+
+# The AWS SDK for Python
+# License: Apache2
+# Upstream url: https://github.com/boto/boto3
+boto3==1.4.5
+
+# Slack API clients for Web API and RTM API
+# License: MIT
+# Upstream url: https://github.com/slackapi/python-slackclient
+slackclient==1.0.7
+
+# Testing library
+# License: MIT
+# Upstream url: https://github.com/pytest-dev/pytest
+pytest==3.1.1
+
+# Thin-wrapper around the mock package for easier use with py.test
+# License: MIT
+# Upstream url: https://github.com/pytest-dev/pytest-mock/
+pytest-mock==1.1
+
+# Code coverage plugin for py.test
+# License: MIT
+# Upstream url: https://github.com/pytest-dev/pytest-cov
+pytest-cov==2.5.1
+
+# Python client for Redis key-value store
+# License: MIT
+# Upstream url: http://github.com/andymccurdy/redis-py
+redis==2.10.6
+
+# Lock context manager implemented via redis SETNX/BLPOP.
+# License: BSD
+# Upstream url: https://github.com/ionelmc/python-redis-lock
+python-redis-lock==3.2.0
