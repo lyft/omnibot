@@ -1,5 +1,10 @@
 name: Build and Deploy
-on: [push]
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
 jobs:
   build-and-deploy-docs:
     name: Build and publish docs
