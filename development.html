@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quickstart and Development &mdash; omnibot 1.0.0-2f02c3 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/omnibot.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Omnibot receiver libraries" href="receivers.html" />
+    <link rel="prev" title="Observability" href="observability.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> omnibot
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0-2f02c3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#quickstart-for-testing">Quickstart for testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#docker-installation">Docker installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#to-run-omnibot-in-docker">To run omnibot in Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#to-build-the-image">To build the image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#pip-installation">pip installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#make-a-virtualenv-and-install-pip-requirements">Make a virtualenv and install pip requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#manual-installation">Manual installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#clone-omnibot">Clone omnibot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#id1">Make a virtualenv and install pip requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#run-omnibot">Run omnibot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#example-minimal-configuration">Example Minimal Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#basic-configuration">Basic Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#configuration-file-configuration">Configuration File Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#teams">Teams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#bots">Bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#bot-credential-configuration">Bot Credential Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#urls-configuration-for-use-in-slack-app-dashboard">URLs Configuration for Use in Slack App Dashboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#sqs-configuration">SQS Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#redis-configuration">Redis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#statsd-configuration">Statsd Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#logging-configuration">Logging Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#handler-configuration">Handler Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#common-handler-configuration">Common Handler Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#message-handlers">Message Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#interactive-component-handlers">Interactive Component Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#slash-command-handlers">Slash Command Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#api-access-control-configuration">API Access Control Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="adding_new_slack_apps.html">Adding new slack apps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adding_new_slack_apps.html#adding-normal-slack-apps">Adding normal slack apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adding_new_slack_apps.html#adding-a-slack-app-for-use-as-a-primary-bot">Adding a slack app for use as a primary bot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="observability.html">Observability</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="observability.html#stats">Stats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#delivery-and-processing">Delivery and Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#webhook-worker-gevent-pool">Webhook Worker Gevent Pool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#watcher-worker-latency">Watcher Worker Latency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="observability.html#logs">Logs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#event-subscription-tracing-data">Event Subscription Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#slash-command-tracing-data">Slash Command Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#interactive-component-tracing-data">Interactive Component Tracing Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart and Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quickstart">Quickstart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#developing-new-bots">Developing new bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#making-and-testing-changes-to-omnibot-using-docker-and-docker-compose">Making and testing changes to omnibot using docker and docker-compose</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="receivers.html">Omnibot receiver libraries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="receivers.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="event_parsing.html">Event parsing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="event_parsing.html#event-subscription-events">Event Subscription Events</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="event_parsing.html#message-events">Message Events</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="event_parsing.html#interactive-component-events">Interactive Component Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_parsing.html#slash-command-events">Slash Command Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slack_proxying.html">Slack proxying</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slack_proxying.html#message-handlers">Message handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slack_proxying.html#slash-command-and-interactive-component-handlers">Slash command and interactive component handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="writing_new_callbacks.html">Writing new callback functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-of-conduct">Code of conduct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#contributing-code">Contributing code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#sign-the-contributor-license-agreement-cla">Sign the Contributor License Agreement (CLA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#file-issues-in-github">File issues in Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#submit-pull-requests">Submit pull requests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API endpoint</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#api-route-documentation">API route documentation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Python module documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autogen/omnibot.html">omnibot package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.authnz.html">omnibot.authnz package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.authnz.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.authnz.html#module-omnibot.authnz.envoy_checks">omnibot.authnz.envoy_checks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.authnz.html#module-omnibot.authnz">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.callbacks.html">omnibot.callbacks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.interactive_component_callbacks">omnibot.callbacks.interactive_component_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.message_callbacks">omnibot.callbacks.message_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.network_callbacks">omnibot.callbacks.network_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.slash_command_callbacks">omnibot.callbacks.slash_command_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.routes.html">omnibot.routes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.routes.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.routes.html#module-omnibot.routes.api">omnibot.routes.api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.routes.html#module-omnibot.routes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.scripts.html">omnibot.scripts package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#module-omnibot.scripts.omniredis">omnibot.scripts.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#module-omnibot.scripts.utils">omnibot.scripts.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#module-omnibot.scripts">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.services.html">omnibot.services package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services.omniredis">omnibot.services.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services.sqs">omnibot.services.sqs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services.stats">omnibot.services.stats module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.utils.html">omnibot.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.utils.html#module-omnibot.utils.settings">omnibot.utils.settings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.utils.html#module-omnibot.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.app">omnibot.app module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.processor">omnibot.processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.settings">omnibot.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.setup_logging">omnibot.setup_logging module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.watcher">omnibot.watcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.webhook_worker">omnibot.webhook_worker module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.wsgi">omnibot.wsgi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">omnibot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Quickstart and Development</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/development.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quickstart-and-development">
+<h1>Quickstart and Development<a class="headerlink" href="#quickstart-and-development" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>You’ll need a slack team (a slack workspace/account that omnibot will work within). You’ll need to <a class="reference external" href="https://stackoverflow.com/questions/40940327/what-is-the-simplest-way-to-find-a-slack-team-id-and-a-channel-id">find your team ID</a>.</p></li>
+<li><p>You’ll need <a class="reference internal" href="adding_new_slack_apps.html#adding-normal-slack-apps"><span class="std std-ref">a slack app (bot)</span></a> to connect to omnibot. You’ll need the app’s App ID, which is in the <code class="docutils literal notranslate"><span class="pre">Basic</span> <span class="pre">Information</span></code> section of the api dashboard.</p></li>
+<li><p>You’ll need the <code class="docutils literal notranslate"><span class="pre">Verification</span> <span class="pre">Token</span></code> (in the <code class="docutils literal notranslate"><span class="pre">Basic</span> <span class="pre">Information</span></code> section), and the <code class="docutils literal notranslate"><span class="pre">OAuth</span> <span class="pre">Access</span> <span class="pre">Token</span></code> and <code class="docutils literal notranslate"><span class="pre">Bot</span> <span class="pre">User</span> <span class="pre">OAuth</span> <span class="pre">Access</span> <span class="pre">Token</span></code> (both in the <code class="docutils literal notranslate"><span class="pre">OAuth</span> <span class="pre">&amp;</span> <span class="pre">Permissions</span></code> section) for your slack app.</p></li>
+<li><p>You’ll need <a class="reference internal" href="adding_new_slack_apps.html#adding-primary-bot-slack-apps"><span class="std std-ref">a primary bot</span></a>, which the watcher worker will use to poll some APIs in slack and cache their information. Omnibot’s cache is relatively critical to its operations, so you need a primary bot.</p></li>
+<li><p>You don’t necessarily need to be an admin in the slack team, but it’ll help. If you don’t have slack admin, you’ll need an admin to install your slack apps for you, and they may need to provide you with the oauth token.</p></li>
+</ol>
+</div>
+<div class="section" id="quickstart">
+<span id="id1"></span><h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<p>This quickstart will start omnibot, connect a slack app to omnibot, and have a very basic handler respond to messages.</p>
+<p>Add basic omnibot configuration:</p>
+<p><code class="docutils literal notranslate"><span class="pre">config/development/omnibot.env</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># A87654321 here is an example, and should be replaced with the app id for your slack app/bot</span>
+<span class="nv">CREDENTIALS_SLACK_OAUTH_BOT_TOKEN_A87654321</span><span class="o">=</span>xoxb-...
+<span class="nv">CREDENTIALS_SLACK_OAUTH_TOKEN_A87654321</span><span class="o">=</span>xoxp-...
+<span class="nv">CREDENTIALS_SLACK_VERIFICATION_TOKEN_A87654321</span><span class="o">=</span>...
+<span class="c1"># For development via docker-compose, any region is fine, since we&#39;re using fake AWS services</span>
+<span class="nv">AWS_DEFAULT_REGION</span><span class="o">=</span>us-east-1
+<span class="c1"># AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are not required, if this is accessible from a</span>
+<span class="c1"># metadata service (like metadataproxy). Without a metadata service, you need to add some</span>
+<span class="c1"># fake credentials here, or the fake AWS services will complain</span>
+<span class="nv">AWS_ACCESS_KEY_ID</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">AWS_SECRET_ACCESS_KEY</span><span class="o">=</span><span class="m">1</span>
+<span class="c1"># LOG_CONFIG_FILE isn&#39;t required, but watcher and webhook workers will have minimum and</span>
+<span class="c1"># unformatted log output otherwise</span>
+<span class="nv">LOG_CONFIG_FILE</span><span class="o">=</span>/etc/omnibot/logging.yaml
+<span class="c1"># Redis and SQS settings to match what&#39;s in the docker-compose setup</span>
+<span class="nv">REDIS_HOST</span><span class="o">=</span>redis
+<span class="nv">REDIS_PORT</span><span class="o">=</span><span class="m">6379</span>
+<span class="nv">SQS_QUEUE_NAME</span><span class="o">=</span>omnibot
+<span class="nv">SQS_URL</span><span class="o">=</span>http://sqs:9203
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">config/development/omnibot.conf</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># The basic authorization block required to accept events from slack</span>
+<span class="l l-Scalar l-Scalar-Plain">authorization</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">checks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.authnz:allowed_paths&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">paths</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;/api/v1/slack/event&quot;</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;/api/v1/slack/slash_command&quot;</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;/api/v1/slack/interactive&quot;</span>
+<span class="c1"># A friendly name to associate with your team, and its team ID</span>
+<span class="c1"># The friendly name is used in API endpoints you may make accessible</span>
+<span class="l l-Scalar l-Scalar-Plain">teams</span><span class="p p-Indicator">:</span>
+  <span class="s">&quot;friendly-name-for-your-team&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;T12345678&quot;</span>
+<span class="c1"># The dict of bots associated with your team. The friendly name for your bot is used</span>
+<span class="c1"># to reference the bot in the config, and also in API endpoints you may make accessible.</span>
+<span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+  <span class="s">&quot;friendly-name-for-your-team&quot;</span><span class="p p-Indicator">:</span>
+    <span class="s">&quot;your-slack-app-name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;A87654321&quot;</span>
+<span class="c1"># The bot that omnibot proxy will use to poll slack for user, channel, etc. info</span>
+<span class="l l-Scalar l-Scalar-Plain">primary_bot</span><span class="p p-Indicator">:</span>
+  <span class="s">&quot;friendly-name-for-your-team&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;your-slack-app-name&quot;</span>
+<span class="c1"># Event handlers, for routing incoming slack events to callback functions</span>
+<span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">message_handlers</span><span class="p p-Indicator">:</span>
+    <span class="c1"># A command handler that matches any command sent to your-slack-app-name, in</span>
+    <span class="c1"># friendly-name-for-your-team and sends it to a test_handler.</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">match</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">match_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;command&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&quot;testing&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;friendly-name-for-your-team&quot;</span>
+           <span class="p p-Indicator">-</span> <span class="s">&quot;your-slack-app-name&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.message_callbacks:test_callback&quot;</span>
+          <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">text</span><span class="p p-Indicator">:</span> <span class="s">&#39;test&#39;</span>
+</pre></div>
+</div>
+<p>Start omnibot, using docker-compose:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;path-to-omnibot-repo&gt;
+docker-compose up
+</pre></div>
+</div>
+<p>Note that it’s normal to see some errors on startup from docker compose about missing SQS queues or boto connection refused while things are starting up. Until local SQS starts up, dependent services fail and restart. Eventually, you should see a poll loop with output like the following: <code class="docutils literal notranslate"><span class="pre">omnibot-webhook_1</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">|</span> <span class="pre">{&quot;asctime&quot;:</span> <span class="pre">&quot;2019-08-30</span> <span class="pre">19:02:01,295&quot;,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;__main__&quot;,</span> <span class="pre">&quot;levelname&quot;:</span> <span class="pre">&quot;DEBUG&quot;,</span> <span class="pre">&quot;message&quot;:</span> <span class="pre">&quot;No</span> <span class="pre">messages,</span> <span class="pre">continuing&quot;}</span></code></p>
+<p>Start <a class="reference external" href="https://ngrok.com/download">ngrok</a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/&lt;path-to-ngrok-binary&gt;/ngrok http <span class="m">80</span>
+</pre></div>
+</div>
+<p>Connect your slack app’s <code class="docutils literal notranslate"><span class="pre">Event</span> <span class="pre">Subscriptions</span></code> to the https ngrok link (see the <cite>Forwarding</cite> section of the ngrok command output), using the <code class="docutils literal notranslate"><span class="pre">Event</span> <span class="pre">Subscriptions</span></code> section of the slack api dashboard. Example URL: <code class="docutils literal notranslate"><span class="pre">https://abcd.ngrok.com/api/v1/slack/event</span></code></p>
+<p>You should likely add the following event subscriptions:</p>
+<ul class="simple">
+<li><p>Bot Events</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">message.channels</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">message.groups</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">message.im</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">message.mpim</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>Invite your app into a channel in your slack workspace, and send any message to it: <code class="docutils literal notranslate"><span class="pre">&#64;your-slack-app-name</span> <span class="pre">hello</span></code></p>
+<p>The app should respond back with <code class="docutils literal notranslate"><span class="pre">test</span></code> in a thread.</p>
+<div class="section" id="developing-new-bots">
+<h3>Developing new bots<a class="headerlink" href="#developing-new-bots" title="Permalink to this headline">¶</a></h3>
+<p>The recommended way to develop bots using omnibot is to match events using handlers, and to configure those handlers to forward events to your own backend services using the http network callback in the callbacks. This generally requires only configuration changes in omnibot, unless the omnibot proxy doesn’t currently have support for the slack feature you need to use. See the <a class="reference internal" href="configuration.html#handler-configuration"><span class="std std-ref">handler configuration</span></a> for common ways to match and forward events to your own services.</p>
+<p>It’s possible to add a callback module directly to omnibot, using it as a framework, rather than as a proxy, but you should likely use the http callback if any of these conditions are true:</p>
+<ul class="simple">
+<li><p>If you need to add a new pip requirement to omnibot (this may cause you to have conflicts in dependency requirements, or may change a library to an incompatible version)</p></li>
+<li><p>If you need to make a large number of external API calls (this will cause concurrency issues as it’ll hold your request in the thread pool longer)</p></li>
+<li><p>If you need to use a lot of CPU (this will cause concurrency issues, as your callback won’t yield)</p></li>
+<li><p>If you need to store data</p></li>
+</ul>
+<p>Basically, you want to avoid one callback causing issues for the rest of omnibot’s bots and callbacks. Isolating your bot’s code in a new service ensures you’re isolating the operations and availability of your bot as well.</p>
+</div>
+<div class="section" id="making-and-testing-changes-to-omnibot-using-docker-and-docker-compose">
+<h3>Making and testing changes to omnibot using docker and docker-compose<a class="headerlink" href="#making-and-testing-changes-to-omnibot-using-docker-and-docker-compose" title="Permalink to this headline">¶</a></h3>
+<p>If you want to develop against omnibot itself, the recommended approach is to use docker and docker-compose. The standard process is:</p>
+<ol class="arabic simple">
+<li><p>docker-compose up</p></li>
+<li><p>Make changes</p></li>
+<li><p>docker build -t lyft/omnibot .</p></li>
+<li><p>docker-compose restart</p></li>
+<li><p>&lt;repeat&gt;</p></li>
+</ol>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="receivers.html" class="btn btn-neutral float-right" title="Omnibot receiver libraries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="observability.html" class="btn btn-neutral float-left" title="Observability" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2019, Omnibot Project Authors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

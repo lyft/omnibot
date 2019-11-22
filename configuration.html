@@ -1,0 +1,829 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configuration &mdash; omnibot 1.0.0-2f02c3 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/omnibot.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Adding new slack apps" href="adding_new_slack_apps.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> omnibot
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0-2f02c3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Usage</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#quickstart-for-testing">Quickstart for testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#docker-installation">Docker installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#to-run-omnibot-in-docker">To run omnibot in Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#to-build-the-image">To build the image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#pip-installation">pip installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#make-a-virtualenv-and-install-pip-requirements">Make a virtualenv and install pip requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#manual-installation">Manual installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#clone-omnibot">Clone omnibot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#id1">Make a virtualenv and install pip requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#run-omnibot">Run omnibot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-minimal-configuration">Example Minimal Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-configuration">Basic Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-file-configuration">Configuration File Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#teams">Teams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bots">Bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bot-credential-configuration">Bot Credential Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#urls-configuration-for-use-in-slack-app-dashboard">URLs Configuration for Use in Slack App Dashboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sqs-configuration">SQS Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#redis-configuration">Redis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#statsd-configuration">Statsd Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logging-configuration">Logging Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#handler-configuration">Handler Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#common-handler-configuration">Common Handler Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#message-handlers">Message Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#interactive-component-handlers">Interactive Component Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#slash-command-handlers">Slash Command Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#api-access-control-configuration">API Access Control Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="adding_new_slack_apps.html">Adding new slack apps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adding_new_slack_apps.html#adding-normal-slack-apps">Adding normal slack apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adding_new_slack_apps.html#adding-a-slack-app-for-use-as-a-primary-bot">Adding a slack app for use as a primary bot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="observability.html">Observability</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="observability.html#stats">Stats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#delivery-and-processing">Delivery and Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#webhook-worker-gevent-pool">Webhook Worker Gevent Pool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#watcher-worker-latency">Watcher Worker Latency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="observability.html#logs">Logs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#event-subscription-tracing-data">Event Subscription Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#slash-command-tracing-data">Slash Command Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#interactive-component-tracing-data">Interactive Component Tracing Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Quickstart and Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#quickstart">Quickstart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="development.html#developing-new-bots">Developing new bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development.html#making-and-testing-changes-to-omnibot-using-docker-and-docker-compose">Making and testing changes to omnibot using docker and docker-compose</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="receivers.html">Omnibot receiver libraries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="receivers.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="event_parsing.html">Event parsing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="event_parsing.html#event-subscription-events">Event Subscription Events</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="event_parsing.html#message-events">Message Events</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="event_parsing.html#interactive-component-events">Interactive Component Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_parsing.html#slash-command-events">Slash Command Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slack_proxying.html">Slack proxying</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slack_proxying.html#message-handlers">Message handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slack_proxying.html#slash-command-and-interactive-component-handlers">Slash command and interactive component handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="writing_new_callbacks.html">Writing new callback functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-of-conduct">Code of conduct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#contributing-code">Contributing code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#sign-the-contributor-license-agreement-cla">Sign the Contributor License Agreement (CLA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#file-issues-in-github">File issues in Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#submit-pull-requests">Submit pull requests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API endpoint</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#api-route-documentation">API route documentation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Python module documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autogen/omnibot.html">omnibot package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.authnz.html">omnibot.authnz package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.authnz.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.authnz.html#module-omnibot.authnz.envoy_checks">omnibot.authnz.envoy_checks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.authnz.html#module-omnibot.authnz">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.callbacks.html">omnibot.callbacks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.interactive_component_callbacks">omnibot.callbacks.interactive_component_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.message_callbacks">omnibot.callbacks.message_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.network_callbacks">omnibot.callbacks.network_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.slash_command_callbacks">omnibot.callbacks.slash_command_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.routes.html">omnibot.routes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.routes.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.routes.html#module-omnibot.routes.api">omnibot.routes.api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.routes.html#module-omnibot.routes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.scripts.html">omnibot.scripts package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#module-omnibot.scripts.omniredis">omnibot.scripts.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#module-omnibot.scripts.utils">omnibot.scripts.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#module-omnibot.scripts">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.services.html">omnibot.services package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services.omniredis">omnibot.services.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services.sqs">omnibot.services.sqs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services.stats">omnibot.services.stats module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.utils.html">omnibot.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.utils.html#module-omnibot.utils.settings">omnibot.utils.settings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.utils.html#module-omnibot.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.app">omnibot.app module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.processor">omnibot.processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.settings">omnibot.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.setup_logging">omnibot.setup_logging module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.watcher">omnibot.watcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.webhook_worker">omnibot.webhook_worker module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.wsgi">omnibot.wsgi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">omnibot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Configuration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/configuration.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="example-minimal-configuration">
+<h2>Example Minimal Configuration<a class="headerlink" href="#example-minimal-configuration" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">omnibot.env</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CREDENTIALS_SLACK_OAUTH_BOT_TOKEN_A87654321</span><span class="o">=</span>xoxb-...
+<span class="nv">CREDENTIALS_SLACK_OAUTH_TOKEN_A87654321</span><span class="o">=</span>xoxp-...
+<span class="nv">CREDENTIALS_SLACK_VERIFICATION_TOKEN_A87654321</span><span class="o">=</span>...
+<span class="nv">AWS_DEFAULT_REGION</span><span class="o">=</span>us-east-1
+<span class="c1"># AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are not required, if this is accessible from the metadata service</span>
+<span class="nv">AWS_ACCESS_KEY_ID</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">AWS_SECRET_ACCESS_KEY</span><span class="o">=</span><span class="m">1</span>
+<span class="c1"># LOG_CONFIG_FILE isn&#39;t required, but watcher and webhook workers will have minimum and unformatted log output otherwise</span>
+<span class="nv">LOG_CONFIG_FILE</span><span class="o">=</span>/etc/omnibot/logging.yaml
+<span class="nv">REDIS_HOST</span><span class="o">=</span>redis
+<span class="nv">SQS_QUEUE_NAME</span><span class="o">=</span>omnibot
+<span class="nv">SQS_URL</span><span class="o">=</span>http://sqs:9203
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">omnibot.conf</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">authorization</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">checks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.authnz:allowed_paths&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">paths</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;/api/v1/slack/event&quot;</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;/api/v1/slack/slash_command&quot;</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;/api/v1/slack/interactive&quot;</span>
+<span class="l l-Scalar l-Scalar-Plain">teams</span><span class="p p-Indicator">:</span>
+  <span class="s">&quot;example-team&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;T12345678&quot;</span>
+<span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+  <span class="s">&quot;example-team&quot;</span><span class="p p-Indicator">:</span>
+    <span class="s">&quot;example-bot&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;A87654321&quot;</span>
+<span class="l l-Scalar l-Scalar-Plain">primary_bot</span><span class="p p-Indicator">:</span>
+  <span class="s">&quot;example-team&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;example-bot&quot;</span>
+<span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">message_handlers</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">match</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">match_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;command&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">match_mention</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+      <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&quot;testing&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-team&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;example-bot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.message_callbacks:test_callback&quot;</span>
+          <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">text</span><span class="p p-Indicator">:</span> <span class="s">&#39;test&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="basic-configuration">
+<h2>Basic Configuration<a class="headerlink" href="#basic-configuration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="configuration-file-configuration">
+<h3>Configuration File Configuration<a class="headerlink" href="#configuration-file-configuration" title="Permalink to this headline">¶</a></h3>
+<p>A majority of omnibot’s configuration comes from a configuration file, which can be configured through an environment variable:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CONFIG_FILE</span></code> (optional): Filesystem location of omnibot’s configuration file. Default: <code class="docutils literal notranslate"><span class="pre">/etc/omnibot/omnibot.conf</span></code></p></li>
+</ul>
+<p>For basic functionality, omnibot will need to know about the teams and bots it will be proxying on behalf of. Omnibot can support multiple teams and multiple bots inside of those teams.</p>
+</div>
+<div class="section" id="teams">
+<h3>Teams<a class="headerlink" href="#teams" title="Permalink to this headline">¶</a></h3>
+<p>Teams are configured in omnibot’s configuration file, as a dictionary mapping of team names (used by omnibot) to team IDs (used by slack):</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">teams</span><span class="p p-Indicator">:</span>
+  <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;T1234ABCD&quot;</span>
+  <span class="s">&quot;example-sandbox&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;T4321DCBA&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bots">
+<h3>Bots<a class="headerlink" href="#bots" title="Permalink to this headline">¶</a></h3>
+<p>See <a class="reference internal" href="adding_new_slack_apps.html"><span class="doc">docs for adding slack apps</span></a> for how to add a slack app for use in this section.</p>
+<p>Bots are configured in omnibot’s configuration file, as a dictionary of dictionaries, mapping teams to bots, and bots to IDs:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+  <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+    <span class="s">&quot;omnibot&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;A1111AAAA&quot;</span>
+    <span class="s">&quot;docbot&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;A1234ABCD&quot;</span>
+    <span class="s">&quot;deploybot&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;A4321DCBA&quot;</span>
+  <span class="s">&quot;example-sandbox&quot;</span><span class="p p-Indicator">:</span>
+    <span class="s">&quot;omnibot&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;A6666ZZZZ&quot;</span>
+    <span class="s">&quot;docbot&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;A6789WXYZ&quot;</span>
+    <span class="s">&quot;deploybot&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;A9876ZYXW&quot;</span>
+</pre></div>
+</div>
+<p>For parts of omnibot’s functionality, it’s necessary to poll slack’s APIs for users, channels, private channels (groups), and some other data sets. To reduce the number of API calls necessary, and to be able to limit oauth scopes where possible, omnibot uses a <code class="docutils literal notranslate"><span class="pre">primary</span> <span class="pre">bot</span></code> per team to fetch this data (note that it doesn’t need to be named omnibot, use any bot you want):</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">primary_bot</span><span class="p p-Indicator">:</span>
+  <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot&quot;</span>
+  <span class="s">&quot;example-sandbox&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bot-credential-configuration">
+<h3>Bot Credential Configuration<a class="headerlink" href="#bot-credential-configuration" title="Permalink to this headline">¶</a></h3>
+<p>Credentials for bots in omnibot are configured through environment variables. For each bot, it’s necessary to set three environment variables:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CREDENTIALS_SLACK_VERIFICATION_TOKEN_&lt;APP_ID&gt;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CREDENTIALS_SLACK_OAUTH_TOKEN_&lt;APP_ID&gt;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CREDENTIALS_SLACK_OAUTH_BOT_TOKEN_&lt;APP_ID&gt;</span></code></p></li>
+</ul>
+<p>So, in the above configuration, for omnibot, in <code class="docutils literal notranslate"><span class="pre">example-production</span></code>, we’d set:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">CREDENTIALS_SLACK_VERIFICATION_TOKEN_A1111AAAA</span><span class="o">=</span><span class="s2">&quot;...&quot;</span>
+<span class="nb">export</span> <span class="nv">CREDENTIALS_SLACK_OAUTH_TOKEN_A1111AAAA</span><span class="o">=</span><span class="s2">&quot;xoxp...&quot;</span>
+<span class="nb">export</span> <span class="nv">CREDENTIALS_SLACK_OAUTH_BOT_TOKEN_A1111AAAA</span><span class="o">=</span><span class="s2">&quot;xoxb...&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="urls-configuration-for-use-in-slack-app-dashboard">
+<h3>URLs Configuration for Use in Slack App Dashboard<a class="headerlink" href="#urls-configuration-for-use-in-slack-app-dashboard" title="Permalink to this headline">¶</a></h3>
+<p>omnibot currently has support for accepting events, slash commands, and interactive components. The following API endpoints are used:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">events</span></code>: <code class="docutils literal notranslate"><span class="pre">/api/v1/slack/event</span></code> (Example: <code class="docutils literal notranslate"><span class="pre">https://example.com/api/v1/slack/event</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">slash</span> <span class="pre">commands</span></code>: <code class="docutils literal notranslate"><span class="pre">/api/v1/slack/slash_command</span></code> (Example: <code class="docutils literal notranslate"><span class="pre">https://example.com/api/v1/slack/slash_command</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">interactive</span> <span class="pre">components</span></code>: <code class="docutils literal notranslate"><span class="pre">/api/v1/slack/interactive</span></code> (Example: <code class="docutils literal notranslate"><span class="pre">https://example.com/api/v1/slack/interactive</span></code>)</p></li>
+</ul>
+</div>
+<div class="section" id="sqs-configuration">
+<h3>SQS Configuration<a class="headerlink" href="#sqs-configuration" title="Permalink to this headline">¶</a></h3>
+<p>omnibot enqueues every event it receives from slack. Worker processes handle the SQS messages. omnibot cannot operate without SQS. SQS settings are configured through environnent variables:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SQS_QUEUE_NAME</span></code> (required): SQS queue name to use for enqueuing slack events</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WEBHOOK_WORKER_CONCURRENCY</span></code> (recommended): gevent pool concurrency for handling enqueued webhooks. Default: <code class="docutils literal notranslate"><span class="pre">10</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SQS_URL</span></code> (optional): A non-default URL to use, if you’re not connecting directly to SQS, but instead are using a proxy like envoy, or some SQS replacement or development service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SQS_BATCH_SIZE</span></code> (optional): Number of SQS events to fetch per request. Default: same as <code class="docutils literal notranslate"><span class="pre">WEBHOOK_WORKER_CONCURRENCY</span></code>, if <code class="docutils literal notranslate"><span class="pre">WEBHOOK_WORKER_CONCURRENCY</span></code> is less than or equal to 10, otherwise <code class="docutils literal notranslate"><span class="pre">10</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SQS_MAX_POOL_CONNECTIONS</span></code> (optional): <code class="docutils literal notranslate"><span class="pre">max_pool_connections</span></code> in botocore configuration. Default: <code class="docutils literal notranslate"><span class="pre">WEBHOOK_WORKER_CONCURRENCY</span></code> or <code class="docutils literal notranslate"><span class="pre">10</span></code>, whichever is lower.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SQS_VISIBILITY_TIMEOUT</span></code> (optional): Amount of time an SQS message will remain invisible to other webhook workers, when a webhook worker dequeues an event. Recommended to leave at default. Default: <code class="docutils literal notranslate"><span class="pre">60</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SQS_WAIT_TIME_SECONDS</span></code> (optional): SQS long polling rate. Recommended to leave at default. Default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+</ul>
+<p>For production workloads, you may want to increase <code class="docutils literal notranslate"><span class="pre">WEBHOOK_WORKER_CONCURRENCY</span></code>, depending on the number of webhook worker processes you’re running. omnibot uses gevent, so, you’ll want to adjust this based on the number of webhook worker processes you’re running, the number of hosts running the webhook workers, and the number of events per second you’ll be handling. At the time of this writing, Lyft is using a setting of 10 in production, running 3 hosts, with 1 webhook worker process per host.</p>
+</div>
+<div class="section" id="redis-configuration">
+<h3>Redis Configuration<a class="headerlink" href="#redis-configuration" title="Permalink to this headline">¶</a></h3>
+<p>omnibot uses a redis queue for an ephemeral cache that’s partially populated as a read-through cache, and also continually repopulated through a <code class="docutils literal notranslate"><span class="pre">watcher</span></code> worker process. omnibot cannot operate without redis. Configuration for redis is configured through environment variables:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">REDIS_HOST</span></code>: The hostname for your redis server, or envoy/nutcracker proxy. Default: <code class="docutils literal notranslate"><span class="pre">localhost</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REDIS_PORT</span></code>: The port for your redis server, or envoy/nutcracker proxy. Default: <code class="docutils literal notranslate"><span class="pre">6379</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="statsd-configuration">
+<h3>Statsd Configuration<a class="headerlink" href="#statsd-configuration" title="Permalink to this headline">¶</a></h3>
+<p>omnibot has relatively rich instrumentation (see the <a class="reference internal" href="observability.html#observability-stats"><span class="std std-ref">observability docs</span></a> for more information); metrics are sent through pystatsd, which is configured through environment variables:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">STATSD_HOST</span></code>: The host for your statsd server. Default: <code class="docutils literal notranslate"><span class="pre">localhost</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">STATSD_PORT</span></code>: The port for your statsd server. Default: <code class="docutils literal notranslate"><span class="pre">8125</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">STATSD_PREFIX</span></code>: A prefix to use for all metrics sent. Default: <code class="docutils literal notranslate"><span class="pre">omnibot</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="logging-configuration">
+<h3>Logging Configuration<a class="headerlink" href="#logging-configuration" title="Permalink to this headline">¶</a></h3>
+<p>Logging is primarily assumed to be configured through your wsgi server (like gunicorn or uwsgi) for the web worker. For the watcher and webhook workers, you can define the configuration via a python dict config:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">LOG_CONFIG_FILE</span></code>: Path to a yaml or json file that defines your logging config. Default: <code class="docutils literal notranslate"><span class="pre">/etc/omnibot/logging.conf</span></code></p></li>
+</ul>
+<p>See the <a class="reference internal" href="observability.html#observability-logs"><span class="std std-ref">observability docs</span></a> for information about using logs for tracing events.</p>
+</div>
+</div>
+<div class="section" id="handler-configuration">
+<span id="id1"></span><h2>Handler Configuration<a class="headerlink" href="#handler-configuration" title="Permalink to this headline">¶</a></h2>
+<p>All handler configurations are configured through the omnibot configuration file.</p>
+<div class="section" id="common-handler-configuration">
+<h3>Common Handler Configuration<a class="headerlink" href="#common-handler-configuration" title="Permalink to this headline">¶</a></h3>
+<p>Though omnibot has a number of handler configurations, they’re all roughly configurations that route something sent from slack, to a function that handles it. There’s some common configuration that defines part of this across all handler types. For example, here’s a message handler that is routing messages with the text <code class="docutils literal notranslate"><span class="pre">&#64;here</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;channel</span></code>, to a built-in callback function:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">message_handlers</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">match</span><span class="p p-Indicator">:</span> <span class="s">&quot;.*(@here|@channel).*&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">match_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;regex&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&quot;Warn</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">@here</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">@channel.&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+      <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.message_callbacks:specials_callback&quot;</span>
+        <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+          <span class="l l-Scalar l-Scalar-Plain">channels</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">random</span><span class="p p-Indicator">:</span>
+              <span class="l l-Scalar l-Scalar-Plain">message</span><span class="p p-Indicator">:</span> <span class="s">&quot;Please</span><span class="nv"> </span><span class="s">don&#39;t</span><span class="nv"> </span><span class="s">`{special}`</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">it</span><span class="nv"> </span><span class="s">notifies</span><span class="nv"> </span><span class="s">{member_count}</span><span class="nv"> </span><span class="s">people.&quot;</span>
+              <span class="l l-Scalar l-Scalar-Plain">reaction</span><span class="p p-Indicator">:</span> <span class="s">&quot;broken_heart&quot;</span>
+</pre></div>
+</div>
+<p>Bots is a dictionary of teams with a list of bots, so it’s possible to use the same callback for multiple teams, and multiple bots in those teams. Also, callbacks is a list, so it’s possible to route the same message to multiple callbacks:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">message_handlers</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">match</span><span class="p p-Indicator">:</span> <span class="s">&quot;.*(@here|@channel).*&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">match_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;regex&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&quot;Warn</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">@here</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">@channel.&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+      <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
+      <span class="s">&quot;example-sandbox&quot;</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.message_callbacks:specials_callback&quot;</span>
+        <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+          <span class="l l-Scalar l-Scalar-Plain">channels</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">random</span><span class="p p-Indicator">:</span>
+              <span class="l l-Scalar l-Scalar-Plain">message</span><span class="p p-Indicator">:</span> <span class="s">&quot;Please</span><span class="nv"> </span><span class="s">don&#39;t</span><span class="nv"> </span><span class="s">`{special}`</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">it</span><span class="nv"> </span><span class="s">notifies</span><span class="nv"> </span><span class="s">{member_count}</span><span class="nv"> </span><span class="s">people.&quot;</span>
+              <span class="l l-Scalar l-Scalar-Plain">reaction</span><span class="p p-Indicator">:</span> <span class="s">&quot;broken_heart&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.network_callbacks:http_callback&quot;</span>
+        <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+          <span class="l l-Scalar l-Scalar-Plain">request_kwargs</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">url</span><span class="p p-Indicator">:</span> <span class="s">&quot;https://herebot.local/api/v1/herebot/messages&quot;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">bots</span></code> is a dict of teams, each team specifying a list of bots that this handler targets. Any team/bot not listed here will be ignored.</p>
+<p><code class="docutils literal notranslate"><span class="pre">callbacks</span></code> is a list of functions that will be called (in order) if this handler matches. Each callback is specified by a <code class="docutils literal notranslate"><span class="pre">module</span></code>, which is a <code class="docutils literal notranslate"><span class="pre">python.path.to.the.module:a_function_in_the_module</span></code>, and <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>, which is a dictionary of keys and values to pass into the function. For example, <code class="docutils literal notranslate"><span class="pre">special_callback</span></code> is defined like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">specials_handler</span><span class="p">(</span><span class="n">channels</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>, see the documentation specific to the callback to see what you can pass in.</p>
+<p><code class="docutils literal notranslate"><span class="pre">description</span></code> is used to document the handler, and also, in some cases, to populate auto-generated help responses from the bots.</p>
+</div>
+<div class="section" id="message-handlers">
+<h3>Message Handlers<a class="headerlink" href="#message-handlers" title="Permalink to this headline">¶</a></h3>
+<p>Message handlers route slack messages (via event subscriptions) from a list of bots in a particular team to callback functions, when the message matches certain criteria. Message handlers match in two different ways <code class="docutils literal notranslate"><span class="pre">regex</span></code> and <code class="docutils literal notranslate"><span class="pre">command</span></code>.</p>
+<p>Here’s an example of routing messages with the text <code class="docutils literal notranslate"><span class="pre">&#64;here</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;channel</span></code>, to a built-in callback function, based on a regex match:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">message_handlers</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">match</span><span class="p p-Indicator">:</span> <span class="s">&quot;.*(@here|@channel).*&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">match_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;regex&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&quot;Warn</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">@here</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">@channel.&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.message_callbacks:specials_callback&quot;</span>
+          <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">channels</span><span class="p p-Indicator">:</span>
+              <span class="l l-Scalar l-Scalar-Plain">random</span><span class="p p-Indicator">:</span>
+                <span class="l l-Scalar l-Scalar-Plain">message</span><span class="p p-Indicator">:</span> <span class="s">&quot;Please</span><span class="nv"> </span><span class="s">don&#39;t</span><span class="nv"> </span><span class="s">`{special}`</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">it</span><span class="nv"> </span><span class="s">notifies</span><span class="nv"> </span><span class="s">{member_count}</span><span class="nv"> </span><span class="s">people.&quot;</span>
+                <span class="l l-Scalar l-Scalar-Plain">reaction</span><span class="p p-Indicator">:</span> <span class="s">&quot;broken_heart&quot;</span>
+</pre></div>
+</div>
+<p>This handler has a regex that will match against any message with <code class="docutils literal notranslate"><span class="pre">&#64;here</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;channel</span></code> in the text that slack delivers to this bot, and will route it to the <code class="docutils literal notranslate"><span class="pre">omnibot.callbacks.message_callbacks:specials_callback</span></code> callback.</p>
+<p>Here’s another example, that will only respond to the <code class="docutils literal notranslate"><span class="pre">docs</span></code> command directed at a configured bot (e.g. <code class="docutils literal notranslate"><span class="pre">&#64;omnibot</span> <span class="pre">docs</span> <span class="pre">how</span> <span class="pre">do</span> <span class="pre">I</span> <span class="pre">configure</span> <span class="pre">handlers</span></code>):</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">message_handlers</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">match</span><span class="p p-Indicator">:</span> <span class="s">&quot;docs&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">match_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;command&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&quot;Find</span><span class="nv"> </span><span class="s">documentation</span><span class="nv"> </span><span class="s">relevant</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">this</span><span class="nv"> </span><span class="s">channel.&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.network_callbacks:http_callback&quot;</span>
+          <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">request_kwargs</span><span class="p p-Indicator">:</span>
+              <span class="l l-Scalar l-Scalar-Plain">url</span><span class="p p-Indicator">:</span> <span class="s">&quot;https://docbot.local/api/v1/docbot/messages&quot;</span>
+</pre></div>
+</div>
+<p>A single bot can have more than one command routed to it. Similarly, we can route commands to the same callback, but from different bots:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">message_handlers</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">match</span><span class="p p-Indicator">:</span> <span class="s">&quot;docs&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">match_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;command&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&quot;Find</span><span class="nv"> </span><span class="s">documentation</span><span class="nv"> </span><span class="s">relevant</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">this</span><span class="nv"> </span><span class="s">channel.&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.network_callbacks:http_callback&quot;</span>
+          <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">request_kwargs</span><span class="p p-Indicator">:</span>
+              <span class="l l-Scalar l-Scalar-Plain">url</span><span class="p p-Indicator">:</span> <span class="s">&quot;https://docbot.local/api/v1/docbot/messages&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">match</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">match_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;command&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&quot;Find</span><span class="nv"> </span><span class="s">documentation</span><span class="nv"> </span><span class="s">relevant</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">this</span><span class="nv"> </span><span class="s">channel.&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;docbot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.network_callbacks:http_callback&quot;</span>
+          <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">request_kwargs</span><span class="p p-Indicator">:</span>
+              <span class="l l-Scalar l-Scalar-Plain">url</span><span class="p p-Indicator">:</span> <span class="s">&quot;https://docbot.local/api/v1/docbot/messages&quot;</span>
+</pre></div>
+</div>
+<p>The empty string match above (<code class="docutils literal notranslate"><span class="pre">match:</span> <span class="pre">&quot;&quot;</span></code>) will send any message directed to the bot to the callback, without needing to match a particular command. So, the following two messages work identically:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@omnibot</span> <span class="n">docs</span> <span class="n">api</span> <span class="n">FAQ</span>
+<span class="nd">@docbot</span> <span class="n">api</span> <span class="n">FAQ</span>
+</pre></div>
+</div>
+<p>This makes it easy to migrate functionality from one bot to another, or to combine functionality from multiple bots into a single bot with little effort.</p>
+<p>Matches are checked in order, and only the first match is used, which makes it possible to override subcommands from one handler with another:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">message_handlers</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">match</span><span class="p p-Indicator">:</span> <span class="s">&quot;override&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">match_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;command&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&quot;Find</span><span class="nv"> </span><span class="s">documentation</span><span class="nv"> </span><span class="s">relevant</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">this</span><span class="nv"> </span><span class="s">channel.&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;docbot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.network_callbacks:http_callback&quot;</span>
+          <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">request_kwargs</span><span class="p p-Indicator">:</span>
+              <span class="l l-Scalar l-Scalar-Plain">url</span><span class="p p-Indicator">:</span> <span class="s">&quot;https://overridebot.local/api/v1/overridebot/messages&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">match</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">match_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;command&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&quot;Find</span><span class="nv"> </span><span class="s">documentation</span><span class="nv"> </span><span class="s">relevant</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">this</span><span class="nv"> </span><span class="s">channel.&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;docbot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.network_callbacks:http_callback&quot;</span>
+          <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">request_kwargs</span><span class="p p-Indicator">:</span>
+              <span class="l l-Scalar l-Scalar-Plain">url</span><span class="p p-Indicator">:</span> <span class="s">&quot;https://docbot.local/api/v1/docbot/messages&quot;</span>
+</pre></div>
+</div>
+<p>The above will send <code class="docutils literal notranslate"><span class="pre">&#64;docbot</span> <span class="pre">override</span> <span class="pre">...</span></code> to <code class="docutils literal notranslate"><span class="pre">https://overridebot.local/api/v1/overridebot/messages</span></code>, but will send any other <code class="docutils literal notranslate"><span class="pre">&#64;docbot</span> <span class="pre">...</span></code> command to <code class="docutils literal notranslate"><span class="pre">https://docbot.local/api/v1/docbot/messages</span></code>.</p>
+</div>
+<div class="section" id="interactive-component-handlers">
+<h3>Interactive Component Handlers<a class="headerlink" href="#interactive-component-handlers" title="Permalink to this headline">¶</a></h3>
+<p>Interactive components map interactive component events from Slack (like a button click in an interactive message) to a list of bots in a particular team to callback functions. Interactive component handlers have the following options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">callback_id</span></code>: The callback id to route for. Callback ids are generally set via dialogs, interactive messages, message actions, or other forms of slack interactive feature sets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">response_type</span></code>: <code class="docutils literal notranslate"><span class="pre">in_channel</span></code> or <code class="docutils literal notranslate"><span class="pre">ephemeral</span></code>. <code class="docutils literal notranslate"><span class="pre">in_channel</span></code> will display the callback response in the channel. <code class="docutils literal notranslate"><span class="pre">ephemeral</span></code> will display the response from the callback in the channel.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bots</span></code>: A dict of slack teams, each team specifying a list of bots we accept these interactive commands from.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dialog</span></code>: A dict configuring a dialog response to display when an interactive component is used. See the slack interactive dialog docs for configuration options here. Note that dialogs must specify a callback id that correlates with a configured interactive component handler.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">canned_response</span></code>: A response for omnibot to immediately respond with when the interactive component is received. This can be useful if the callback is slow or sometimes flaky, as it’ll let you tell the end-user that the bot it working on it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">no_message_response</span></code>: By default, upon responding to an interactive message component, omnibot will overwrite the message that a bot sends with another message. Either a “canned response” that you specify or the response type if the response type is “in_channel”. Setting no_message_response to <code class="docutils literal notranslate"><span class="pre">true</span></code> prevents this from happening.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">callbacks</span></code>: A list of callbacks to route the interactive component to.</p></li>
+</ul>
+<p>As an example, let’s say that we want to add a message action, that will let a user submit a slack thread to a service, that will turn the slack thread into a stackoverflow question with a list of answers based on the thread and its responses:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">interactive_component_handlers</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">callback_id</span><span class="p p-Indicator">:</span> <span class="s">&quot;stackoverflow_thread_submit&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">response_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;in_channel&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">canned_response</span><span class="p p-Indicator">:</span> <span class="s">&quot;Submitting</span><span class="nv"> </span><span class="s">thread...&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.network_callbacks:http_callback&quot;</span>
+          <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">request_kwargs</span><span class="p p-Indicator">:</span>
+              <span class="l l-Scalar l-Scalar-Plain">url</span><span class="p p-Indicator">:</span> <span class="s">&quot;https://so-seeder.local/api/v1/interactive-component&quot;</span>
+</pre></div>
+</div>
+<p>It’s also possible to respond to an interactive component with a dialog, that will let you chain the handler with another handler:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">interactive_component_handlers</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">callback_id</span><span class="p p-Indicator">:</span> <span class="s">&quot;stackoverflow_thread_prompt&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">response_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;in_channel&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">dialog</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">title</span><span class="p p-Indicator">:</span> <span class="s">&quot;Thread</span><span class="nv"> </span><span class="s">submission&quot;</span>
+        <span class="l l-Scalar l-Scalar-Plain">submit_label</span><span class="p p-Indicator">:</span> <span class="s">&quot;submit&quot;</span>
+        <span class="l l-Scalar l-Scalar-Plain">callback_id</span><span class="p p-Indicator">:</span> <span class="s">&quot;stackoverflow_thread_submit&quot;</span>
+        <span class="l l-Scalar l-Scalar-Plain">elements</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="s">&quot;checkbox&quot;</span>
+            <span class="l l-Scalar l-Scalar-Plain">label</span><span class="p p-Indicator">:</span> <span class="s">&quot;Attribute</span><span class="nv"> </span><span class="s">answers</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">original</span><span class="nv"> </span><span class="s">authors&quot;</span>
+            <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="s">&quot;attribution_element&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">callback_id</span><span class="p p-Indicator">:</span> <span class="s">&quot;stackoverflow_thread_submit&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">response_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;in_channel&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">canned_response</span><span class="p p-Indicator">:</span> <span class="s">&quot;Submitting</span><span class="nv"> </span><span class="s">thread...&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.network_callbacks:http_callback&quot;</span>
+          <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">request_kwargs</span><span class="p p-Indicator">:</span>
+              <span class="l l-Scalar l-Scalar-Plain">url</span><span class="p p-Indicator">:</span> <span class="s">&quot;https://so-seeder.local/api/v1/interactive-component&quot;</span>
+</pre></div>
+</div>
+<p>The above uses two chained together handlers. The first handler is what you’d point the message action at; omnibot will respond with the configured dialog, which points at the second handler. The second handler routes the dialog response to the configured callback. Note that the first handler doesn’t have any callbacks set, because we’re only using this to chain handlers together.</p>
+</div>
+<div class="section" id="slash-command-handlers">
+<h3>Slash Command Handlers<a class="headerlink" href="#slash-command-handlers" title="Permalink to this headline">¶</a></h3>
+<p>Slash command handlers route slash commands from Slack to a list of bots in a particular team to callback functions. Slash command handlers have the following options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">command</span></code>: The slash command to route for (defined in the slack API dashboard)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">response_type</span></code>: <code class="docutils literal notranslate"><span class="pre">in_channel</span></code> or <code class="docutils literal notranslate"><span class="pre">ephemeral</span></code>. <code class="docutils literal notranslate"><span class="pre">in_channel</span></code> will display both the slash command used, as well as any response from the callback. <code class="docutils literal notranslate"><span class="pre">ephemeral</span></code> will only display the response from the callback.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bots</span></code>: A dict of slack teams, each team specifying a list of bots we accept these slash commands from.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dialog</span></code>: A dict configuring a dialog response to display when a slash command is used. See the slack interactive dialog docs for configuration options here. Note that dialogs must specify a callback id that correlates with a configured interactive component handler.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">canned_response</span></code>: A response for omnibot to immediately respond with when the slash command is received. This can be useful if the callback is slow or sometimes flaky, as it’ll let you tell the end-user that the bot it working on it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">no_message_response</span></code>: By default, upon responding to an slash command, omnibot will overwrite the message that a bot sends with another message. Either a “canned response” that you specify or the response type if the response type is “in_channel”. Setting no_message_response to <code class="docutils literal notranslate"><span class="pre">true</span></code> prevents this from happening.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">callbacks</span></code>: A list of callbacks to route the slash commands to.</p></li>
+</ul>
+<p>As an example, let’s say we want to have a slash command <code class="docutils literal notranslate"><span class="pre">/echo</span></code> that will respond back with whatever text the end-user provided:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">slash_command_handlers</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="s">&quot;/echo&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">response_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;in_channel&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.slash_command_callbacks:echo_callback&quot;</span>
+</pre></div>
+</div>
+<p>When an end-user uses <code class="docutils literal notranslate"><span class="pre">/echo</span> <span class="pre">test</span></code>, the omnibot bot in Slack will respond with <code class="docutils literal notranslate"><span class="pre">test</span></code>. Let’s say for instance, that you wanted to take the text from a dialog, when <code class="docutils literal notranslate"><span class="pre">/echo</span></code> is used, rather than providing the text after the slash command:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">slash_command_handlers</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="s">&quot;/echo&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">response_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;in_channel&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">dialog</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">title</span><span class="p p-Indicator">:</span> <span class="s">&quot;Echo</span><span class="nv"> </span><span class="s">dialog&quot;</span>
+        <span class="l l-Scalar l-Scalar-Plain">submit_label</span><span class="p p-Indicator">:</span> <span class="s">&quot;submit&quot;</span>
+        <span class="l l-Scalar l-Scalar-Plain">callback_id</span><span class="p p-Indicator">:</span> <span class="s">&quot;echo_submit&quot;</span>
+        <span class="l l-Scalar l-Scalar-Plain">elements</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="s">&quot;text&quot;</span>
+            <span class="l l-Scalar l-Scalar-Plain">label</span><span class="p p-Indicator">:</span> <span class="s">&quot;Echo</span><span class="nv"> </span><span class="s">this</span><span class="nv"> </span><span class="s">text&quot;</span>
+            <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="s">&quot;echo_element&quot;</span>
+</pre></div>
+</div>
+<p>In the above, there’s no callbacks configured, as we’re chaining a slash command handler with an interactive component handler. This handler configuration alone wouldn’t do anything, without a correlated interactive component handler, which could be configured like so:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">interactive_component_handlers</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">callback_id</span><span class="p p-Indicator">:</span> <span class="s">&quot;echo_submit&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">response_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;in_channel&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+        <span class="s">&quot;example-production&quot;</span><span class="p p-Indicator">:</span>
+          <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
+      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.interactive_component_callbacks:echo_dialog_submission_callback&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="api-access-control-configuration">
+<h2>API Access Control Configuration<a class="headerlink" href="#api-access-control-configuration" title="Permalink to this headline">¶</a></h2>
+<p>omnibot has a pluggable authorization system for its API. omnibot has both an external and an internal API; the external API is what Slack talks to, and the internal API is used by your services to talk to Slack. By default, for security purposes, omnibot is configure to deny all API calls if the authorization system isn’t configured.</p>
+<p>The following basic configuration is recommended for allowing Slack to call omnibot’s external APIs, while disabling internal APIs:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">authorization</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">checks</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.authnz:allowed_paths&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">paths</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;/api/v1/slack/event&quot;</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;/api/v1/slack/slash_command&quot;</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;/api/v1/slack/interactive&quot;</span>
+</pre></div>
+</div>
+<p>The above allows <code class="docutils literal notranslate"><span class="pre">event</span> <span class="pre">subscriptions</span></code>, <code class="docutils literal notranslate"><span class="pre">slash</span> <span class="pre">commands</span></code>, and <code class="docutils literal notranslate"><span class="pre">interactive</span> <span class="pre">components</span></code> to be sent to omnibot, from Slack.</p>
+<p>Note that checks configured are additive: all configured checks must pass for a request to be allowed.</p>
+<p>For specific configuration for available checks, see the documentation specific to each check. omnibot ships with the following checks available:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="autogen/omnibot.authnz.html#omnibot.authnz.allowed_paths" title="omnibot.authnz.allowed_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">omnibot.authnz.allowed_paths()</span></code></a></p></li>
+<li><p><a class="reference internal" href="autogen/omnibot.authnz.html#omnibot.authnz.envoy_checks.envoy_internal_check" title="omnibot.authnz.envoy_checks.envoy_internal_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">omnibot.authnz.envoy_checks.envoy_internal_check()</span></code></a></p></li>
+<li><p><a class="reference internal" href="autogen/omnibot.authnz.html#omnibot.authnz.envoy_checks.envoy_permissions_check" title="omnibot.authnz.envoy_checks.envoy_permissions_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">omnibot.authnz.envoy_checks.envoy_permissions_check()</span></code></a></p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="adding_new_slack_apps.html" class="btn btn-neutral float-right" title="Adding new slack apps" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2019, Omnibot Project Authors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

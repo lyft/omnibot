@@ -1,0 +1,62 @@
+omnibot.services.slack package
+==============================
+
+Submodules
+----------
+
+omnibot.services.slack.bot module
+---------------------------------
+
+.. automodule:: omnibot.services.slack.bot
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.services.slack.interactive\_component module
+----------------------------------------------------
+
+.. automodule:: omnibot.services.slack.interactive_component
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.services.slack.message module
+-------------------------------------
+
+.. automodule:: omnibot.services.slack.message
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.services.slack.parser module
+------------------------------------
+
+.. automodule:: omnibot.services.slack.parser
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.services.slack.slash\_command module
+--------------------------------------------
+
+.. automodule:: omnibot.services.slack.slash_command
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.services.slack.team module
+----------------------------------
+
+.. automodule:: omnibot.services.slack.team
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: omnibot.services.slack
+   :members:
+   :undoc-members:
+   :show-inheritance:

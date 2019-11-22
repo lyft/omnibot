@@ -1,0 +1,714 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Observability &mdash; omnibot 1.0.0-2f02c3 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/omnibot.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quickstart and Development" href="development.html" />
+    <link rel="prev" title="Adding new slack apps" href="adding_new_slack_apps.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> omnibot
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0-2f02c3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Usage</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#quickstart-for-testing">Quickstart for testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#docker-installation">Docker installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#to-run-omnibot-in-docker">To run omnibot in Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#to-build-the-image">To build the image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#pip-installation">pip installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#make-a-virtualenv-and-install-pip-requirements">Make a virtualenv and install pip requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#manual-installation">Manual installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#clone-omnibot">Clone omnibot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#id1">Make a virtualenv and install pip requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#run-omnibot">Run omnibot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#example-minimal-configuration">Example Minimal Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#basic-configuration">Basic Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#configuration-file-configuration">Configuration File Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#teams">Teams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#bots">Bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#bot-credential-configuration">Bot Credential Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#urls-configuration-for-use-in-slack-app-dashboard">URLs Configuration for Use in Slack App Dashboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#sqs-configuration">SQS Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#redis-configuration">Redis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#statsd-configuration">Statsd Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#logging-configuration">Logging Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#handler-configuration">Handler Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#common-handler-configuration">Common Handler Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#message-handlers">Message Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#interactive-component-handlers">Interactive Component Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#slash-command-handlers">Slash Command Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#api-access-control-configuration">API Access Control Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="adding_new_slack_apps.html">Adding new slack apps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adding_new_slack_apps.html#adding-normal-slack-apps">Adding normal slack apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adding_new_slack_apps.html#adding-a-slack-app-for-use-as-a-primary-bot">Adding a slack app for use as a primary bot</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Observability</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#stats">Stats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#delivery-and-processing">Delivery and Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#webhook-worker-gevent-pool">Webhook Worker Gevent Pool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#watcher-worker-latency">Watcher Worker Latency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#logs">Logs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#event-subscription-tracing-data">Event Subscription Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#slash-command-tracing-data">Slash Command Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#interactive-component-tracing-data">Interactive Component Tracing Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Quickstart and Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#quickstart">Quickstart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="development.html#developing-new-bots">Developing new bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development.html#making-and-testing-changes-to-omnibot-using-docker-and-docker-compose">Making and testing changes to omnibot using docker and docker-compose</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="receivers.html">Omnibot receiver libraries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="receivers.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="event_parsing.html">Event parsing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="event_parsing.html#event-subscription-events">Event Subscription Events</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="event_parsing.html#message-events">Message Events</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="event_parsing.html#interactive-component-events">Interactive Component Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_parsing.html#slash-command-events">Slash Command Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slack_proxying.html">Slack proxying</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slack_proxying.html#message-handlers">Message handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slack_proxying.html#slash-command-and-interactive-component-handlers">Slash command and interactive component handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="writing_new_callbacks.html">Writing new callback functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-of-conduct">Code of conduct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#contributing-code">Contributing code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#sign-the-contributor-license-agreement-cla">Sign the Contributor License Agreement (CLA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#file-issues-in-github">File issues in Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#submit-pull-requests">Submit pull requests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API endpoint</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#api-route-documentation">API route documentation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Python module documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autogen/omnibot.html">omnibot package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.authnz.html">omnibot.authnz package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.authnz.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.authnz.html#module-omnibot.authnz.envoy_checks">omnibot.authnz.envoy_checks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.authnz.html#module-omnibot.authnz">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.callbacks.html">omnibot.callbacks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.interactive_component_callbacks">omnibot.callbacks.interactive_component_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.message_callbacks">omnibot.callbacks.message_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.network_callbacks">omnibot.callbacks.network_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.slash_command_callbacks">omnibot.callbacks.slash_command_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.routes.html">omnibot.routes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.routes.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.routes.html#module-omnibot.routes.api">omnibot.routes.api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.routes.html#module-omnibot.routes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.scripts.html">omnibot.scripts package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#module-omnibot.scripts.omniredis">omnibot.scripts.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#module-omnibot.scripts.utils">omnibot.scripts.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#module-omnibot.scripts">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.services.html">omnibot.services package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services.omniredis">omnibot.services.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services.sqs">omnibot.services.sqs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services.stats">omnibot.services.stats module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.utils.html">omnibot.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.utils.html#module-omnibot.utils.settings">omnibot.utils.settings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.utils.html#module-omnibot.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.app">omnibot.app module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.processor">omnibot.processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.settings">omnibot.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.setup_logging">omnibot.setup_logging module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.watcher">omnibot.watcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.webhook_worker">omnibot.webhook_worker module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.wsgi">omnibot.wsgi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">omnibot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Observability</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/observability.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="observability">
+<span id="id1"></span><h1>Observability<a class="headerlink" href="#observability" title="Permalink to this headline">¶</a></h1>
+<p>omnibot is a distributed system, and as such observability is important. Observability through omnibot is primarily handled through stats and logs.</p>
+<div class="section" id="stats">
+<span id="observability-stats"></span><h2>Stats<a class="headerlink" href="#stats" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="delivery-and-processing">
+<h3>Delivery and Processing<a class="headerlink" href="#delivery-and-processing" title="Permalink to this headline">¶</a></h3>
+<p>Stats related to delivery and processing of event subscription, slash command, and interactive component events. These stats can help you determine whether slack or omnibot is at fault for latency or failures:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>pre_sqs_delivery_latency</p></td>
+<td><p>Timer</p></td>
+<td><p>Latency of event subscription events between occurance and delivery from slack to omnibot API</p></td>
+</tr>
+<tr class="row-odd"><td><p>pre_sqs_delivery_retry_latency</p></td>
+<td><p>Timer</p></td>
+<td><p>Latency of event subscription events between occurance and delivery from slack to omnibot API, for events being retried</p></td>
+</tr>
+<tr class="row-even"><td><p>delivery_latency</p></td>
+<td><p>Timer</p></td>
+<td><p>Post-SQS delivery latency of event subscription events between occurance and omnibot’s webhook worker receiving it from SQS</p></td>
+</tr>
+<tr class="row-odd"><td><p>sqs.sent</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of SQS messages enqueued</p></td>
+</tr>
+<tr class="row-even"><td><p>sqs.&lt;bot_name&gt;.sent</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of SQS messages enqueued for the specific configured bot</p></td>
+</tr>
+<tr class="row-odd"><td><p>sqs.received</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of SQS messages dequeued</p></td>
+</tr>
+<tr class="row-even"><td><p>handle_message</p></td>
+<td><p>Timer</p></td>
+<td><p>Post-SQS processing latency of SQS messages, including message JSON deserialization, end-to-end handler and callback processing, and SQS message deletion</p></td>
+</tr>
+<tr class="row-odd"><td><p>process_event</p></td>
+<td><p>Timer</p></td>
+<td><p>Post-SQS processing latency of slack event subscription events, including end-to-end handler and callback processing</p></td>
+</tr>
+<tr class="row-even"><td><p>event.process.attempt.&lt;event_type&gt;</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times omnibot received an event subscription event and attempted to process it</p></td>
+</tr>
+<tr class="row-odd"><td><p>event.process.failed.&lt;event_type&gt;</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times omnibot received an event subscription event and failed to process it</p></td>
+</tr>
+<tr class="row-even"><td><p>event.handled</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times a processed event subscription event matched a configured handler</p></td>
+</tr>
+<tr class="row-odd"><td><p>event.defaulted</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times a processed event subscription event defaulted to a help handler</p></td>
+</tr>
+<tr class="row-even"><td><p>event.ignored</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times a processed event subscription event did not match any handler and was ignored</p></td>
+</tr>
+<tr class="row-odd"><td><p>event.unsupported</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times a processed event subscription event wasn’t of a supported type and was ignored</p></td>
+</tr>
+<tr class="row-even"><td><p>process_slash_command</p></td>
+<td><p>Timer</p></td>
+<td><p>Post-SQS processing latency of slack slash command events, including end-to-end handler and callback processing</p></td>
+</tr>
+<tr class="row-odd"><td><p>slash_command.process.attempt.&lt;command_name&gt;</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times omnibot received a slash command event and attempted to process it</p></td>
+</tr>
+<tr class="row-even"><td><p>slash_command.process.failed.&lt;command_name&gt;</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times omnibot received a slash command event and failed to process it</p></td>
+</tr>
+<tr class="row-odd"><td><p>process_interactive_component</p></td>
+<td><p>Timer</p></td>
+<td><p>Post-SQS processing latency of slack interactive component events, including end-to-end handler and callback processing</p></td>
+</tr>
+<tr class="row-even"><td><p>interactive_component.process.attempt.&lt;component&gt;</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times omnibot received an interactive component event and attempted to process it</p></td>
+</tr>
+<tr class="row-odd"><td><p>interactive_component.process.failed.&lt;component&gt;</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times omnibot received an interactive component event and failed to process it</p></td>
+</tr>
+<tr class="row-even"><td><p>unexpand_metadata</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency of specials, channels, and users when defined in omnibot_parse of handler responses</p></td>
+</tr>
+<tr class="row-odd"><td><p>parser.extract_users</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency for converting from slack format to friendly format for users</p></td>
+</tr>
+<tr class="row-even"><td><p>parser.extract_channels</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency for converting from slack format to friendly format for users</p></td>
+</tr>
+<tr class="row-odd"><td><p>parser.extract_subteams</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency for converting from slack format to friendly format for subteams</p></td>
+</tr>
+<tr class="row-even"><td><p>parser.extract_specials</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency for converting from slack format to friendly format for specials</p></td>
+</tr>
+<tr class="row-odd"><td><p>parser.extract_emojis</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency for converting from slack format to friendly format for emojis</p></td>
+</tr>
+<tr class="row-even"><td><p>parser.extract_emails</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency for converting from slack format to friendly format for emails</p></td>
+</tr>
+<tr class="row-odd"><td><p>parser.extract_urls</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency for converting from slack format to friendly format for urls</p></td>
+</tr>
+<tr class="row-even"><td><p>parser.extract_mentions</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency for converting from slack format to friendly format for mentions</p></td>
+</tr>
+<tr class="row-odd"><td><p>parser.extract_command</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency for converting from slack format to friendly format for commands</p></td>
+</tr>
+<tr class="row-even"><td><p>parser.unextract_specials</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency for converting from friendly format to slack format for specials</p></td>
+</tr>
+<tr class="row-odd"><td><p>parser.unextract_channels</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency for converting from friendly format to slack format for channels</p></td>
+</tr>
+<tr class="row-even"><td><p>parser.unextract_users</p></td>
+<td><p>Timer</p></td>
+<td><p>Parsing latency for converting from friendly format to slack format for users</p></td>
+</tr>
+</tbody>
+</table>
+<p>When considering dashboards, a few useful things:</p>
+<ul class="simple">
+<li><p>If pre_sqs_delivery_latency is &gt;10-15s, it’s likely that slask is having an outage</p></li>
+<li><p>If pre_sqs_delivery_latency is &lt;10-15s and delivery_latency is drastically higher than pre_sqs_delivery_latency, then omnibot is spending a large amount of time processing messages, and you should look at other processing and delivery metrics, like sqs, parser.*, and process*</p></li>
+<li><p>If any of the parser metrics are very slow, it’s likely you’re having issues with redis, as the parser functions will fallback to slack if caches are missing</p></li>
+<li><p>If sqs.sent and sqs.received don’t match, you’re likely having SQS issues</p></li>
+<li><p>If you’re seeing *.process.failed counts, then handlers are failing, and you can track that down using the logs</p></li>
+</ul>
+</div>
+<div class="section" id="webhook-worker-gevent-pool">
+<h3>Webhook Worker Gevent Pool<a class="headerlink" href="#webhook-worker-gevent-pool" title="Permalink to this headline">¶</a></h3>
+<p>Stats related to gevent pool latency. These stats can help you determine if you need to increase worker concurrency, or increase the number of workers running:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>webhookpool.spawn</p></td>
+<td><p>Timer</p></td>
+<td><p>Amount of time it takes to spawn a gevent thread into the webhookpool</p></td>
+</tr>
+<tr class="row-odd"><td><p>webhookpool.pool.full</p></td>
+<td><p>Counter</p></td>
+<td><p>Number of times the webhook worker has reached its maximum concurrency limit</p></td>
+</tr>
+</tbody>
+</table>
+<p>In general, if you’re seeing full counts, you need more concurrency, or you need more worker processes running.</p>
+</div>
+<div class="section" id="watcher-worker-latency">
+<h3>Watcher Worker Latency<a class="headerlink" href="#watcher-worker-latency" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>watch.users</p></td>
+<td><p>Timer</p></td>
+<td><p>Latency per-run of watch_users, to fetch all user information for all teams and primary bots configured</p></td>
+</tr>
+<tr class="row-odd"><td><p>watch.channels</p></td>
+<td><p>Timer</p></td>
+<td><p>Latency per-run of watch_channels, to fetch all channel information for all teams and primary bots configured</p></td>
+</tr>
+<tr class="row-even"><td><p>watch.groups</p></td>
+<td><p>Timer</p></td>
+<td><p>Latency per-run of watch_groups, to fetch all private group information for all teams and primary bots configured</p></td>
+</tr>
+<tr class="row-odd"><td><p>watch.ims</p></td>
+<td><p>Timer</p></td>
+<td><p>Latency per-run of watch_ims, to fetch all im channel information for all teams and primary bots configured</p></td>
+</tr>
+<tr class="row-even"><td><p>watch.mpims</p></td>
+<td><p>Timer</p></td>
+<td><p>Latency per-run of watch_mpims, to fetch all mpim channel information for all teams and primary bots configured</p></td>
+</tr>
+<tr class="row-odd"><td><p>watch.emoji</p></td>
+<td><p>Timer</p></td>
+<td><p>Latency per-run of watch_emoji, to fetch all emoi information for all teams and primary bots configured</p></td>
+</tr>
+</tbody>
+</table>
+<p>If you’re seeing issues with unparsed messages, or seeing high latency in parsing, these stats can help show how long it’s taking to refresh the cache via the poll looping.</p>
+</div>
+</div>
+<div class="section" id="logs">
+<span id="observability-logs"></span><h2>Logs<a class="headerlink" href="#logs" title="Permalink to this headline">¶</a></h2>
+<p>omnibot includes a logging configuration yaml file that can be used to ensure logs are JSON structured, and a number of the log messages include extra data that will help you trace logs back to specific event ids, event types, slack app ids, slack team ids, and specific friendly bot names. This data is passed through into handler callback functions. This allows you to track logs for particular events from delivery, to processing, into the handler, and back from the response from the callbacks, including cross-service, as long as the service called by the http handler logs the same infomation.</p>
+<div class="section" id="event-subscription-tracing-data">
+<h3>Event Subscription Tracing Data<a class="headerlink" href="#event-subscription-tracing-data" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>event_ts</p></td>
+<td><p>The ID of the event subscription event from slack. In the case of slack messages, this is also the message ID.</p></td>
+</tr>
+<tr class="row-odd"><td><p>event_type</p></td>
+<td><p>The subtype of the event subscription event</p></td>
+</tr>
+<tr class="row-even"><td><p>app_id</p></td>
+<td><p>The ID of the slack app</p></td>
+</tr>
+<tr class="row-odd"><td><p>team_id</p></td>
+<td><p>The ID of the slack workspace</p></td>
+</tr>
+<tr class="row-even"><td><p>bot_receiver</p></td>
+<td><p>The bot (friendly name) configured in omnibot that’s associated with the app_id</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="slash-command-tracing-data">
+<h3>Slash Command Tracing Data<a class="headerlink" href="#slash-command-tracing-data" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>trigger_id</p></td>
+<td><p>The ID of the slash command event from slack.</p></td>
+</tr>
+<tr class="row-odd"><td><p>command</p></td>
+<td><p>The command name configured in the slack API for this slash command event.</p></td>
+</tr>
+<tr class="row-even"><td><p>app_id</p></td>
+<td><p>The ID of the slack app</p></td>
+</tr>
+<tr class="row-odd"><td><p>team_id</p></td>
+<td><p>The ID of the slack workspace</p></td>
+</tr>
+<tr class="row-even"><td><p>bot_receiver</p></td>
+<td><p>The bot (friendly name) configured in omnibot that’s associated with the app_id</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="interactive-component-tracing-data">
+<h3>Interactive Component Tracing Data<a class="headerlink" href="#interactive-component-tracing-data" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>callback_id</p></td>
+<td><p>The callback id of the interactive component event from slack.</p></td>
+</tr>
+<tr class="row-odd"><td><p>component_type</p></td>
+<td><p>The type of interactive component event associated with the interactive component event from slack.</p></td>
+</tr>
+<tr class="row-even"><td><p>app_id</p></td>
+<td><p>The ID of the slack app</p></td>
+</tr>
+<tr class="row-odd"><td><p>team_id</p></td>
+<td><p>The ID of the slack workspace</p></td>
+</tr>
+<tr class="row-even"><td><p>bot_receiver</p></td>
+<td><p>The bot (friendly name) configured in omnibot that’s associated with the app_id</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="development.html" class="btn btn-neutral float-right" title="Quickstart and Development" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="adding_new_slack_apps.html" class="btn btn-neutral float-left" title="Adding new slack apps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2019, Omnibot Project Authors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

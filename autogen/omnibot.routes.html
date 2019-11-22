@@ -1,0 +1,784 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>omnibot.routes package &mdash; omnibot 1.0.0-2f02c3 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/omnibot.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="omnibot.scripts package" href="omnibot.scripts.html" />
+    <link rel="prev" title="omnibot.callbacks package" href="omnibot.callbacks.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> omnibot
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0-2f02c3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#quickstart-for-testing">Quickstart for testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#docker-installation">Docker installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#to-run-omnibot-in-docker">To run omnibot in Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#to-build-the-image">To build the image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#pip-installation">pip installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#make-a-virtualenv-and-install-pip-requirements">Make a virtualenv and install pip requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#manual-installation">Manual installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#clone-omnibot">Clone omnibot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#id1">Make a virtualenv and install pip requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#run-omnibot">Run omnibot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#example-minimal-configuration">Example Minimal Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#basic-configuration">Basic Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#configuration-file-configuration">Configuration File Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#teams">Teams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#bots">Bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#bot-credential-configuration">Bot Credential Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#urls-configuration-for-use-in-slack-app-dashboard">URLs Configuration for Use in Slack App Dashboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#sqs-configuration">SQS Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#redis-configuration">Redis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#statsd-configuration">Statsd Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#logging-configuration">Logging Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#handler-configuration">Handler Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#common-handler-configuration">Common Handler Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#message-handlers">Message Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#interactive-component-handlers">Interactive Component Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#slash-command-handlers">Slash Command Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#api-access-control-configuration">API Access Control Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../adding_new_slack_apps.html">Adding new slack apps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../adding_new_slack_apps.html#adding-normal-slack-apps">Adding normal slack apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adding_new_slack_apps.html#adding-a-slack-app-for-use-as-a-primary-bot">Adding a slack app for use as a primary bot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../observability.html">Observability</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../observability.html#stats">Stats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#delivery-and-processing">Delivery and Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#webhook-worker-gevent-pool">Webhook Worker Gevent Pool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#watcher-worker-latency">Watcher Worker Latency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../observability.html#logs">Logs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#event-subscription-tracing-data">Event Subscription Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#slash-command-tracing-data">Slash Command Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#interactive-component-tracing-data">Interactive Component Tracing Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Quickstart and Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development.html#quickstart">Quickstart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development.html#developing-new-bots">Developing new bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development.html#making-and-testing-changes-to-omnibot-using-docker-and-docker-compose">Making and testing changes to omnibot using docker and docker-compose</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../receivers.html">Omnibot receiver libraries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../receivers.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../event_parsing.html">Event parsing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../event_parsing.html#event-subscription-events">Event Subscription Events</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../event_parsing.html#message-events">Message Events</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../event_parsing.html#interactive-component-events">Interactive Component Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../event_parsing.html#slash-command-events">Slash Command Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../slack_proxying.html">Slack proxying</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../slack_proxying.html#message-handlers">Message handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../slack_proxying.html#slash-command-and-interactive-component-handlers">Slash command and interactive component handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../writing_new_callbacks.html">Writing new callback functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#code-of-conduct">Code of conduct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#contributing-code">Contributing code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#sign-the-contributor-license-agreement-cla">Sign the Contributor License Agreement (CLA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#file-issues-in-github">File issues in Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#submit-pull-requests">Submit pull requests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API endpoint</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#api-route-documentation">API route documentation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Python module documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="omnibot.html">omnibot package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="omnibot.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="omnibot.authnz.html">omnibot.authnz package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.authnz.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.authnz.html#module-omnibot.authnz.envoy_checks">omnibot.authnz.envoy_checks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.authnz.html#module-omnibot.authnz">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.callbacks.html">omnibot.callbacks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.interactive_component_callbacks">omnibot.callbacks.interactive_component_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.message_callbacks">omnibot.callbacks.message_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.network_callbacks">omnibot.callbacks.network_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.slash_command_callbacks">omnibot.callbacks.slash_command_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">omnibot.routes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-omnibot.routes.api">omnibot.routes.api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-omnibot.routes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.scripts.html">omnibot.scripts package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#module-omnibot.scripts.omniredis">omnibot.scripts.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#module-omnibot.scripts.utils">omnibot.scripts.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#module-omnibot.scripts">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.services.html">omnibot.services package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services.omniredis">omnibot.services.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services.sqs">omnibot.services.sqs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services.stats">omnibot.services.stats module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.utils.html">omnibot.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.utils.html#module-omnibot.utils.settings">omnibot.utils.settings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.utils.html#module-omnibot.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.app">omnibot.app module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.processor">omnibot.processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.settings">omnibot.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.setup_logging">omnibot.setup_logging module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.watcher">omnibot.watcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.webhook_worker">omnibot.webhook_worker module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.wsgi">omnibot.wsgi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">omnibot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="omnibot.html">omnibot package</a> &raquo;</li>
+        
+      <li>omnibot.routes package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/autogen/omnibot.routes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="omnibot-routes-package">
+<h1>omnibot.routes package<a class="headerlink" href="#omnibot-routes-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-omnibot.routes.api">
+<span id="omnibot-routes-api-module"></span><h2>omnibot.routes.api module<a class="headerlink" href="#module-omnibot.routes.api" title="Permalink to this headline">¶</a></h2>
+<p>API module for omnibot, to handle events from slack, or to handle
+service-to-service calls.</p>
+<p>Endpoints in this module may be access controlled through the authorization
+configuration; see documentation on checks:</p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">omnibot.authnz:enforce_checks()</span></code></p></li>
+</ul>
+<dl class="function">
+<dt id="omnibot.routes.api.get_bot_ims">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">get_bot_ims</code><span class="sig-paren">(</span><em class="sig-param">team_name</em>, <em class="sig-param">bot_name</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.get_bot_ims" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of IMs (DMs with a bot), for the provided
+<cite>bot_name</cite> and <cite>team_name</cite>.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span>GET /api/v1/slack/get_ims/myteam/mybot
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span>HTTP/1.1 200 OK
+Content-Type: application/json
+
+{&quot;ims&quot;:
+     [
+         {
+             &quot;id&quot;: &#39;D1234567&#39;,
+             &quot;created&quot;: 1518129625,
+             &quot;is_im&quot;: true,
+             &quot;is_org_shared&quot;: true,
+             &quot;user&quot;: &quot;U1234567&quot;
+             &quot;is_user_deleted&quot;: false,
+             &quot;priority&quot;: 0.01234567
+         }
+     ]
+ }
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>team_name</strong> (<em>str</em>) – The team to search for this user, as configured in
+omnibot.</p></li>
+<li><p><strong>bot_name</strong> (<em>str</em>) – The bot to use for the request, as configured in omnibot.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.routes.api.get_channel_by_name">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">get_channel_by_name</code><span class="sig-paren">(</span><em class="sig-param">team_name</em>, <em class="sig-param">bot_name</em>, <em class="sig-param">channel_name</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.get_channel_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a channel object from slack, for the provided <cite>channel_name</cite> in
+the <cite>team_name</cite> using the specified <cite>bot_name</cite>.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/api/v1/slack/get_channel/myteam/mybot/general</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span> HTTP/1.1 200 OK
+ Content-Type: application/json
+
+ {
+   &quot;channel&quot;: {
+     &quot;id&quot;: &quot;C4VQ6NUNN&quot;,
+     &quot;name&quot;: &quot;general&quot;,
+     &quot;is_channel&quot;: true,
+     &quot;created&quot;: 1491515285,
+     &quot;creator&quot;: &quot;U4WF56QGP&quot;,
+     &quot;is_archived&quot;: false,
+     &quot;is_general&quot;: true,
+     &quot;unlinked&quot;: 0,
+     &quot;name_normalized&quot;: &quot;general&quot;,
+     &quot;is_shared&quot;: false,
+     &quot;is_org_shared&quot;: false,
+     &quot;is_member&quot;: false,
+     &quot;is_private&quot;: false,
+     &quot;is_mpim&quot;: false,
+     &quot;members&quot;: [
+       &quot;U4WF56QGP&quot;,
+       &quot;U6HQQ19EC&quot;,
+       &quot;U6J3LTKSQ&quot;,
+       &quot;U6J4EGP44&quot;,
+       &quot;U6JDF1JBU&quot;,
+       &quot;U6JEGTFDZ&quot;,
+       &quot;U6JERPMJ7&quot;,
+       &quot;U6JG691MJ&quot;,
+       &quot;U6JGEQ0J0&quot;,
+       &quot;U6SAVUK44&quot;,
+       &quot;U750C7B37&quot;,
+       &quot;U7DH0H802&quot;
+     ],
+     &quot;topic&quot;: {
+       &quot;value&quot;: &quot;test123&quot;,
+       &quot;creator&quot;: &quot;U6J3LTKSQ&quot;,
+       &quot;last_set&quot;: 1507156612
+     },
+     &quot;purpose&quot;: {
+       &quot;value&quot;: &quot;This channel is for team-wide communication.&quot;
+       &quot;creator&quot;: &quot;&quot;,
+       &quot;last_set&quot;: 0
+     },
+     &quot;previous_names&quot;: [],
+     &quot;num_members&quot;: 9
+   }
+}
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>team_name</strong> (<em>str</em>) – The team to search for this channel, as configured in
+omnibot.</p></li>
+<li><p><strong>bot_name</strong> (<em>str</em>) – The bot to use for the request, as configured in omnibot.</p></li>
+<li><p><strong>channel_name</strong> (<em>str</em>) – The name of the channel to get.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Reqheader x-envoy-internal</dt>
+<dd class="field-even"><p>Header that indicates whether or not this
+request is coming from an internal service
+or not. This is auto-set by envoy and doesn’t
+need to be explicitly set.</p>
+</dd>
+<dt class="field-odd">Resheader Content-Type</dt>
+<dd class="field-odd"><p>application/json</p>
+</dd>
+<dt class="field-even">Statuscode 200</dt>
+<dd class="field-even"><p>success</p>
+</dd>
+<dt class="field-odd">Statuscode 404</dt>
+<dd class="field-odd"><p>channel with specified channel_name could not be found
+in the specified team using the specified bot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.routes.api.get_team_id_by_name">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">get_team_id_by_name</code><span class="sig-paren">(</span><em class="sig-param">team_name</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.get_team_id_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a team_id, from its <cite>team_name</cite>.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/api/v1/slack/get_team/myteam</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+
+<span class="p">{</span><span class="nt">&quot;team_id&quot;</span><span class="p">:</span> <span class="s2">&quot;T123456&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>team_name</strong> (<em>str</em>) – The team to search for this user, as configured in
+omnibot.</p>
+</dd>
+<dt class="field-even">Reqheader x-envoy-internal</dt>
+<dd class="field-even"><p>Header that indicates whether or not this
+request is coming from an internal service
+or not. This is auto-set by envoy and doesn’t
+need to be explicitly set.</p>
+</dd>
+<dt class="field-odd">Resheader Content-Type</dt>
+<dd class="field-odd"><p>application/json</p>
+</dd>
+<dt class="field-even">Statuscode 200</dt>
+<dd class="field-even"><p>success</p>
+</dd>
+<dt class="field-odd">Statuscode 404</dt>
+<dd class="field-odd"><p>team is not configured</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.routes.api.get_user_v2">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">get_user_v2</code><span class="sig-paren">(</span><em class="sig-param">team_name</em>, <em class="sig-param">bot_name</em>, <em class="sig-param">email</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.get_user_v2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns basic user information, for the provided <cite>email</cite> in the <cite>team_name</cite>
+using the specified <cite>bot_name</cite>.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/api/v1/slack/get_user/myteam/mybot/user@example.com</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+
+<span class="p">{</span><span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;user@example.com&quot;</span><span class="p">,</span> <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test User&quot;</span><span class="p">,</span> <span class="nt">&quot;team_id&quot;</span><span class="p">:</span> <span class="s2">&quot;T123456&quot;</span><span class="p">,</span>
+ <span class="nt">&quot;user_id&quot;</span><span class="p">:</span> <span class="s2">&quot;U123ABC&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>team_name</strong> (<em>str</em>) – The team to search for this user, as configured in
+omnibot.</p></li>
+<li><p><strong>bot_name</strong> (<em>str</em>) – The bot to use for the request, as configured in omnibot.</p></li>
+<li><p><strong>email</strong> (<em>str</em>) – The email address of the user to get.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Reqheader x-envoy-internal</dt>
+<dd class="field-even"><p>Header that indicates whether or not this
+request is coming from an internal service
+or not. This is auto-set by envoy and doesn’t
+need to be explicitly set.</p>
+</dd>
+<dt class="field-odd">Resheader Content-Type</dt>
+<dd class="field-odd"><p>application/json</p>
+</dd>
+<dt class="field-even">Statuscode 200</dt>
+<dd class="field-even"><p>success</p>
+</dd>
+<dt class="field-odd">Statuscode 404</dt>
+<dd class="field-odd"><p>user with specified email could not be found using the
+specified bot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.routes.api.healthcheck">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">healthcheck</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.healthcheck" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.routes.api.instrument_event">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">instrument_event</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">event</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.instrument_event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.routes.api.queue_event">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">queue_event</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">event</em>, <em class="sig-param">event_type</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.queue_event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.routes.api.send_bot_im">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">send_bot_im</code><span class="sig-paren">(</span><em class="sig-param">team_name</em>, <em class="sig-param">bot_name</em>, <em class="sig-param">email</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.send_bot_im" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a message as a bot user to an IM (direct message) channel
+between a team member and a bot user,
+for the provided <cite>team_name</cite>, <cite>bot_name</cite>, and <cite>email</cite>.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span>GET /api/v1/slack/send_im/myteam/mybot/myemail@example.com
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+
+<span class="p">{</span>
+     <span class="nt">&quot;channel&quot;</span><span class="p">:</span> <span class="s2">&quot;DC1234567&quot;</span><span class="p">,</span>
+     <span class="nt">&quot;message&quot;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="nt">&quot;bot_id&quot;</span><span class="p">:</span> <span class="s2">&quot;BC1234567&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;subtype&quot;</span><span class="p">:</span> <span class="s2">&quot;bot_message&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;HI!&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;ts&quot;</span><span class="p">:</span> <span class="s2">&quot;1538593287.000100&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;message&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;mybot&quot;</span>
+     <span class="p">},</span>
+     <span class="nt">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+     <span class="nt">&quot;ts&quot;</span><span class="p">:</span> <span class="s2">&quot;1538593287.000100&quot;</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>team_name</strong> (<em>str</em>) – The team to search for the given bot,
+as configured in omnibot.</p></li>
+<li><p><strong>bot_name</strong> (<em>str</em>) – The bot sending the IM to the user,
+as configured in omnibot.</p></li>
+<li><p><strong>email</strong> (<em>str</em>) – The email address of user to send message to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Resheader Content-Type</dt>
+<dd class="field-even"><p>application/json</p>
+</dd>
+<dt class="field-odd">Statuscode 200</dt>
+<dd class="field-odd"><p>success</p>
+</dd>
+<dt class="field-even">Statuscode 400</dt>
+<dd class="field-even"><p>slack call returned a non-OK status</p>
+</dd>
+<dt class="field-odd">Statuscode 404</dt>
+<dd class="field-odd"><p>team, bot, IM unable to be found,
+or user deleted from slack team</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.routes.api.slack_action_v2">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">slack_action_v2</code><span class="sig-paren">(</span><em class="sig-param">team_name</em>, <em class="sig-param">bot_name</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.slack_action_v2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform an action against slack, as the provided <cite>bot_name</cite> in the
+provided <cite>team_name</cite>.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/api/v1/slack/action/myteam/mybot</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+
+<span class="p">{</span>
+  <span class="nt">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;chat.postMessage&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;channel&quot;</span><span class="p">:</span> <span class="s2">&quot;test-omnibot&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;@example see #general and use @here&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;as_user&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;omnibot_parse&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">,</span> <span class="s2">&quot;users&quot;</span><span class="p">,</span> <span class="s2">&quot;specials&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">&lt;json string action</dt>
+<dd class="field-odd"><p>slack api action to perform. example:
+<cite>chat.postMessage</cite></p>
+</dd>
+<dt class="field-even">&lt;json dict kwargs</dt>
+<dd class="field-even"><p>keyword arguments you’d pass into the associated
+slack api action. example:
+<cite>“text”: “&#64;example see #general and use &#64;here”</cite></p>
+</dd>
+<dt class="field-odd">&lt;json dict omnibot_parse</dt>
+<dd class="field-odd"><p>The keyword argument you’d like omnibot to
+parse, with a list of things to parse. example:
+{“text”: [“channels”, “users”, “specials”]}</p>
+</dd>
+</dl>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+
+<span class="p">{</span>
+  <span class="nt">&quot;channel&quot;</span><span class="p">:</span> <span class="s2">&quot;C12345&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;message&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;bot_id&quot;</span><span class="p">:</span> <span class="s2">&quot;B456123&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;subtype&quot;</span><span class="p">:</span> <span class="s2">&quot;bot_message&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;@UABC123|example&gt; see &lt;#C12345|general&gt; and use &lt;!here|here&gt;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ts&quot;</span><span class="p">:</span> <span class="s2">&quot;1523557397.000335&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;message&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;mybot&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nt">&quot;ts&quot;</span><span class="p">:</span> <span class="s2">&quot;1523557397.000335&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>team_name</strong> (<em>str</em>) – The team to perform this action against, as configured in
+omnibot.</p></li>
+<li><p><strong>bot_name</strong> (<em>str</em>) – The bot to use for the request, as configured in omnibot.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Reqheader x-envoy-internal</dt>
+<dd class="field-even"><p>Header that indicates whether or not this
+request is coming from an internal service
+or not. This is auto-set by envoy and doesn’t
+need to be explicitly set.</p>
+</dd>
+<dt class="field-odd">Resheader Content-Type</dt>
+<dd class="field-odd"><p>application/json</p>
+</dd>
+<dt class="field-even">Statuscode 200</dt>
+<dd class="field-even"><p>success</p>
+</dd>
+<dt class="field-odd">Statuscode 400</dt>
+<dd class="field-odd"><p>slack call returned a non-OK status</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.routes.api.slack_event">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">slack_event</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.slack_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle event subscription API webhooks from slack.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.routes.api.slack_interactive_component">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">slack_interactive_component</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.slack_interactive_component" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.routes.api.slack_slash_command">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">slack_slash_command</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.slack_slash_command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.routes.api.verify_bot">
+<code class="sig-prename descclassname">omnibot.routes.api.</code><code class="sig-name descname">verify_bot</code><span class="sig-paren">(</span><em class="sig-param">f</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.routes.api.verify_bot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-omnibot.routes">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-omnibot.routes" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="omnibot.scripts.html" class="btn btn-neutral float-right" title="omnibot.scripts package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="omnibot.callbacks.html" class="btn btn-neutral float-left" title="omnibot.callbacks package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2019, Omnibot Project Authors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

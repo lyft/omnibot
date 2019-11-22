@@ -1,0 +1,54 @@
+tests.unit.omnibot.services.slack package
+=========================================
+
+Submodules
+----------
+
+tests.unit.omnibot.services.slack.bot\_test module
+--------------------------------------------------
+
+.. automodule:: tests.unit.omnibot.services.slack.bot_test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.unit.omnibot.services.slack.interactive\_component\_test module
+---------------------------------------------------------------------
+
+.. automodule:: tests.unit.omnibot.services.slack.interactive_component_test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.unit.omnibot.services.slack.message\_test module
+------------------------------------------------------
+
+.. automodule:: tests.unit.omnibot.services.slack.message_test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.unit.omnibot.services.slack.parser\_test module
+-----------------------------------------------------
+
+.. automodule:: tests.unit.omnibot.services.slack.parser_test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.unit.omnibot.services.slack.team\_test module
+---------------------------------------------------
+
+.. automodule:: tests.unit.omnibot.services.slack.team_test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: tests.unit.omnibot.services.slack
+   :members:
+   :undoc-members:
+   :show-inheritance:

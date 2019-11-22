@@ -1,0 +1,30 @@
+omnibot.scripts package
+=======================
+
+Submodules
+----------
+
+omnibot.scripts.omniredis module
+--------------------------------
+
+.. automodule:: omnibot.scripts.omniredis
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.scripts.utils module
+----------------------------
+
+.. automodule:: omnibot.scripts.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: omnibot.scripts
+   :members:
+   :undoc-members:
+   :show-inheritance:

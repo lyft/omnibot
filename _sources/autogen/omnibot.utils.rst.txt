@@ -1,0 +1,22 @@
+omnibot.utils package
+=====================
+
+Submodules
+----------
+
+omnibot.utils.settings module
+-----------------------------
+
+.. automodule:: omnibot.utils.settings
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: omnibot.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

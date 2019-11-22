@@ -1,0 +1,30 @@
+tests.unit.omnibot package
+==========================
+
+Subpackages
+-----------
+
+.. toctree::
+
+   tests.unit.omnibot.authnz
+   tests.unit.omnibot.services
+
+Submodules
+----------
+
+tests.unit.omnibot.settings\_test module
+----------------------------------------
+
+.. automodule:: tests.unit.omnibot.settings_test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: tests.unit.omnibot
+   :members:
+   :undoc-members:
+   :show-inheritance:

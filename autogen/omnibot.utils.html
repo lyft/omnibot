@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>omnibot.utils package &mdash; omnibot 1.0.0-2f02c3 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/omnibot.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="omnibot.services.slack package" href="omnibot.services.slack.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> omnibot
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0-2f02c3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#quickstart-for-testing">Quickstart for testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#docker-installation">Docker installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#to-run-omnibot-in-docker">To run omnibot in Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#to-build-the-image">To build the image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#pip-installation">pip installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#make-a-virtualenv-and-install-pip-requirements">Make a virtualenv and install pip requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#manual-installation">Manual installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#clone-omnibot">Clone omnibot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#id1">Make a virtualenv and install pip requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#run-omnibot">Run omnibot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#example-minimal-configuration">Example Minimal Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#basic-configuration">Basic Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#configuration-file-configuration">Configuration File Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#teams">Teams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#bots">Bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#bot-credential-configuration">Bot Credential Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#urls-configuration-for-use-in-slack-app-dashboard">URLs Configuration for Use in Slack App Dashboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#sqs-configuration">SQS Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#redis-configuration">Redis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#statsd-configuration">Statsd Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#logging-configuration">Logging Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#handler-configuration">Handler Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#common-handler-configuration">Common Handler Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#message-handlers">Message Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#interactive-component-handlers">Interactive Component Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#slash-command-handlers">Slash Command Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#api-access-control-configuration">API Access Control Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../adding_new_slack_apps.html">Adding new slack apps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../adding_new_slack_apps.html#adding-normal-slack-apps">Adding normal slack apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adding_new_slack_apps.html#adding-a-slack-app-for-use-as-a-primary-bot">Adding a slack app for use as a primary bot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../observability.html">Observability</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../observability.html#stats">Stats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#delivery-and-processing">Delivery and Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#webhook-worker-gevent-pool">Webhook Worker Gevent Pool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#watcher-worker-latency">Watcher Worker Latency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../observability.html#logs">Logs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#event-subscription-tracing-data">Event Subscription Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#slash-command-tracing-data">Slash Command Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#interactive-component-tracing-data">Interactive Component Tracing Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Quickstart and Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development.html#quickstart">Quickstart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development.html#developing-new-bots">Developing new bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development.html#making-and-testing-changes-to-omnibot-using-docker-and-docker-compose">Making and testing changes to omnibot using docker and docker-compose</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../receivers.html">Omnibot receiver libraries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../receivers.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../event_parsing.html">Event parsing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../event_parsing.html#event-subscription-events">Event Subscription Events</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../event_parsing.html#message-events">Message Events</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../event_parsing.html#interactive-component-events">Interactive Component Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../event_parsing.html#slash-command-events">Slash Command Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../slack_proxying.html">Slack proxying</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../slack_proxying.html#message-handlers">Message handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../slack_proxying.html#slash-command-and-interactive-component-handlers">Slash command and interactive component handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../writing_new_callbacks.html">Writing new callback functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#code-of-conduct">Code of conduct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#contributing-code">Contributing code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#sign-the-contributor-license-agreement-cla">Sign the Contributor License Agreement (CLA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#file-issues-in-github">File issues in Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#submit-pull-requests">Submit pull requests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API endpoint</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#api-route-documentation">API route documentation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Python module documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="omnibot.html">omnibot package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="omnibot.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="omnibot.authnz.html">omnibot.authnz package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.authnz.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.authnz.html#module-omnibot.authnz.envoy_checks">omnibot.authnz.envoy_checks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.authnz.html#module-omnibot.authnz">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.callbacks.html">omnibot.callbacks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.interactive_component_callbacks">omnibot.callbacks.interactive_component_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.message_callbacks">omnibot.callbacks.message_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.network_callbacks">omnibot.callbacks.network_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.slash_command_callbacks">omnibot.callbacks.slash_command_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.routes.html">omnibot.routes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.routes.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.routes.html#module-omnibot.routes.api">omnibot.routes.api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.routes.html#module-omnibot.routes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.scripts.html">omnibot.scripts package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#module-omnibot.scripts.omniredis">omnibot.scripts.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#module-omnibot.scripts.utils">omnibot.scripts.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#module-omnibot.scripts">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.services.html">omnibot.services package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services.omniredis">omnibot.services.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services.sqs">omnibot.services.sqs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services.stats">omnibot.services.stats module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">omnibot.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-omnibot.utils.settings">omnibot.utils.settings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-omnibot.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.app">omnibot.app module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.processor">omnibot.processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.settings">omnibot.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.setup_logging">omnibot.setup_logging module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.watcher">omnibot.watcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.webhook_worker">omnibot.webhook_worker module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.wsgi">omnibot.wsgi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">omnibot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="omnibot.html">omnibot package</a> &raquo;</li>
+        
+      <li>omnibot.utils package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/autogen/omnibot.utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="omnibot-utils-package">
+<h1>omnibot.utils package<a class="headerlink" href="#omnibot-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-omnibot.utils.settings">
+<span id="omnibot-utils-settings-module"></span><h2>omnibot.utils.settings module<a class="headerlink" href="#module-omnibot.utils.settings" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="omnibot.utils.settings.bool_env">
+<code class="sig-prename descclassname">omnibot.utils.settings.</code><code class="sig-name descname">bool_env</code><span class="sig-paren">(</span><em class="sig-param">var_name</em>, <em class="sig-param">default=False</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.utils.settings.bool_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an environment variable coerced to a boolean value.</p>
+<p>Example:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Bash:</dt><dd><p>$ export SOME_VAL=True</p>
+</dd>
+<dt>settings.py:</dt><dd><p>SOME_VAL = bool_env(‘SOME_VAL’, False)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Arguments:</p>
+<blockquote>
+<div><p>var_name: The name of the environment variable.
+default: The default to use if <cite>var_name</cite> is not specified in the
+environment.</p>
+</div></blockquote>
+<dl>
+<dt>Returns: <cite>var_name</cite> or <cite>default</cite> coerced to a boolean using the following</dt><dd><p>rules:</p>
+<blockquote>
+<div><p>“False”, “false” or “” =&gt; False
+Any other non-empty string =&gt; True</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.utils.settings.float_env">
+<code class="sig-prename descclassname">omnibot.utils.settings.</code><code class="sig-name descname">float_env</code><span class="sig-paren">(</span><em class="sig-param">var_name</em>, <em class="sig-param">default=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.utils.settings.float_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an environment variable coerced to a float value.
+This has the same arguments as bool_env. If a value cannot be coerced to a
+float, a ValueError will be raised.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.utils.settings.int_env">
+<code class="sig-prename descclassname">omnibot.utils.settings.</code><code class="sig-name descname">int_env</code><span class="sig-paren">(</span><em class="sig-param">var_name</em>, <em class="sig-param">default=0</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.utils.settings.int_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an environment variable coerced to an integer value.
+This has the same arguments as bool_env. If a value cannot be coerced to an
+integer, a ValueError will be raised.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.utils.settings.str_env">
+<code class="sig-prename descclassname">omnibot.utils.settings.</code><code class="sig-name descname">str_env</code><span class="sig-paren">(</span><em class="sig-param">var_name</em>, <em class="sig-param">default=''</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.utils.settings.str_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an environment variable as a string.
+This has the same arguments as bool_env.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-omnibot.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-omnibot.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="omnibot.utils.get_callback_id">
+<code class="sig-prename descclassname">omnibot.utils.</code><code class="sig-name descname">get_callback_id</code><span class="sig-paren">(</span><em class="sig-param">component</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.utils.get_callback_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the callback ID of the given interactive component.
+In the case the component corresponds to Slack’s newer block
+components, return its block ID instead, but treat it as though
+it were the callback ID to minimize code change as the two
+function similarly.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="omnibot.services.slack.html" class="btn btn-neutral float-left" title="omnibot.services.slack package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2019, Omnibot Project Authors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

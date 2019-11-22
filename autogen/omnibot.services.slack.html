@@ -1,0 +1,1078 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>omnibot.services.slack package &mdash; omnibot 1.0.0-2f02c3 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/omnibot.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="omnibot.utils package" href="omnibot.utils.html" />
+    <link rel="prev" title="omnibot.services package" href="omnibot.services.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> omnibot
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0-2f02c3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#quickstart-for-testing">Quickstart for testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#docker-installation">Docker installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#to-run-omnibot-in-docker">To run omnibot in Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#to-build-the-image">To build the image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#pip-installation">pip installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#make-a-virtualenv-and-install-pip-requirements">Make a virtualenv and install pip requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#manual-installation">Manual installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#clone-omnibot">Clone omnibot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#id1">Make a virtualenv and install pip requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#run-omnibot">Run omnibot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#example-minimal-configuration">Example Minimal Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#basic-configuration">Basic Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#configuration-file-configuration">Configuration File Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#teams">Teams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#bots">Bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#bot-credential-configuration">Bot Credential Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#urls-configuration-for-use-in-slack-app-dashboard">URLs Configuration for Use in Slack App Dashboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#sqs-configuration">SQS Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#redis-configuration">Redis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#statsd-configuration">Statsd Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#logging-configuration">Logging Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#handler-configuration">Handler Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#common-handler-configuration">Common Handler Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#message-handlers">Message Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#interactive-component-handlers">Interactive Component Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#slash-command-handlers">Slash Command Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#api-access-control-configuration">API Access Control Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../adding_new_slack_apps.html">Adding new slack apps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../adding_new_slack_apps.html#adding-normal-slack-apps">Adding normal slack apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adding_new_slack_apps.html#adding-a-slack-app-for-use-as-a-primary-bot">Adding a slack app for use as a primary bot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../observability.html">Observability</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../observability.html#stats">Stats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#delivery-and-processing">Delivery and Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#webhook-worker-gevent-pool">Webhook Worker Gevent Pool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#watcher-worker-latency">Watcher Worker Latency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../observability.html#logs">Logs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#event-subscription-tracing-data">Event Subscription Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#slash-command-tracing-data">Slash Command Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#interactive-component-tracing-data">Interactive Component Tracing Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Quickstart and Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development.html#quickstart">Quickstart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development.html#developing-new-bots">Developing new bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development.html#making-and-testing-changes-to-omnibot-using-docker-and-docker-compose">Making and testing changes to omnibot using docker and docker-compose</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../receivers.html">Omnibot receiver libraries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../receivers.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../event_parsing.html">Event parsing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../event_parsing.html#event-subscription-events">Event Subscription Events</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../event_parsing.html#message-events">Message Events</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../event_parsing.html#interactive-component-events">Interactive Component Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../event_parsing.html#slash-command-events">Slash Command Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../slack_proxying.html">Slack proxying</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../slack_proxying.html#message-handlers">Message handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../slack_proxying.html#slash-command-and-interactive-component-handlers">Slash command and interactive component handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../writing_new_callbacks.html">Writing new callback functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#code-of-conduct">Code of conduct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#contributing-code">Contributing code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#sign-the-contributor-license-agreement-cla">Sign the Contributor License Agreement (CLA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#file-issues-in-github">File issues in Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#submit-pull-requests">Submit pull requests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API endpoint</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#api-route-documentation">API route documentation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Python module documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="omnibot.html">omnibot package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="omnibot.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="omnibot.authnz.html">omnibot.authnz package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.authnz.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.authnz.html#module-omnibot.authnz.envoy_checks">omnibot.authnz.envoy_checks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.authnz.html#module-omnibot.authnz">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.callbacks.html">omnibot.callbacks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.interactive_component_callbacks">omnibot.callbacks.interactive_component_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.message_callbacks">omnibot.callbacks.message_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.network_callbacks">omnibot.callbacks.network_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.slash_command_callbacks">omnibot.callbacks.slash_command_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.routes.html">omnibot.routes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.routes.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.routes.html#module-omnibot.routes.api">omnibot.routes.api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.routes.html#module-omnibot.routes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.scripts.html">omnibot.scripts package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#module-omnibot.scripts.omniredis">omnibot.scripts.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#module-omnibot.scripts.utils">omnibot.scripts.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#module-omnibot.scripts">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="reference internal" href="omnibot.services.html">omnibot.services package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="omnibot.services.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services.omniredis">omnibot.services.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services.sqs">omnibot.services.sqs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services.stats">omnibot.services.stats module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.utils.html">omnibot.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.utils.html#module-omnibot.utils.settings">omnibot.utils.settings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.utils.html#module-omnibot.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.app">omnibot.app module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.processor">omnibot.processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.settings">omnibot.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.setup_logging">omnibot.setup_logging module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.watcher">omnibot.watcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.webhook_worker">omnibot.webhook_worker module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.wsgi">omnibot.wsgi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">omnibot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="omnibot.html">omnibot package</a> &raquo;</li>
+        
+          <li><a href="omnibot.services.html">omnibot.services package</a> &raquo;</li>
+        
+      <li>omnibot.services.slack package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/autogen/omnibot.services.slack.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="omnibot-services-slack-package">
+<h1>omnibot.services.slack package<a class="headerlink" href="#omnibot-services-slack-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-omnibot.services.slack.bot">
+<span id="omnibot-services-slack-bot-module"></span><h2>omnibot.services.slack.bot module<a class="headerlink" href="#module-omnibot.services.slack.bot" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="omnibot.services.slack.bot.Bot">
+<em class="property">class </em><code class="sig-prename descclassname">omnibot.services.slack.bot.</code><code class="sig-name descname">Bot</code><span class="sig-paren">(</span><em class="sig-param">team</em>, <em class="sig-param">name</em>, <em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.bot.Bot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for representing a slack bot.</p>
+<dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.bot_id">
+<em class="property">property </em><code class="sig-name descname">bot_id</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.bot_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.get_bot_by_bot_id">
+<em class="property">classmethod </em><code class="sig-name descname">get_bot_by_bot_id</code><span class="sig-paren">(</span><em class="sig-param">team</em>, <em class="sig-param">bot_id</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.bot.Bot.get_bot_by_bot_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.get_bot_by_name">
+<em class="property">classmethod </em><code class="sig-name descname">get_bot_by_name</code><span class="sig-paren">(</span><em class="sig-param">team</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.bot.Bot.get_bot_by_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.get_bot_by_verification_token">
+<em class="property">classmethod </em><code class="sig-name descname">get_bot_by_verification_token</code><span class="sig-paren">(</span><em class="sig-param">verification_token</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.bot.Bot.get_bot_by_verification_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.interactive_component_handlers">
+<em class="property">property </em><code class="sig-name descname">interactive_component_handlers</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.interactive_component_handlers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.message_handlers">
+<em class="property">property </em><code class="sig-name descname">message_handlers</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.message_handlers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.oauth_bot_token">
+<em class="property">property </em><code class="sig-name descname">oauth_bot_token</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.oauth_bot_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.oauth_token">
+<em class="property">property </em><code class="sig-name descname">oauth_token</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.oauth_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.slash_command_handlers">
+<em class="property">property </em><code class="sig-name descname">slash_command_handlers</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.slash_command_handlers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.team">
+<em class="property">property </em><code class="sig-name descname">team</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.team" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.verification_token">
+<em class="property">property </em><code class="sig-name descname">verification_token</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.verification_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="omnibot.services.slack.bot.BotInitializationError">
+<em class="property">exception </em><code class="sig-prename descclassname">omnibot.services.slack.bot.</code><code class="sig-name descname">BotInitializationError</code><a class="headerlink" href="#omnibot.services.slack.bot.BotInitializationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-omnibot.services.slack.interactive_component">
+<span id="omnibot-services-slack-interactive-component-module"></span><h2>omnibot.services.slack.interactive_component module<a class="headerlink" href="#module-omnibot.services.slack.interactive_component" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent">
+<em class="property">class </em><code class="sig-prename descclassname">omnibot.services.slack.interactive_component.</code><code class="sig-name descname">InteractiveComponent</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">component</em>, <em class="sig-param">event_trace</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for representing a parsed slack InteractiveComponent.</p>
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.action_ts">
+<em class="property">property </em><code class="sig-name descname">action_ts</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.action_ts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.actions">
+<em class="property">property </em><code class="sig-name descname">actions</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.bot">
+<em class="property">property </em><code class="sig-name descname">bot</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.bot" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bot associated with the app that received this message from the
+slash component api. To get info about a bot that may have sent
+this message, see bot_id.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.callback_id">
+<em class="property">property </em><code class="sig-name descname">callback_id</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.callback_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.channel">
+<em class="property">property </em><code class="sig-name descname">channel</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.channel_id">
+<em class="property">property </em><code class="sig-name descname">channel_id</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.channel_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.component_type">
+<em class="property">property </em><code class="sig-name descname">component_type</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.component_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.event_trace">
+<em class="property">property </em><code class="sig-name descname">event_trace</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.event_trace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.message">
+<em class="property">property </em><code class="sig-name descname">message</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.parsed_channel">
+<em class="property">property </em><code class="sig-name descname">parsed_channel</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.parsed_channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.parsed_user">
+<em class="property">property </em><code class="sig-name descname">parsed_user</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.parsed_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.payload">
+<em class="property">property </em><code class="sig-name descname">payload</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.payload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.response_url">
+<em class="property">property </em><code class="sig-name descname">response_url</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.response_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.submission">
+<em class="property">property </em><code class="sig-name descname">submission</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.submission" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.team">
+<em class="property">property </em><code class="sig-name descname">team</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.team" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.trigger_id">
+<em class="property">property </em><code class="sig-name descname">trigger_id</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.trigger_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.interactive_component.InteractiveComponent.user">
+<em class="property">property </em><code class="sig-name descname">user</code><a class="headerlink" href="#omnibot.services.slack.interactive_component.InteractiveComponent.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-omnibot.services.slack.message">
+<span id="omnibot-services-slack-message-module"></span><h2>omnibot.services.slack.message module<a class="headerlink" href="#module-omnibot.services.slack.message" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="omnibot.services.slack.message.Message">
+<em class="property">class </em><code class="sig-prename descclassname">omnibot.services.slack.message.</code><code class="sig-name descname">Message</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">event</em>, <em class="sig-param">event_trace</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.message.Message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for representing a parsed slack message.</p>
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.bot">
+<em class="property">property </em><code class="sig-name descname">bot</code><a class="headerlink" href="#omnibot.services.slack.message.Message.bot" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bot associated with the app that received this message from the
+event subscription api. To get info about a bot that may have sent
+this message, see bot_id.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.bot_id">
+<em class="property">property </em><code class="sig-name descname">bot_id</code><a class="headerlink" href="#omnibot.services.slack.message.Message.bot_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bot_id associated with the message, if the message if from a bot.
+If this message isn’t from a bot, this will return None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.channel">
+<em class="property">property </em><code class="sig-name descname">channel</code><a class="headerlink" href="#omnibot.services.slack.message.Message.channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.channel_id">
+<em class="property">property </em><code class="sig-name descname">channel_id</code><a class="headerlink" href="#omnibot.services.slack.message.Message.channel_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.channels">
+<em class="property">property </em><code class="sig-name descname">channels</code><a class="headerlink" href="#omnibot.services.slack.message.Message.channels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.command_text">
+<em class="property">property </em><code class="sig-name descname">command_text</code><a class="headerlink" href="#omnibot.services.slack.message.Message.command_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.directed">
+<em class="property">property </em><code class="sig-name descname">directed</code><a class="headerlink" href="#omnibot.services.slack.message.Message.directed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.emails">
+<em class="property">property </em><code class="sig-name descname">emails</code><a class="headerlink" href="#omnibot.services.slack.message.Message.emails" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.event_trace">
+<em class="property">property </em><code class="sig-name descname">event_trace</code><a class="headerlink" href="#omnibot.services.slack.message.Message.event_trace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.match">
+<em class="property">property </em><code class="sig-name descname">match</code><a class="headerlink" href="#omnibot.services.slack.message.Message.match" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.match_type">
+<em class="property">property </em><code class="sig-name descname">match_type</code><a class="headerlink" href="#omnibot.services.slack.message.Message.match_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.mentioned">
+<em class="property">property </em><code class="sig-name descname">mentioned</code><a class="headerlink" href="#omnibot.services.slack.message.Message.mentioned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.parsed_text">
+<em class="property">property </em><code class="sig-name descname">parsed_text</code><a class="headerlink" href="#omnibot.services.slack.message.Message.parsed_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.payload">
+<em class="property">property </em><code class="sig-name descname">payload</code><a class="headerlink" href="#omnibot.services.slack.message.Message.payload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.set_match">
+<code class="sig-name descname">set_match</code><span class="sig-paren">(</span><em class="sig-param">match_type</em>, <em class="sig-param">match</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.message.Message.set_match" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.specials">
+<em class="property">property </em><code class="sig-name descname">specials</code><a class="headerlink" href="#omnibot.services.slack.message.Message.specials" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.subtype">
+<em class="property">property </em><code class="sig-name descname">subtype</code><a class="headerlink" href="#omnibot.services.slack.message.Message.subtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.team">
+<em class="property">property </em><code class="sig-name descname">team</code><a class="headerlink" href="#omnibot.services.slack.message.Message.team" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.text">
+<em class="property">property </em><code class="sig-name descname">text</code><a class="headerlink" href="#omnibot.services.slack.message.Message.text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.thread_ts">
+<em class="property">property </em><code class="sig-name descname">thread_ts</code><a class="headerlink" href="#omnibot.services.slack.message.Message.thread_ts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.ts">
+<em class="property">property </em><code class="sig-name descname">ts</code><a class="headerlink" href="#omnibot.services.slack.message.Message.ts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.urls">
+<em class="property">property </em><code class="sig-name descname">urls</code><a class="headerlink" href="#omnibot.services.slack.message.Message.urls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.user">
+<em class="property">property </em><code class="sig-name descname">user</code><a class="headerlink" href="#omnibot.services.slack.message.Message.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.message.Message.users">
+<em class="property">property </em><code class="sig-name descname">users</code><a class="headerlink" href="#omnibot.services.slack.message.Message.users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="omnibot.services.slack.message.MessageUnsupportedError">
+<em class="property">exception </em><code class="sig-prename descclassname">omnibot.services.slack.message.</code><code class="sig-name descname">MessageUnsupportedError</code><a class="headerlink" href="#omnibot.services.slack.message.MessageUnsupportedError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-omnibot.services.slack.parser">
+<span id="omnibot-services-slack-parser-module"></span><h2>omnibot.services.slack.parser module<a class="headerlink" href="#module-omnibot.services.slack.parser" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="omnibot.services.slack.parser.extract_channels">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">extract_channels</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.extract_channels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.extract_command">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">extract_command</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.extract_command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.extract_emails">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">extract_emails</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.extract_emails" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.extract_emojis">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">extract_emojis</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.extract_emojis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.extract_mentions">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">extract_mentions</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">bot</em>, <em class="sig-param">channel</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.extract_mentions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.extract_specials">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">extract_specials</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.extract_specials" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.extract_subteams">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">extract_subteams</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.extract_subteams" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.extract_urls">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">extract_urls</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.extract_urls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.extract_users">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">extract_users</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.extract_users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.replace_channels">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">replace_channels</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">channels</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.replace_channels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.replace_emails">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">replace_emails</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">emails</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.replace_emails" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.replace_specials">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">replace_specials</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">specials</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.replace_specials" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.replace_urls">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">replace_urls</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">urls</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.replace_urls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.replace_users">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">replace_users</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">users</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.replace_users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.unextract_channels">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">unextract_channels</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.unextract_channels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.unextract_specials">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">unextract_specials</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.unextract_specials" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.parser.unextract_users">
+<code class="sig-prename descclassname">omnibot.services.slack.parser.</code><code class="sig-name descname">unextract_users</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.parser.unextract_users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-omnibot.services.slack.slash_command">
+<span id="omnibot-services-slack-slash-command-module"></span><h2>omnibot.services.slack.slash_command module<a class="headerlink" href="#module-omnibot.services.slack.slash_command" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="omnibot.services.slack.slash_command.SlashCommand">
+<em class="property">class </em><code class="sig-prename descclassname">omnibot.services.slack.slash_command.</code><code class="sig-name descname">SlashCommand</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">command</em>, <em class="sig-param">event_trace</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for representing a parsed slack SlashCommand.</p>
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.bot">
+<em class="property">property </em><code class="sig-name descname">bot</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.bot" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bot associated with the app that received this message from the
+slash command api. To get info about a bot that may have sent
+this message, see bot_id.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.bot_id">
+<em class="property">property </em><code class="sig-name descname">bot_id</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.bot_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bot_id associated with the message, if the message if from a bot.
+If this message isn’t from a bot, this will return None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.channel">
+<em class="property">property </em><code class="sig-name descname">channel</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.channel_id">
+<em class="property">property </em><code class="sig-name descname">channel_id</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.channel_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.channels">
+<em class="property">property </em><code class="sig-name descname">channels</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.channels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.command">
+<em class="property">property </em><code class="sig-name descname">command</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.emails">
+<em class="property">property </em><code class="sig-name descname">emails</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.emails" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.enterprise_id">
+<em class="property">property </em><code class="sig-name descname">enterprise_id</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.enterprise_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.enterprise_name">
+<em class="property">property </em><code class="sig-name descname">enterprise_name</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.enterprise_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.event_trace">
+<em class="property">property </em><code class="sig-name descname">event_trace</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.event_trace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.parsed_text">
+<em class="property">property </em><code class="sig-name descname">parsed_text</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.parsed_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.payload">
+<em class="property">property </em><code class="sig-name descname">payload</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.payload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.response_url">
+<em class="property">property </em><code class="sig-name descname">response_url</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.response_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.specials">
+<em class="property">property </em><code class="sig-name descname">specials</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.specials" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.team">
+<em class="property">property </em><code class="sig-name descname">team</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.team" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.text">
+<em class="property">property </em><code class="sig-name descname">text</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.trigger_id">
+<em class="property">property </em><code class="sig-name descname">trigger_id</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.trigger_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.urls">
+<em class="property">property </em><code class="sig-name descname">urls</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.urls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.user_id">
+<em class="property">property </em><code class="sig-name descname">user_id</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.user_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.slash_command.SlashCommand.users">
+<em class="property">property </em><code class="sig-name descname">users</code><a class="headerlink" href="#omnibot.services.slack.slash_command.SlashCommand.users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-omnibot.services.slack.team">
+<span id="omnibot-services-slack-team-module"></span><h2>omnibot.services.slack.team module<a class="headerlink" href="#module-omnibot.services.slack.team" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="omnibot.services.slack.team.Team">
+<em class="property">class </em><code class="sig-prename descclassname">omnibot.services.slack.team.</code><code class="sig-name descname">Team</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">team_id</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.team.Team" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for representing a slack team.</p>
+<dl class="method">
+<dt id="omnibot.services.slack.team.Team.get_team_by_id">
+<em class="property">classmethod </em><code class="sig-name descname">get_team_by_id</code><span class="sig-paren">(</span><em class="sig-param">team_id</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.team.Team.get_team_by_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.team.Team.get_team_by_name">
+<em class="property">classmethod </em><code class="sig-name descname">get_team_by_name</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.team.Team.get_team_by_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.team.Team.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#omnibot.services.slack.team.Team.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="omnibot.services.slack.team.Team.team_id">
+<em class="property">property </em><code class="sig-name descname">team_id</code><a class="headerlink" href="#omnibot.services.slack.team.Team.team_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="omnibot.services.slack.team.TeamInitializationError">
+<em class="property">exception </em><code class="sig-prename descclassname">omnibot.services.slack.team.</code><code class="sig-name descname">TeamInitializationError</code><a class="headerlink" href="#omnibot.services.slack.team.TeamInitializationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-omnibot.services.slack">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-omnibot.services.slack" title="Permalink to this headline">¶</a></h2>
+<p>Slackclient wrapper.</p>
+<dl class="function">
+<dt id="omnibot.services.slack.client">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">client</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">client_type='oauth'</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Global Slack client.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_channel">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_channel</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">channel</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a channel, from its channel id</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_channel_by_name">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_channel_by_name</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">channel</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_channel_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a channel, from its channel name. This function will only fetch from
+cache. If the channel isn’t in cache, it will return None.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_channels">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_channels</code><span class="sig-paren">(</span><em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_channels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_emoji">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_emoji</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_emoji" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_groups">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_groups</code><span class="sig-paren">(</span><em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_im_channel_id">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_im_channel_id</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_im_channel_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_ims">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_ims</code><span class="sig-paren">(</span><em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_ims" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_mpims">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_mpims</code><span class="sig-paren">(</span><em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_mpims" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_name_from_user">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_name_from_user</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_name_from_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_user">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_user</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a user, from its user id</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_user_by_email">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_user_by_email</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">email</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_user_by_email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_user_by_name">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_user_by_name</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">username</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_user_by_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.get_users">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">get_users</code><span class="sig-paren">(</span><em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.get_users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.update_channel">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_channel</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">channel</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.update_channels">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_channels</code><span class="sig-paren">(</span><em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_channels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.update_emoji">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_emoji</code><span class="sig-paren">(</span><em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_emoji" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.update_group">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_group</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">group</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.update_groups">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_groups</code><span class="sig-paren">(</span><em class="sig-param">bots</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.update_im">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_im</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">im</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_im" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.update_ims">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_ims</code><span class="sig-paren">(</span><em class="sig-param">bots</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_ims" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.update_mpim">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_mpim</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">mpim</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_mpim" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.update_mpims">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_mpims</code><span class="sig-paren">(</span><em class="sig-param">bots</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_mpims" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.update_user">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_user</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="omnibot.services.slack.update_users">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_users</code><span class="sig-paren">(</span><em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="omnibot.utils.html" class="btn btn-neutral float-right" title="omnibot.utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="omnibot.services.html" class="btn btn-neutral float-left" title="omnibot.services package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2019, Omnibot Project Authors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

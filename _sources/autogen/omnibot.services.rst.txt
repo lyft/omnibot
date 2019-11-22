@@ -1,0 +1,45 @@
+omnibot.services package
+========================
+
+Subpackages
+-----------
+
+.. toctree::
+
+   omnibot.services.slack
+
+Submodules
+----------
+
+omnibot.services.omniredis module
+---------------------------------
+
+.. automodule:: omnibot.services.omniredis
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.services.sqs module
+---------------------------
+
+.. automodule:: omnibot.services.sqs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.services.stats module
+-----------------------------
+
+.. automodule:: omnibot.services.stats
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: omnibot.services
+   :members:
+   :undoc-members:
+   :show-inheritance:

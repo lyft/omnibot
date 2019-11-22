@@ -1,0 +1,82 @@
+omnibot package
+===============
+
+Subpackages
+-----------
+
+.. toctree::
+
+   omnibot.authnz
+   omnibot.callbacks
+   omnibot.routes
+   omnibot.scripts
+   omnibot.services
+   omnibot.utils
+
+Submodules
+----------
+
+omnibot.app module
+------------------
+
+.. automodule:: omnibot.app
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.processor module
+------------------------
+
+.. automodule:: omnibot.processor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.settings module
+-----------------------
+
+.. automodule:: omnibot.settings
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.setup\_logging module
+-----------------------------
+
+.. automodule:: omnibot.setup_logging
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.watcher module
+----------------------
+
+.. automodule:: omnibot.watcher
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.webhook\_worker module
+------------------------------
+
+.. automodule:: omnibot.webhook_worker
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+omnibot.wsgi module
+-------------------
+
+.. automodule:: omnibot.wsgi
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: omnibot
+   :members:
+   :undoc-members:
+   :show-inheritance:

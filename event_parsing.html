@@ -1,0 +1,819 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Event parsing &mdash; omnibot 1.0.0-2f02c3 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/omnibot.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Slack proxying" href="slack_proxying.html" />
+    <link rel="prev" title="Omnibot receiver libraries" href="receivers.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> omnibot
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0-2f02c3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#quickstart-for-testing">Quickstart for testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#docker-installation">Docker installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#to-run-omnibot-in-docker">To run omnibot in Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#to-build-the-image">To build the image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#pip-installation">pip installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#make-a-virtualenv-and-install-pip-requirements">Make a virtualenv and install pip requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#manual-installation">Manual installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#clone-omnibot">Clone omnibot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#id1">Make a virtualenv and install pip requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#run-omnibot">Run omnibot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#example-minimal-configuration">Example Minimal Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#basic-configuration">Basic Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#configuration-file-configuration">Configuration File Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#teams">Teams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#bots">Bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#bot-credential-configuration">Bot Credential Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#urls-configuration-for-use-in-slack-app-dashboard">URLs Configuration for Use in Slack App Dashboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#sqs-configuration">SQS Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#redis-configuration">Redis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#statsd-configuration">Statsd Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#logging-configuration">Logging Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#handler-configuration">Handler Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#common-handler-configuration">Common Handler Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#message-handlers">Message Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#interactive-component-handlers">Interactive Component Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#slash-command-handlers">Slash Command Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#api-access-control-configuration">API Access Control Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="adding_new_slack_apps.html">Adding new slack apps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adding_new_slack_apps.html#adding-normal-slack-apps">Adding normal slack apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adding_new_slack_apps.html#adding-a-slack-app-for-use-as-a-primary-bot">Adding a slack app for use as a primary bot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="observability.html">Observability</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="observability.html#stats">Stats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#delivery-and-processing">Delivery and Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#webhook-worker-gevent-pool">Webhook Worker Gevent Pool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#watcher-worker-latency">Watcher Worker Latency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="observability.html#logs">Logs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#event-subscription-tracing-data">Event Subscription Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#slash-command-tracing-data">Slash Command Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="observability.html#interactive-component-tracing-data">Interactive Component Tracing Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="development.html">Quickstart and Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#quickstart">Quickstart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="development.html#developing-new-bots">Developing new bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="development.html#making-and-testing-changes-to-omnibot-using-docker-and-docker-compose">Making and testing changes to omnibot using docker and docker-compose</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="receivers.html">Omnibot receiver libraries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="receivers.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Event parsing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#event-subscription-events">Event Subscription Events</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#message-events">Message Events</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#interactive-component-events">Interactive Component Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#slash-command-events">Slash Command Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slack_proxying.html">Slack proxying</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slack_proxying.html#message-handlers">Message handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slack_proxying.html#slash-command-and-interactive-component-handlers">Slash command and interactive component handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="writing_new_callbacks.html">Writing new callback functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-of-conduct">Code of conduct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#contributing-code">Contributing code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#sign-the-contributor-license-agreement-cla">Sign the Contributor License Agreement (CLA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#file-issues-in-github">File issues in Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#submit-pull-requests">Submit pull requests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API endpoint</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#api-route-documentation">API route documentation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Python module documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autogen/omnibot.html">omnibot package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.authnz.html">omnibot.authnz package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.authnz.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.authnz.html#module-omnibot.authnz.envoy_checks">omnibot.authnz.envoy_checks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.authnz.html#module-omnibot.authnz">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.callbacks.html">omnibot.callbacks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.interactive_component_callbacks">omnibot.callbacks.interactive_component_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.message_callbacks">omnibot.callbacks.message_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.network_callbacks">omnibot.callbacks.network_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks.slash_command_callbacks">omnibot.callbacks.slash_command_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.callbacks.html#module-omnibot.callbacks">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.routes.html">omnibot.routes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.routes.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.routes.html#module-omnibot.routes.api">omnibot.routes.api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.routes.html#module-omnibot.routes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.scripts.html">omnibot.scripts package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#module-omnibot.scripts.omniredis">omnibot.scripts.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#module-omnibot.scripts.utils">omnibot.scripts.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.scripts.html#module-omnibot.scripts">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.services.html">omnibot.services package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services.omniredis">omnibot.services.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services.sqs">omnibot.services.sqs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services.stats">omnibot.services.stats module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.services.html#module-omnibot.services">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/omnibot.utils.html">omnibot.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.utils.html#module-omnibot.utils.settings">omnibot.utils.settings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/omnibot.utils.html#module-omnibot.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.app">omnibot.app module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.processor">omnibot.processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.settings">omnibot.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.setup_logging">omnibot.setup_logging module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.watcher">omnibot.watcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.webhook_worker">omnibot.webhook_worker module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot.wsgi">omnibot.wsgi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#module-omnibot">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">omnibot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Event parsing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/event_parsing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="event-parsing">
+<h1>Event parsing<a class="headerlink" href="#event-parsing" title="Permalink to this headline">¶</a></h1>
+<p>When omnibot receives events, it sanitizes the event (to remove sensitive info, like validation token), and injects extra metadata into the event, like parsed versions of some fields (like user, message, etc). This document can be used as a reference for how omnibot parses events.</p>
+<div class="section" id="event-subscription-events">
+<h2>Event Subscription Events<a class="headerlink" href="#event-subscription-events" title="Permalink to this headline">¶</a></h2>
+<p>Currently, for event subscription events, omnibot only has direct support for message events (message.channels, message.groups, message.im, message.mpim).</p>
+<div class="section" id="message-events">
+<h3>Message Events<a class="headerlink" href="#message-events" title="Permalink to this headline">¶</a></h3>
+<p>When a message is sent to a channel, slack will provide a bot with everything in its special message format, which doesn’t look anything at all like what you’d see in the channel. For example, here’s what a message looks like in a channel:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@rlane</span> <span class="n">hey</span><span class="p">,</span> <span class="n">come</span> <span class="n">join</span> <span class="n">me</span> <span class="ow">in</span> <span class="c1">#general, see https://github.com/lyft/omnibot for why</span>
+</pre></div>
+</div>
+<p>Here’s what slack sends you:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="nd">@U6J3LTKSQ</span><span class="o">&gt;</span> <span class="n">hey</span><span class="p">,</span> <span class="n">come</span> <span class="n">join</span> <span class="n">me</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="c1">#C4VQ6NUNN&gt;, see &lt;https://github.com/lyft/omnibot&gt; for why</span>
+</pre></div>
+</div>
+<p>To see the original, you’d normally need to parse this back into the original, needing to make slack api calls for finding channels, users, etc. omnibot handles this for you. It’ll parse the message, and turn this into a payload that’ll get sent to your handler:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;bot&quot;</span><span class="p">:</span> <span class="s2">&quot;omnibot&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;args&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+  <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;@U6J3LTKSQ&gt; hey, come join me in &lt;#C4VQ6NUNN|general&gt;, see &lt;https://github.com/lyft/omnibot&gt; for why&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;parsed_text&quot;</span><span class="p">:</span> <span class="s2">&quot;@omnibot hey, come join me in #general, see https://github.com/lyft/omnibot for why&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;U6J3LTKSQ&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;parsed_user&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;U6J3LTKSQ&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;team_id&quot;</span><span class="p">:</span> <span class="s2">&quot;T12345967&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;deleted&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;3c989f&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;real_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ryan Lane&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;tz&quot;</span><span class="p">:</span> <span class="s2">&quot;America/Los_Angeles&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;tz_label&quot;</span><span class="p">:</span> <span class="s2">&quot;Pacific Standard Time&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;tz_offset&quot;</span><span class="p">:</span> <span class="mi">-28800</span><span class="p">,</span>
+    <span class="nt">&quot;profile&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;first_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ryan&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;last_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lane&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;avatar_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;g04939292775&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;real_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ryan Lane&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;display_name&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;real_name_normalized&quot;</span><span class="p">:</span> <span class="s2">&quot;Ryan Lane&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;display_name_normalized&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane@lyft.com&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;image_24&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=24&amp;d=https%3A%2F%2Fa.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0009-24.png&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;image_32&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=32&amp;d=https%3A%2F%2Fa.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0009-32.png&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;image_48&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=48&amp;d=https%3A%2F%2Fa.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0009-48.png&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;image_72&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=72&amp;d=https%3A%2F%2Fa.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0009-72.png&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;image_192&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=192&amp;d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0009-192.png&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;image_512&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=512&amp;d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0009-512.png&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;team&quot;</span><span class="p">:</span> <span class="s2">&quot;T12345967&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;is_admin&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_owner&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_primary_owner&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_restricted&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_ultra_restricted&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_bot&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;updated&quot;</span><span class="p">:</span> <span class="mi">1504862981</span><span class="p">,</span>
+    <span class="nt">&quot;is_app_user&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;has_2fa&quot;</span><span class="p">:</span> <span class="kc">false</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;users&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;&lt;@U6J3LTKSQ&gt;&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;channels&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;&lt;#C4VQ6NUNN|general&gt;&quot;</span><span class="p">:</span> <span class="s2">&quot;general&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;subteams&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;specials&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;emojis&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;emails&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;urls&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;&lt;https://github.com/lyft/omnibot&gt;&quot;</span><span class="p">:</span> <span class="s2">&quot;https://github.com/lyft/omnibot&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;channel_id&quot;</span><span class="p">:</span> <span class="s2">&quot;C4VQ6NUNN&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;channel&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;C4VQ6NUNN&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;general&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;is_channel&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;created&quot;</span><span class="p">:</span> <span class="mi">1491515285</span><span class="p">,</span>
+    <span class="nt">&quot;creator&quot;</span><span class="p">:</span> <span class="s2">&quot;U4WF56QGP&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;is_archived&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_general&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;unlinked&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;name_normalized&quot;</span><span class="p">:</span> <span class="s2">&quot;general&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;is_shared&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_org_shared&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_member&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_private&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_mpim&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;members&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s2">&quot;U4WF56QGP&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;U6HQQ19EC&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;U6J3LTKSQ&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;U6J4EGP44&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;U6JDF1JBU&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;U6JEGTFDZ&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;U6JERPMJ7&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;U6JG691MJ&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;U6JGEQ0J0&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;U6SAVUK44&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;U750C7B37&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;U7DH0H802&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;topic&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;test123&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;creator&quot;</span><span class="p">:</span> <span class="s2">&quot;U6J3LTKSQ&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;last_set&quot;</span><span class="p">:</span> <span class="mi">1507156612</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;purpose&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;This channel is for team-wide communication and announcements. All team members are in this channel.&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;creator&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;last_set&quot;</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;previous_names&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="nt">&quot;num_members&quot;</span><span class="p">:</span> <span class="mi">9</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;directed&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nt">&quot;ts&quot;</span><span class="p">:</span> <span class="s2">&quot;1507683858.000290&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It’ll auto-parse all of slack’s markup, and in the payload it’ll give you the parsed and unparsed versions of all the data, along with each type split into its own attribute, in case you want to quickly access any of the parsed data, or if you want to partially reparse the data yourself.</p>
+</div>
+</div>
+<div class="section" id="interactive-component-events">
+<h2>Interactive Component Events<a class="headerlink" href="#interactive-component-events" title="Permalink to this headline">¶</a></h2>
+<p>Interactive component events occur when a user interacts with a various interactive component, like an interactive message, or a message actions. An example below is a user clicking the unregister button on an eventbot event in slack. When omnibot receives an event like this, it will inject some extra metadata to help downstream callbacks with common actions, like getting user info from a user id, or channel info from a channel id (<code class="docutils literal notranslate"><span class="pre">parsed_user</span></code> and <code class="docutils literal notranslate"><span class="pre">parsed_channel</span></code>). If a message is included with the interactive component event, omnibot will parse that message like a message event above.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;omnibot_payload_type&quot;</span><span class="p">:</span> <span class="s2">&quot;interactive_component&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;bot&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;your-slack-app-name&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;bot_id&quot;</span><span class="p">:</span> <span class="s2">&quot;A87654321&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;team&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;friendly-name-for-your-team&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;team_id&quot;</span><span class="p">:</span> <span class="s2">&quot;T12345678&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;interactive_message&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;callback_id&quot;</span><span class="p">:</span> <span class="s2">&quot;eventbot_events&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;action_ts&quot;</span><span class="p">:</span> <span class="s2">&quot;1566941256.572612&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;message_ts&quot;</span><span class="p">:</span> <span class="s2">&quot;1566417920.003500&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;trigger_id&quot;</span><span class="p">:</span> <span class="s2">&quot;728814876339.165116859648.9a3bcfc1b0bacf60542865403ea81002&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;response_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://hooks.slack.com/actions/T12345678/1231231234/hasdfigasf97g9asfgsadgf9&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;original_message&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;message&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;subtype&quot;</span><span class="p">:</span> <span class="s2">&quot;bot_message&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Test evenbot event&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;ts&quot;</span><span class="p">:</span> <span class="s2">&quot;1566417920.003500&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;your-slack-app-name&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;bot_id&quot;</span><span class="p">:</span> <span class="s2">&quot;B87654321&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;attachments&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;callback_id&quot;</span><span class="p">:</span> <span class="s2">&quot;eventbot_events&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="nt">&quot;fields&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Description&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;hello world&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;short&quot;</span><span class="p">:</span> <span class="kc">false</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Total attendees&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;short&quot;</span><span class="p">:</span> <span class="kc">false</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Attendee Venmo handles&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;test_venmo_handle&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;short&quot;</span><span class="p">:</span> <span class="kc">false</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Attendees missing Venmo handle&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;short&quot;</span><span class="p">:</span> <span class="kc">false</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Cost&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;Total cost: $100.51; Cost per attendee: $50.26&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;short&quot;</span><span class="p">:</span> <span class="kc">false</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Extra attendees&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;short&quot;</span><span class="p">:</span> <span class="kc">false</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="nt">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;update&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Update event details&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;button&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;1566417920.003500&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;refresh&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Refresh event details&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;button&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;1566417920.003500&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="nt">&quot;fallback&quot;</span><span class="p">:</span> <span class="s2">&quot;[no preview available]&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;callback_id&quot;</span><span class="p">:</span> <span class="s2">&quot;eventbot_events&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Manage your registration&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="nt">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;register&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Register&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;button&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;1566417920.003500&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;unregister&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Unregister&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;button&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;1566417920.003500&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;update_venmo&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Update Venmo&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;button&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;1566417920.003500&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="nt">&quot;fallback&quot;</span><span class="p">:</span> <span class="s2">&quot;Manage your registration&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;state&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;user&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;U6J3LTKSQ&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;parsed_user&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;U6J3LTKSQ&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;team_id&quot;</span><span class="p">:</span> <span class="s2">&quot;T12345678&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;deleted&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;3c989f&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;real_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ryan Lane&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;tz&quot;</span><span class="p">:</span> <span class="s2">&quot;America/Los_Angeles&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;tz_label&quot;</span><span class="p">:</span> <span class="s2">&quot;Pacific Daylight Time&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;tz_offset&quot;</span><span class="p">:</span> <span class="mi">-25200</span><span class="p">,</span>
+        <span class="nt">&quot;profile&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;phone&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;skype&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;real_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ryan Lane&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;real_name_normalized&quot;</span><span class="p">:</span> <span class="s2">&quot;Ryan Lane&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;display_name&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;display_name_normalized&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;status_text&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;status_emoji&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;status_expiration&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;avatar_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;g04939292775&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane@lyft.com&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;first_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ryan&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;last_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lane&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;image_24&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=24&amp;d=https%3A%2F%2Fa.slack-edge.com%2F00b63%2Fimg%2Favatars%2Fava_0009-24.png&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;image_32&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=32&amp;d=https%3A%2F%2Fa.slack-edge.com%2F00b63%2Fimg%2Favatars%2Fava_0009-32.png&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;image_48&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=48&amp;d=https%3A%2F%2Fa.slack-edge.com%2F00b63%2Fimg%2Favatars%2Fava_0009-48.png&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;image_72&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=72&amp;d=https%3A%2F%2Fa.slack-edge.com%2F00b63%2Fimg%2Favatars%2Fava_0009-72.png&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;image_192&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=192&amp;d=https%3A%2F%2Fa.slack-edge.com%2F00b63%2Fimg%2Favatars%2Fava_0009-192.png&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;image_512&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=512&amp;d=https%3A%2F%2Fa.slack-edge.com%2F00b63%2Fimg%2Favatars%2Fava_0009-512.png&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;status_text_canonical&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;team&quot;</span><span class="p">:</span> <span class="s2">&quot;T12345678&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;is_admin&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;is_owner&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;is_primary_owner&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;is_restricted&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;is_ultra_restricted&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;is_bot&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;is_app_user&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;updated&quot;</span><span class="p">:</span> <span class="mi">1525293976</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;channel&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;C6KD0QX0Q&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;test-omnibot&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;parsed_channel&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;C6KD0QX0Q&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;test-omnibot&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;is_channel&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;created&quot;</span><span class="p">:</span> <span class="mi">1502257073</span><span class="p">,</span>
+        <span class="nt">&quot;is_archived&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;is_general&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;unlinked&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;creator&quot;</span><span class="p">:</span> <span class="s2">&quot;U6J3LTKSQ&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;name_normalized&quot;</span><span class="p">:</span> <span class="s2">&quot;test-omnibot&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;is_shared&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;is_org_shared&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;is_member&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;is_private&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;is_mpim&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nt">&quot;topic&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;creator&quot;</span><span class="p">:</span> <span class="s2">&quot;U6J3LTKSQ&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;last_set&quot;</span><span class="p">:</span> <span class="mi">1515793069</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;purpose&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;creator&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;last_set&quot;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;previous_names&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;num_members&quot;</span><span class="p">:</span> <span class="mi">12</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;message&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;submission&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;unregister&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;button&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;1566417920.003500&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="slash-command-events">
+<h2>Slash Command Events<a class="headerlink" href="#slash-command-events" title="Permalink to this headline">¶</a></h2>
+<p>Slash command events occur when a user invokes a slash command that points at omnibot (e.g. <code class="docutils literal notranslate"><span class="pre">/tableflip</span></code>).  An example below is a user clicking the unregister button on an eventbot event in slack. When omnibot receives an event like this, it will inject some extra metadata to help downstream callbacks with common actions, like getting user info from a user id, or channel info from a channel id (<code class="docutils literal notranslate"><span class="pre">parsed_user</span></code> and <code class="docutils literal notranslate"><span class="pre">parsed_channel</span></code>). If a message is included with the interactive component event, omnibot will parse that message like a message event above.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;omnibot_payload_type&quot;</span><span class="p">:</span> <span class="s2">&quot;slash_command&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;bot&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;your-slack-app-name&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;bot_id&quot;</span><span class="p">:</span> <span class="s2">&quot;A87654321&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;team&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;friendly-name-for-your-team&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;team_id&quot;</span><span class="p">:</span> <span class="s2">&quot;T12345678&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;enterprise_id&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+  <span class="nt">&quot;enterprise_name&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+  <span class="nt">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;/tableflip&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;response_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://hooks.slack.com/actions/T12345678/1231231234/hasdfigasf97g9asfgsadgf9&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;trigger_id&quot;</span><span class="p">:</span> <span class="s2">&quot;795200246613.165116859648.9500e32e47f5c1f2f2fc57a6014d92e6&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;user_id&quot;</span><span class="p">:</span> <span class="s2">&quot;U6J3LTKSQ&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;parsed_user&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;U6J3LTKSQ&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;team_id&quot;</span><span class="p">:</span> <span class="s2">&quot;T12345678&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;deleted&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;3c989f&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;real_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ryan Lane&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;tz&quot;</span><span class="p">:</span> <span class="s2">&quot;America/Los_Angeles&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;tz_label&quot;</span><span class="p">:</span> <span class="s2">&quot;Pacific Daylight Time&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;tz_offset&quot;</span><span class="p">:</span> <span class="mi">-25200</span><span class="p">,</span>
+    <span class="nt">&quot;profile&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;phone&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;skype&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;real_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ryan Lane&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;real_name_normalized&quot;</span><span class="p">:</span> <span class="s2">&quot;Ryan Lane&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;display_name&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;display_name_normalized&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;status_text&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;status_emoji&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;status_expiration&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nt">&quot;avatar_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;g4939292775a&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;rlane@lyft.com&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;first_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ryan&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;last_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lane&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;image_24&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=24&amp;d=https%3A%2F%2Fa.slack-edge.com%2Fdf10d%2Fimg%2Favatars%2Fava_0009-24.png&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;image_32&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=32&amp;d=https%3A%2F%2Fa.slack-edge.com%2Fdf10d%2Fimg%2Favatars%2Fava_0009-32.png&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;image_48&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=48&amp;d=https%3A%2F%2Fa.slack-edge.com%2Fdf10d%2Fimg%2Favatars%2Fava_0009-48.png&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;image_72&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=72&amp;d=https%3A%2F%2Fa.slack-edge.com%2Fdf10d%2Fimg%2Favatars%2Fava_0009-72.png&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;image_192&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=192&amp;d=https%3A%2F%2Fa.slack-edge.com%2Fdf10d%2Fimg%2Favatars%2Fava_0009-192.png&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;image_512&quot;</span><span class="p">:</span> <span class="s2">&quot;https://secure.gravatar.com/avatar/04939292775a6f4a1817e5e846c11609.jpg?s=512&amp;d=https%3A%2F%2Fa.slack-edge.com%2Fdf10d%2Fimg%2Favatars%2Fava_0009-512.png&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;status_text_canonical&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;team&quot;</span><span class="p">:</span> <span class="s2">&quot;T12345678&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;is_admin&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;is_owner&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;is_primary_owner&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;is_restricted&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_ultra_restricted&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_bot&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_app_user&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;updated&quot;</span><span class="p">:</span> <span class="mi">1569022884</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;parsed_text&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;channel_id&quot;</span><span class="p">:</span> <span class="s2">&quot;C6KD0QX0Q&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;channel&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;C6KD0QX0Q&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;test-omnibot&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;is_channel&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;created&quot;</span><span class="p">:</span> <span class="mi">1502257073</span><span class="p">,</span>
+    <span class="nt">&quot;is_archived&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_general&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;unlinked&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;creator&quot;</span><span class="p">:</span> <span class="s2">&quot;U6J3LTKSQ&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name_normalized&quot;</span><span class="p">:</span> <span class="s2">&quot;test-omnibot&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;is_shared&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_org_shared&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_member&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;is_private&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;is_mpim&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">&quot;topic&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;creator&quot;</span><span class="p">:</span> <span class="s2">&quot;U6J3LTKSQ&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;last_set&quot;</span><span class="p">:</span> <span class="mi">1515793069</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;purpose&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;creator&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;last_set&quot;</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;previous_names&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="nt">&quot;num_members&quot;</span><span class="p">:</span> <span class="mi">11</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;users&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;channels&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;subteams&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;specials&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;emojis&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;emails&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;urls&quot;</span><span class="p">:</span> <span class="p">{}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="slack_proxying.html" class="btn btn-neutral float-right" title="Slack proxying" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="receivers.html" class="btn btn-neutral float-left" title="Omnibot receiver libraries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2019, Omnibot Project Authors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+tests.unit.omnibot.services package
+===================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+   tests.unit.omnibot.services.slack
+
+Module contents
+---------------
+
+.. automodule:: tests.unit.omnibot.services
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,22 @@
+omnibot.routes package
+======================
+
+Submodules
+----------
+
+omnibot.routes.api module
+-------------------------
+
+.. automodule:: omnibot.routes.api
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: omnibot.routes
+   :members:
+   :undoc-members:
+   :show-inheritance:
