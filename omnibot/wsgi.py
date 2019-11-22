@@ -8,7 +8,7 @@ app.register_blueprint(api.blueprint)
 
 
 if __name__ == '__main__':
-    from omnibot import setup_logging
+    from omnibot import setup_logging  # noqa:F401
     app.run(
         host=settings.get('HOST', '0.0.0.0'),
         port=settings.get('PORT', 5000),
