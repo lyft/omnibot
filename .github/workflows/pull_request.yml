@@ -13,6 +13,27 @@ jobs:
         run: pip install pre-commit
       - name: Run pre-commit
         run: pre-commit run --all-files
+  license-check:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Ruby 2.x
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.x
+      - name: Install license finder
+        run: gem install license_finder
+      - name: Setup python 3.6
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+      - name: Install apt dependencies
+        run: sudo apt-get install -y python3-dev openssl libssl-dev gcc pkg-config libffi-dev libxml2-dev libxmlsec1-dev
+      - name: Install dependencies
+        run: pip install -r piptools_requirements3.txt && pip install -r requirements3.txt
+      - name: Run license finder
+        run: license_finder
   test:
     runs-on: ubuntu-18.04
     steps:
