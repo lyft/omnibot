@@ -1,0 +1,13 @@
+on: pull_request
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Run tests
+        run: make test
