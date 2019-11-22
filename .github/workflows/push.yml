@@ -1,0 +1,61 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+jobs:
+  build-and-deploy-docs:
+    name: Build and publish docs
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup python 3.6
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+      - name: Install virtualenv
+        run: pip install virtualenv
+      - name: Build docs
+        run: make build_docs
+      - name: Remove docs folder, so github will ignore it
+        run: rm -rf docs
+      - name: Deploy docs
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_BRANCH: master # The branch the action should deploy from.
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: generated/docs # The folder the action should deploy.
+  build-and-publish-python-module:
+    name: Build and publish python module to pypi
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup python 3.6
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+      - name: Generate dist
+        run: python setup.py sdist bdist
+      - name: Publish to PyPI
+        if: startsWith(github.event.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
+  build-and-publish-docker-image:
+    name: Build and publish docker image
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@2.8
+        with:
+          name: lyft/omnibot
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
