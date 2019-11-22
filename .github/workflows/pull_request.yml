@@ -9,5 +9,7 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
+      - name: Install dependencies
+        run: pip install -r piptools_requirements3.txt && pip install -r requirements3.txt
       - name: Run tests
         run: make test
