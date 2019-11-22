@@ -1,5 +1,18 @@
 on: pull_request
 jobs:
+  pre-commit:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup python 3.6
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+      - name: Install pre-commit
+        run: pip install pre-commit
+      - name: Run pre-commit
+        run: pre-commit run --all-files
   test:
     runs-on: ubuntu-18.04
     steps:
