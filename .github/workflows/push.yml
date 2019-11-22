@@ -55,7 +55,8 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.pypi_password }}
-  build:
+  build-and-publish-docker-image:
+    name: Build and publish docker image
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
