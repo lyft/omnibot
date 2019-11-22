@@ -20,6 +20,8 @@ jobs:
         run: pip install virtualenv
       - name: Build docs
         run: make build_docs
+      - name: Remove docs folder, so github will ignore it
+        run: rm -rf docs
       - name: Deploy docs
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
@@ -38,7 +40,7 @@ jobs:
         with:
           python-version: 3.6
       - name: Generate dist
-        run: python setup.py sdist bdist_wheel
+        run: python setup.py sdist bdist
       - name: Publish to PyPI
         if: startsWith(github.event.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@master
