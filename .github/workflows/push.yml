@@ -40,7 +40,7 @@ jobs:
         with:
           python-version: 3.6
       - name: Generate dist
-        run: python setup.py sdist bdist
+        run: python setup.py sdist bdist_wheel
       - name: Publish to PyPI
         if: startsWith(github.event.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@master
