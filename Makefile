@@ -1,6 +1,11 @@
 # we use the pipefail option below, which is bash specific.
 SHELL := /bin/bash
 
+.PHONY: compile_deps # freeze requirements.in to requirements3.txt
+compile_deps:
+	./pip-compile.sh
+
+build_docs:
 .PHONY: build_docs # build the docs
 build_docs:
 	./docs/build.sh
