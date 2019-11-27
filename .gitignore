@@ -69,3 +69,6 @@ config/development/omnibot.conf
 # docs generation
 generated
 build_docs
+
+# pip-tools venv
+piptools_venv
