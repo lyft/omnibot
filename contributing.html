@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Contributing &mdash; omnibot 1.0.3-6d3a15 documentation</title>
+  <title>Contributing &mdash; omnibot 1.0.3-42f7c9 documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                1.0.3-6d3a15
+                1.0.3-42f7c9
               </div>
             
           
@@ -191,6 +191,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#sign-the-contributor-license-agreement-cla">Sign the Contributor License Agreement (CLA)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#file-issues-in-github">File issues in Github</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#submit-pull-requests">Submit pull requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-new-dependencies-to-requirements">Adding new dependencies to requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#approving-licenses-or-dependencies">Approving licenses or dependencies</a></li>
 </ul>
 </li>
 </ul>
@@ -353,6 +355,41 @@ easily reproduce your bug.</p>
 <div class="section" id="submit-pull-requests">
 <h3>Submit pull requests<a class="headerlink" href="#submit-pull-requests" title="Permalink to this headline">¶</a></h3>
 <p>Our only method of accepting code changes is through github pull requests.</p>
+</div>
+<div class="section" id="adding-new-dependencies-to-requirements">
+<h3>Adding new dependencies to requirements<a class="headerlink" href="#adding-new-dependencies-to-requirements" title="Permalink to this headline">¶</a></h3>
+<p>We freeze python dependencies from direct dependencies (from <code class="docutils literal notranslate"><span class="pre">requirements.in</span></code>),
+to diamond dependencies (in <code class="docutils literal notranslate"><span class="pre">requirements3.txt</span></code>). Doing so ensures a consistent installation
+with well known versions in test environments, out to production environments.</p>
+<p>If you need to add a dependency, or update the version of a dependency, you should modify
+<code class="docutils literal notranslate"><span class="pre">requirements.in</span></code>. After doing so, you can compile the in file into the txt file using
+<code class="docutils literal notranslate"><span class="pre">pip-compile.sh</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./pip-compile.sh
+<span class="c1"># or: make compile_deps</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="approving-licenses-or-dependencies">
+<h3>Approving licenses or dependencies<a class="headerlink" href="#approving-licenses-or-dependencies" title="Permalink to this headline">¶</a></h3>
+<p>We run a <a class="reference external" href="https://github.com/pivotal/LicenseFinder">license scanner/approver</a> for third-party
+dependencies used by omnibot. If you add or upgrade dependencies in <code class="docutils literal notranslate"><span class="pre">requirements.in</span></code> or
+<code class="docutils literal notranslate"><span class="pre">requirements3.txt</span></code>, the license scanner tests may fail, outputing the failed requirement, and
+its associated license. As long as the license is acceptable, a project owner will approve the
+license for use.</p>
+<p>You’ll need docker to approve licenses or dependencies. Commands below assume you’re in the omnibot
+repo root folder.</p>
+<p>To approve a new license:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run -v <span class="nv">$PWD</span>:/scan -it licensefinder/license_finder /bin/bash -lc <span class="s2">&quot;cd /scan &amp;&amp; license_finder whitelist add &lt;license_to_add&gt;&quot;</span>
+</pre></div>
+</div>
+<p>To assign a license to a dependency that’s listed as unknown (preferred method of handling unknown licenses):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run -v <span class="nv">$PWD</span>:/scan -it licensefinder/license_finder /bin/bash -lc <span class="s2">&quot;cd /scan &amp;&amp; license_finder dependencies add &lt;unknown_dependency&gt; &lt;LICENSE&gt; --homepage=&#39;https://link.to.dependency/&#39;&quot;</span>
+</pre></div>
+</div>
+<p>To approve a new dependency, that has a license that’s not easy to add (dual or multi-licensed, conditionally licensed, etc.):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run -v <span class="nv">$PWD</span>:/scan -it licensefinder/license_finder /bin/bash -lc <span class="s2">&quot;cd /scan &amp;&amp; license_finder approvals add &lt;dependency_to_add&gt; --why &#39;Description of why the License is acceptable&#39;&quot;</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
