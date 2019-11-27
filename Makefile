@@ -5,7 +5,6 @@ SHELL := /bin/bash
 compile_deps:
 	./pip-compile.sh
 
-build_docs:
 .PHONY: build_docs # build the docs
 build_docs:
 	./docs/build.sh
