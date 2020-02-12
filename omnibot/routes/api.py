@@ -8,8 +8,10 @@ configuration; see documentation on checks:
 * :func:`omnibot.authnz:enforce_checks`
 """
 from __future__ import absolute_import
+import base64
 import json
 import logging
+import os
 import time
 from functools import wraps
 
@@ -638,10 +640,29 @@ def _perform_action(bot, data):
         )
     )
     parse_kwargs(kwargs, bot)
-    ret = slack.client(bot, client_type='oauth_bot').api_call(
-        action,
-        **kwargs
-    )
+
+    if action == 'files.upload':
+        # save base64 encoded file
+        base64_file = kwargs.get('file')
+        base64_bytes = base64_file.encode('ascii')
+        filename = '{}-{}'.format(round(time.time()), kwargs.get('filename'))
+        file = open(filename, 'wb')
+        file.write(base64.decodebytes(base64_bytes))
+        file.close()
+
+        # Open the file for slack to read
+        file = open(filename, 'rb')
+        kwargs['file'] = file
+        ret = slack.client(bot, client_type='oauth_bot').files_upload(**kwargs)
+        file.close()
+
+        # Remove the file
+        os.remove(file.name)
+    else:
+        ret = slack.client(bot, client_type='oauth_bot').api_call(
+            action,
+            json=kwargs
+        )
     logger.debug(ret)
     if not ret['ok']:
         if ret.get('error') in ['missing_scope', 'not_allowed_token_type']:
@@ -653,7 +674,7 @@ def _perform_action(bot, data):
             try:
                 ret = slack.client(bot, client_type='oauth').api_call(
                     action,
-                    **kwargs
+                    json=kwargs
                 )
             except json.decoder.JSONDecodeError:
                 logger.exception(
@@ -767,9 +788,9 @@ def slack_action_v2(team_name, bot_name):
         return jsonify({'error': 'provided bot name was not found.'}), 404
     ret = _perform_action(bot, data)
     if ret['ok']:
-        return jsonify(ret), 200
+        return jsonify({'return': str(ret)}), 200
     else:
-        return jsonify(ret), 400
+        return jsonify({'return': str(ret)}), 400
 
 
 @blueprint.route(
@@ -924,6 +945,6 @@ def send_bot_im(team_name, bot_name, email):
     data['kwargs']['channel'] = im_id
     ret = _perform_action(bot, data)
     if ret['ok']:
-        return jsonify(ret), 200
+        return jsonify({'return': str(ret)}), 200
     else:
-        return jsonify(ret), 400
+        return jsonify({'return': str(ret)}), 400
