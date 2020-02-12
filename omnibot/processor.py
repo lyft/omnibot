@@ -297,13 +297,16 @@ def _handle_post_message(message, kwargs):
         kwargs['thread_ts'] = thread_ts
     parse_kwargs(kwargs, message.bot, message.event_trace)
     try:
+        json = {
+            'channel': channel,
+        }
+        json.update(kwargs)
         ret = slack.client(
             message.bot,
             client_type='oauth_bot'
         ).api_call(
             'chat.postMessage',
-            channel=channel,
-            **kwargs
+            json=json,
         )
     except json.decoder.JSONDecodeError:
         logger.exception('JSON decode failure when parsing {}'.format(kwargs))
@@ -320,7 +323,7 @@ def _handle_action(action, container, kwargs):
         client_type='oauth_bot'
     ).api_call(
         action,
-        **kwargs
+        json=kwargs
     )
     logger.debug(ret)
     if not ret['ok']:
@@ -335,7 +338,7 @@ def _handle_action(action, container, kwargs):
                     client_type='oauth'
                 ).api_call(
                     action,
-                    **kwargs
+                    json=kwargs
                 )
             except json.decoder.JSONDecodeError:
                 logger.exception(
