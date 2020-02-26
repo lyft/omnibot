@@ -5,7 +5,7 @@ import json
 import logging
 
 import gevent
-import slackclient
+import slack
 
 from omnibot.services import omniredis
 
@@ -28,12 +28,12 @@ def client(bot, client_type='oauth'):
         _client[team_name] = {}
     if bot.name not in _client[team_name]:
         _client[team_name][bot.name] = {
-            'oauth': slackclient.SlackClient(
+            'oauth': slack.WebClient(
                 bot.oauth_token
             )
         }
         if bot.oauth_bot_token:
-            _client[team_name][bot.name]['oauth_bot'] = slackclient.SlackClient(
+            _client[team_name][bot.name]['oauth_bot'] = slack.WebClient(
                 bot.oauth_bot_token
             )
     if client_type == 'oauth_bot':
@@ -54,10 +54,13 @@ def _get_channels(bot):
     while True:
         channels_data = client(bot, client_type='oauth_bot').api_call(
             'channels.list',
-            exclude_archived=True,
-            exclude_members=True,
-            limit=1000,
-            cursor=next_cursor
+            json={
+                'exclude_archived': True,
+                'exclude_members': True,
+                'limit': 1000,
+                'cursor': next_cursor,
+            }
+
         )
         if channels_data['ok']:
             channels.extend(channels_data['channels'])
@@ -122,8 +125,10 @@ def _get_groups(bot):
     while True:
         groups_data = client(bot, client_type='oauth_bot').api_call(
             'groups.list',
-            limit=1000,
-            cursor=next_cursor
+            json={
+                'limit': 1000,
+                'cursor': next_cursor,
+            }
         )
         if groups_data['ok']:
             groups.extend(groups_data['groups'])
@@ -187,8 +192,10 @@ def _get_ims(bot):
     while True:
         im_data = client(bot, client_type='oauth_bot').api_call(
             'im.list',
-            limit=1000,
-            cursor=next_cursor
+            json={
+                'limit': 1000,
+                'cursor': next_cursor,
+            }
         )
         if im_data['ok']:
             ims.extend(im_data['ims'])
@@ -254,7 +261,9 @@ def get_im_channel_id(bot, user_id):
         users = user_id
         conversation_data = client(bot, client_type='oauth_bot').api_call(
             'conversations.open',
-            users=users
+            json={
+                'users': users,
+            }
         )
         if conversation_data['ok']:
             return conversation_data['channel']['id']
@@ -286,8 +295,10 @@ def _get_mpims(bot):
     while True:
         mpim_data = client(bot, client_type='oauth_bot').api_call(
             'mpim.list',
-            limit=1000,
-            cursor=next_cursor
+            json={
+                'limit': 1000,
+                'cursor': next_cursor,
+            }
         )
         if mpim_data['ok']:
             mpims.extend(mpim_data['groups'])
@@ -408,7 +419,9 @@ def get_channel(bot, channel):
     logger.debug('Channel {} not in cache.'.format(channel))
     channel_data = client(bot).api_call(
         'channels.info',
-        channel=channel
+        json={
+            'channel': channel,
+        }
     )
     if channel_data['ok']:
         update_channel(bot, channel_data['channel'])
@@ -420,7 +433,9 @@ def get_channel(bot, channel):
     # no channel, look for a private channel
     group_data = client(bot, client_type='oauth_bot').api_call(
         'groups.info',
-        channel=channel
+        json={
+            'channel': channel,
+        }
     )
     if group_data['ok']:
         update_group(bot, group_data['group'])
@@ -493,9 +508,11 @@ def _get_users(bot, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
     while True:
         users_data = client(bot, client_type='oauth_bot').api_call(
             'users.list',
-            presence=False,
-            limit=1000,
-            cursor=next_cursor
+            json={
+                'presence': False,
+                'limit': 1000,
+                'cursor': next_cursor,
+            }
         )
         if users_data['ok']:
             users.extend(users_data['members'])
@@ -572,7 +589,9 @@ def get_user(bot, user_id):
         return json.loads(user)
     user = client(bot).api_call(
         'users.info',
-        user=user_id
+        json={
+            'user': user_id,
+        }
     )
     if user['ok']:
         update_user(bot, user['user'])
