@@ -648,15 +648,15 @@ def _perform_action(bot, data):
             base64_file = kwargs.get('file')
             base64_bytes = base64_file.encode('ascii')
             filename = '{}-{}'.format(round(time.time()), kwargs.get('filename'))
-            file = open(filename, 'wb')
-            file.write(base64.decodebytes(base64_bytes))
-            file.close()
+            with open(filename, 'wb') as file:
+                file.write(base64.decodebytes(base64_bytes))
+                file.close()
 
             # Open the file for slack to read
-            file = open(filename, 'rb')
-            kwargs['file'] = file
-            ret = slack.client(bot, client_type='oauth_bot').files_upload(**kwargs)
-            file.close()
+            with open(filename, 'rb') as file:
+                kwargs['file'] = file
+                ret = slack.client(bot, client_type='oauth_bot').files_upload(**kwargs)
+                file.close()
 
             # Remove the file
             os.remove(file.name)
