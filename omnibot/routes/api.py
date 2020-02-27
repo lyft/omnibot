@@ -24,13 +24,14 @@ from flask import (
 
 from omnibot import authnz
 from omnibot.processor import parse_kwargs
+from omnibot.services import slack
 from omnibot.services import sqs
 from omnibot.services import stats
-from omnibot.services import slack
-from omnibot.services.slack.team import Team
-from omnibot.services.slack.team import TeamInitializationError
 from omnibot.services.slack.bot import Bot
 from omnibot.services.slack.bot import BotInitializationError
+from omnibot.services.slack.slack.errors import SlackClientError
+from omnibot.services.slack.team import Team
+from omnibot.services.slack.team import TeamInitializationError
 from omnibot.utils import get_callback_id
 
 logger = logging.getLogger(__name__)
@@ -641,31 +642,34 @@ def _perform_action(bot, data):
     )
     parse_kwargs(kwargs, bot)
 
-    if action == 'files.upload':
-        # save base64 encoded file
-        base64_file = kwargs.get('file')
-        base64_bytes = base64_file.encode('ascii')
-        filename = '{}-{}'.format(round(time.time()), kwargs.get('filename'))
-        file = open(filename, 'wb')
-        file.write(base64.decodebytes(base64_bytes))
-        file.close()
+    try:
+        if action == 'files.upload':
+            # save base64 encoded file
+            base64_file = kwargs.get('file')
+            base64_bytes = base64_file.encode('ascii')
+            filename = '{}-{}'.format(round(time.time()), kwargs.get('filename'))
+            file = open(filename, 'wb')
+            file.write(base64.decodebytes(base64_bytes))
+            file.close()
 
-        # Open the file for slack to read
-        file = open(filename, 'rb')
-        kwargs['file'] = file
-        ret = slack.client(bot, client_type='oauth_bot').files_upload(**kwargs)
-        file.close()
+            # Open the file for slack to read
+            file = open(filename, 'rb')
+            kwargs['file'] = file
+            ret = slack.client(bot, client_type='oauth_bot').files_upload(**kwargs)
+            file.close()
 
-        # Remove the file
-        os.remove(file.name)
-    else:
-        ret = slack.client(bot, client_type='oauth_bot').api_call(
-            action,
-            json=kwargs
-        )
-    logger.debug(ret)
-    if not ret['ok']:
-        if ret.get('error') in ['missing_scope', 'not_allowed_token_type']:
+            # Remove the file
+            os.remove(file.name)
+        else:
+            ret = slack.client(bot, client_type='oauth_bot').api_call(
+                action,
+                json=kwargs
+            )
+        logger.debug(ret)
+    except Exception as e:
+        logger.exception('Error uploading file', kv={'error': str(e)})
+        # TODO (shekharkhedekar) validate errors
+        if str(e) in ['missing_scope', 'not_allowed_token_type']:
             logger.warning(
                 'action={} failed in post_slack, attempting as user.'.format(
                     action
@@ -683,14 +687,14 @@ def _perform_action(bot, data):
                     )
                 )
                 return {'ok': False}
-            logger.debug(ret)
-            if not ret['ok']:
+            except SlackClientError:
                 logger.error(
                     'action={} failed in post_slack: ret={}'.format(
                         action,
                         ret
                     )
                 )
+            logger.debug(ret)
         else:
             logger.error(
                 'action={} failed in post_slack: ret={}'.format(
@@ -786,10 +790,10 @@ def slack_action_v2(team_name, bot_name):
         bot = Bot.get_bot_by_name(team, bot_name)
     except BotInitializationError:
         return jsonify({'error': 'provided bot name was not found.'}), 404
-    ret = _perform_action(bot, data)
-    if ret['ok']:
+    try:
+        ret = _perform_action(bot, data)
         return jsonify({'return': str(ret)}), 200
-    else:
+    except SlackClientError:
         return jsonify({'return': str(ret)}), 400
 
 
@@ -943,8 +947,8 @@ def send_bot_im(team_name, bot_name, email):
                         'email': email
                         }), 404
     data['kwargs']['channel'] = im_id
-    ret = _perform_action(bot, data)
-    if ret['ok']:
+    try:
+        ret = _perform_action(bot, data)
         return jsonify({'return': str(ret)}), 200
-    else:
+    except SlackClientError:
         return jsonify({'return': str(ret)}), 400
