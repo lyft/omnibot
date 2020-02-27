@@ -7,6 +7,7 @@ import logging
 import importlib
 
 import requests
+from slack.errors import SlackClientError
 
 from omnibot import settings
 from omnibot.services import slack
@@ -15,7 +16,6 @@ from omnibot.services.slack import parser
 from omnibot.services.slack.bot import Bot
 from omnibot.services.slack.interactive_component import InteractiveComponent
 from omnibot.services.slack.message import Message, MessageUnsupportedError
-from omnibot.services.slack.slack.errors import SlackClientError
 from omnibot.services.slack.slash_command import SlashCommand
 from omnibot.services.slack.team import Team
 from omnibot.utils import get_callback_id

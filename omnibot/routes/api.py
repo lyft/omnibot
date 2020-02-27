@@ -21,6 +21,7 @@ from flask import (
     request,
     abort
 )
+from slack.errors import SlackClientError
 
 from omnibot import authnz
 from omnibot.processor import parse_kwargs
@@ -29,7 +30,6 @@ from omnibot.services import sqs
 from omnibot.services import stats
 from omnibot.services.slack.bot import Bot
 from omnibot.services.slack.bot import BotInitializationError
-from omnibot.services.slack.slack.errors import SlackClientError
 from omnibot.services.slack.team import Team
 from omnibot.services.slack.team import TeamInitializationError
 from omnibot.utils import get_callback_id
