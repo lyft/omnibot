@@ -10,13 +10,14 @@ import requests
 
 from omnibot import settings
 from omnibot.services import slack
-from omnibot.services.slack.message import Message, MessageUnsupportedError
-from omnibot.services.slack.slash_command import SlashCommand
-from omnibot.services.slack.interactive_component import InteractiveComponent
 from omnibot.services import stats
 from omnibot.services.slack import parser
-from omnibot.services.slack.team import Team
 from omnibot.services.slack.bot import Bot
+from omnibot.services.slack.interactive_component import InteractiveComponent
+from omnibot.services.slack.message import Message, MessageUnsupportedError
+from omnibot.services.slack.slack.errors import SlackClientError
+from omnibot.services.slack.slash_command import SlashCommand
+from omnibot.services.slack.team import Team
 from omnibot.utils import get_callback_id
 
 logger = logging.getLogger(__name__)
@@ -311,23 +312,27 @@ def _handle_post_message(message, kwargs):
     except json.decoder.JSONDecodeError:
         logger.exception('JSON decode failure when parsing {}'.format(kwargs))
         return
-    logger.debug(ret, extra=message.event_trace)
-    if not ret['ok']:
+    except SlackClientError:
         logger.error(ret, extra=message.event_trace)
+        return
+    logger.debug(ret, extra=message.event_trace)
 
 
 def _handle_action(action, container, kwargs):
     parse_kwargs(kwargs, container.bot, container.event_trace)
-    ret = slack.client(
-        container.bot,
-        client_type='oauth_bot'
-    ).api_call(
-        action,
-        json=kwargs
-    )
-    logger.debug(ret)
-    if not ret['ok']:
-        if ret.get('error') == 'missing_scope':
+    try:
+        ret = slack.client(
+            container.bot,
+            client_type='oauth_bot'
+        ).api_call(
+            action,
+            json=kwargs
+        )
+        logger.debug(ret)
+    except SlackClientError as e:
+        logger.exception('Error in handle action', kv={'error': str(e)})
+        # TODO (shekharkhedekar) validate errors
+        if e.response.get('error') == 'missing_scope':
             logger.warning(
                 'action {} failed, attempting as user.'.format(action),
                 extra=container.event_trace
@@ -345,9 +350,10 @@ def _handle_action(action, container, kwargs):
                     'JSON decode failure when parsing {}'.format(kwargs)
                 )
                 return
-            logger.debug(ret)
-            if not ret['ok']:
+            except Exception:
                 logger.error(ret, extra=container.event_trace)
+            logger.debug(ret)
+
         else:
             logger.error(ret, extra=container.event_trace)
 
