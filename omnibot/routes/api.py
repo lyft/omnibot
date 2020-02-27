@@ -655,8 +655,10 @@ def _perform_action(bot, data):
             # Open the file for slack to read
             with open(filename, 'rb') as file:
                 kwargs['file'] = file
-                ret = slack.client(bot, client_type='oauth_bot').files_upload(**kwargs)
-                file.close()
+                try:
+                    ret = slack.client(bot, client_type='oauth_bot').files_upload(**kwargs)
+                finally:
+                    file.close()
 
             # Remove the file
             os.remove(file.name)
