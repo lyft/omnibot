@@ -666,10 +666,10 @@ def _perform_action(bot, data):
                 json=kwargs
             )
         logger.debug(ret)
-    except Exception as e:
+    except SlackClientError as e:
         logger.exception('Error uploading file', kv={'error': str(e)})
         # TODO (shekharkhedekar) validate errors
-        if str(e) in ['missing_scope', 'not_allowed_token_type']:
+        if e.response.get('error') in ['missing_scope', 'not_allowed_token_type']:
             logger.warning(
                 'action={} failed in post_slack, attempting as user.'.format(
                     action

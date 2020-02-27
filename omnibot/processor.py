@@ -329,10 +329,10 @@ def _handle_action(action, container, kwargs):
             json=kwargs
         )
         logger.debug(ret)
-    except Exception as e:
+    except SlackClientError as e:
         logger.exception('Error in handle action', kv={'error': str(e)})
         # TODO (shekharkhedekar) validate errors
-        if str(e) == 'missing_scope':
+        if e.response.get('error') == 'missing_scope':
             logger.warning(
                 'action {} failed, attempting as user.'.format(action),
                 extra=container.event_trace
