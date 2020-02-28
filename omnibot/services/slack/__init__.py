@@ -2,12 +2,12 @@
 Slackclient wrapper.
 """
 import json
-import logging
 
 import gevent
 import slack
 from slack.errors import SlackClientError
 
+from omnibot import logging
 from omnibot.services import omniredis
 
 logger = logging.getLogger(__name__)
@@ -17,6 +17,14 @@ GEVENT_SLEEP_TIME = 5
 
 # TODO: locking for long-running updates
 _client = {}
+
+
+def _get_sleep_time(response):
+    retry_after = response.get('headers', {}).get('Retry-After')
+    if retry_after:
+        return int(retry_after)
+    else:
+        return GEVENT_SLEEP_TIME
 
 
 def client(bot, client_type='oauth'):
@@ -54,15 +62,11 @@ def _get_channels(bot):
     next_cursor = ''
     while True:
         try:
-            channels_data = client(bot, client_type='oauth_bot').api_call(
-                'channels.list',
-                json={
-                    'exclude_archived': True,
-                    'exclude_members': True,
-                    'limit': 1000,
-                    'cursor': next_cursor,
-                }
-
+            channels_data = client(bot, client_type='oauth_bot').channels_list(
+                limit=500,
+                exclude_archived='true',
+                exclude_members='true',
+                cursor=next_cursor,
             )
             channels.extend(channels_data['channels'])
         except SlackClientError as e:
@@ -80,7 +84,7 @@ def _get_channels(bot):
                     error=e.response.get('error')
                 )
             )
-            gevent.sleep(GEVENT_SLEEP_TIME)
+            gevent.sleep(_get_sleep_time(e.response))
             continue
         next_cursor = channels_data.get(
             'response_metadata',
@@ -88,7 +92,6 @@ def _get_channels(bot):
         ).get('next_cursor')
         if not next_cursor:
             break
-        gevent.sleep(GEVENT_SLEEP_TIME)
     return channels
 
 
@@ -125,12 +128,9 @@ def _get_groups(bot):
     next_cursor = ''
     while True:
         try:
-            groups_data = client(bot, client_type='oauth_bot').api_call(
-                'groups.list',
-                json={
-                    'limit': 1000,
-                    'cursor': next_cursor,
-                }
+            groups_data = client(bot, client_type='oauth_bot').groups_list(
+                limit=500,
+                cursor=next_cursor,
             )
             groups.extend(groups_data['groups'])
         except SlackClientError as e:
@@ -146,7 +146,7 @@ def _get_groups(bot):
                     error=e.response.get('error')
                 )
             )
-            gevent.sleep(GEVENT_SLEEP_TIME)
+            gevent.sleep(_get_sleep_time(e.response))
             continue
         next_cursor = groups_data.get(
             'response_metadata',
@@ -154,7 +154,6 @@ def _get_groups(bot):
         ).get('next_cursor')
         if not next_cursor:
             break
-        gevent.sleep(GEVENT_SLEEP_TIME)
     return groups
 
 
@@ -192,12 +191,9 @@ def _get_ims(bot):
     next_cursor = ''
     while True:
         try:
-            im_data = client(bot, client_type='oauth_bot').api_call(
-                'im.list',
-                json={
-                    'limit': 1000,
-                    'cursor': next_cursor,
-                }
+            im_data = client(bot, client_type='oauth_bot').im_list(
+                limit=500,
+                cursor=next_cursor,
             )
             ims.extend(im_data['ims'])
         except SlackClientError as e:
@@ -213,12 +209,11 @@ def _get_ims(bot):
                     error=e.response.get('error')
                 )
             )
-            gevent.sleep(GEVENT_SLEEP_TIME)
+            gevent.sleep(_get_sleep_time(e.response))
             continue
         next_cursor = im_data.get('response_metadata', {}).get('next_cursor')
         if not next_cursor:
             break
-        gevent.sleep(GEVENT_SLEEP_TIME)
     return ims
 
 
@@ -261,11 +256,8 @@ def get_im_channel_id(bot, user_id):
     while True:
         users = user_id
         try:
-            conversation_data = client(bot, client_type='oauth_bot').api_call(
-                'conversations.open',
-                json={
-                    'users': users,
-                }
+            conversation_data = client(bot, client_type='oauth_bot').conversations_open(
+                users=users,
             )
             return conversation_data['channel']['id']
         except SlackClientError as e:
@@ -281,7 +273,7 @@ def get_im_channel_id(bot, user_id):
                     error=e.response.get('error')
                 )
             )
-            gevent.sleep(GEVENT_SLEEP_TIME)
+            gevent.sleep(_get_sleep_time(e.response))
             continue
     return None
 
@@ -295,12 +287,9 @@ def _get_mpims(bot):
     next_cursor = ''
     while True:
         try:
-            mpim_data = client(bot, client_type='oauth_bot').api_call(
-                'mpim.list',
-                json={
-                    'limit': 1000,
-                    'cursor': next_cursor,
-                }
+            mpim_data = client(bot, client_type='oauth_bot').mpim_list(
+                limit=500,
+                cursor=next_cursor,
             )
             mpims.extend(mpim_data['groups'])
         except SlackClientError as e:
@@ -316,12 +305,11 @@ def _get_mpims(bot):
                     error=e.response.get('error')
                 )
             )
-            gevent.sleep(GEVENT_SLEEP_TIME)
+            gevent.sleep(_get_sleep_time(e.response))
             continue
         next_cursor = mpim_data.get('response_metadata', {}).get('next_cursor')
         if not next_cursor:
             break
-        gevent.sleep(GEVENT_SLEEP_TIME)
     return mpims
 
 
@@ -354,7 +342,7 @@ def _get_emoji(bot):
     # TODO: split this retry logic into a generic retry function
     for retry in range(MAX_RETRIES):
         try:
-            resp = client(bot).api_call('emoji.list')
+            resp = client(bot).emoji_list()
             break
         except SlackClientError as e:
             logger.warning(
@@ -364,7 +352,7 @@ def _get_emoji(bot):
                     error=e.response.get('error')
                 )
             )
-            gevent.sleep(GEVENT_SLEEP_TIME)
+            gevent.sleep(_get_sleep_time(e.response))
     else:
         logger.error('Exceeded max retries when calling emoji.list.')
         return {}
@@ -420,12 +408,7 @@ def get_channel(bot, channel):
         return cached_channel
     logger.debug('Channel {} not in cache.'.format(channel))
     try:
-        channel_data = client(bot).api_call(
-            'channels.info',
-            json={
-                'channel': channel,
-            }
-        )
+        channel_data = client(bot).channels_info(channel=channel)
         update_channel(bot, channel_data['channel'])
         return channel_data['channel']
     except SlackClientError:
@@ -435,11 +418,8 @@ def get_channel(bot, channel):
         )
         # no channel, look for a private channel
         try:
-            group_data = client(bot, client_type='oauth_bot').api_call(
-                'groups.info',
-                json={
-                    'channel': channel,
-                }
+            group_data = client(bot, client_type='oauth_bot').groups_info(
+                channel=channel,
             )
             update_group(bot, group_data['group'])
             return group_data['group']
@@ -511,13 +491,10 @@ def _get_users(bot, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
     next_cursor = ''
     while True:
         try:
-            users_data = client(bot, client_type='oauth_bot').api_call(
-                'users.list',
-                json={
-                    'presence': False,
-                    'limit': 1000,
-                    'cursor': next_cursor,
-                }
+            users_data = client(bot, client_type='oauth_bot').users_list(
+                limit=500,
+                presence='false',
+                cursor=next_cursor,
             )
             users.extend(users_data['members'])
         except SlackClientError as e:
@@ -592,11 +569,8 @@ def get_user(bot, user_id):
     if user:
         return json.loads(user)
     try:
-        user = client(bot).api_call(
-            'users.info',
-            json={
-                'user': user_id,
-            }
+        user = client(bot).users_info(
+            user=user_id,
         )
         update_user(bot, user['user'])
         return user['user']

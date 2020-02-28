@@ -3,12 +3,12 @@ Core processing logic.
 """
 import re
 import json
-import logging
 import importlib
 
 import requests
 from slack.errors import SlackClientError
 
+from omnibot import logging
 from omnibot import settings
 from omnibot.services import slack
 from omnibot.services import stats
@@ -298,17 +298,14 @@ def _handle_post_message(message, kwargs):
         kwargs['thread_ts'] = thread_ts
     parse_kwargs(kwargs, message.bot, message.event_trace)
     try:
-        json = {
+        data = {
             'channel': channel,
         }
-        json.update(kwargs)
+        data.update(kwargs)
         ret = slack.client(
             message.bot,
             client_type='oauth_bot'
-        ).api_call(
-            'chat.postMessage',
-            json=json,
-        )
+        ).chat_postMessage(**data)
     except json.decoder.JSONDecodeError:
         logger.exception('JSON decode failure when parsing {}'.format(kwargs))
         return

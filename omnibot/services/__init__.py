@@ -1,7 +1,7 @@
 """Module for accessing services external to omnibot."""
-import logging
-
 import boto3
+
+from omnibot import logging
 
 logger = logging.getLogger(__name__)
 

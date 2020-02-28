@@ -10,7 +10,6 @@ configuration; see documentation on checks:
 from __future__ import absolute_import
 import base64
 import json
-import logging
 import os
 import time
 from functools import wraps
@@ -24,6 +23,7 @@ from flask import (
 from slack.errors import SlackClientError
 
 from omnibot import authnz
+from omnibot import logging
 from omnibot.processor import parse_kwargs
 from omnibot.services import slack
 from omnibot.services import sqs
