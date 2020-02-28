@@ -65,7 +65,7 @@ def _get_channels(bot):
 
             )
             channels.extend(channels_data['channels'])
-        except SlackClientError:
+        except SlackClientError as e:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
@@ -77,7 +77,7 @@ def _get_channels(bot):
                 'Call to channels.list failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=channels_data.get('error')
+                    error=e.response.get('error')
                 )
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
@@ -133,7 +133,7 @@ def _get_groups(bot):
                 }
             )
             groups.extend(groups_data['groups'])
-        except SlackClientError:
+        except SlackClientError as e:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
@@ -143,7 +143,7 @@ def _get_groups(bot):
                 'Call to groups.list failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=groups_data.get('error')
+                    error=e.response.get('error')
                 )
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
@@ -200,7 +200,7 @@ def _get_ims(bot):
                 }
             )
             ims.extend(im_data['ims'])
-        except SlackClientError:
+        except SlackClientError as e:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
@@ -210,7 +210,7 @@ def _get_ims(bot):
                 'Call to im.list failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=im_data.get('error')
+                    error=e.response.get('error')
                 )
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
@@ -268,7 +268,7 @@ def get_im_channel_id(bot, user_id):
                 }
             )
             return conversation_data['channel']['id']
-        except SlackClientError:
+        except SlackClientError as e:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
@@ -278,7 +278,7 @@ def get_im_channel_id(bot, user_id):
                 'Call to conversations.open failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=conversation_data.get('error')
+                    error=e.response.get('error')
                 )
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
@@ -303,7 +303,7 @@ def _get_mpims(bot):
                 }
             )
             mpims.extend(mpim_data['groups'])
-        except SlackClientError:
+        except SlackClientError as e:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
@@ -313,7 +313,7 @@ def _get_mpims(bot):
                 'Call to mpim.list failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=mpim_data.get('error')
+                    error=e.response.get('error')
                 )
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
@@ -356,12 +356,12 @@ def _get_emoji(bot):
         try:
             resp = client(bot).api_call('emoji.list')
             break
-        except SlackClientError:
+        except SlackClientError as e:
             logger.warning(
                 'Call to emoji.list failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=resp.get('error')
+                    error=e.response.get('error')
                 )
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
@@ -520,7 +520,7 @@ def _get_users(bot, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
                 }
             )
             users.extend(users_data['members'])
-        except SlackClientError:
+        except SlackClientError as e:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= max_retries:
@@ -530,7 +530,7 @@ def _get_users(bot, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
                 'Call to users.list failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=users_data.get('error')
+                    error=e.response.get('error')
                 )
             )
             gevent.sleep(sleep * retry)
