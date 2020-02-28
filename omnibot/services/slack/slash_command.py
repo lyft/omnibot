@@ -1,5 +1,4 @@
-import logging
-
+from omnibot import logging
 from omnibot.services import slack
 from omnibot.services.slack import parser
 

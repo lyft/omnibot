@@ -1,9 +1,9 @@
-import logging
-
 import requests
 from requests.adapters import HTTPAdapter
 from requests.exceptions import RequestException
 from requests.packages.urllib3.util.retry import Retry
+
+from omnibot import logging
 
 logger = logging.getLogger(__name__)
 

@@ -11,7 +11,6 @@ Also see the documentation for the built-in checks:
 * :func:`omnibot.authnz.envoy_checks:envoy_permissions_check`
 """
 import importlib
-import logging
 import re
 from functools import wraps
 
@@ -20,6 +19,7 @@ from flask import (
     request
 )
 
+from omnibot import logging
 from omnibot import settings
 
 logger = logging.getLogger(__name__)
