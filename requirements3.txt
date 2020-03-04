@@ -4,21 +4,22 @@
 #
 #    pip-compile --output-file=./requirements3.txt ./requirements.in
 #
+-e git+https://github.com/lyft/python-slackclient@fixes-for-626-and-625#egg=slackclient  # via -r ./requirements.in
 aiohttp==3.6.2            # via slackclient
 async-timeout==3.0.1      # via aiohttp
 attrs==19.3.0             # via aiohttp
-blinker==1.4
-boto3==1.4.5
+blinker==1.4              # via -r ./requirements.in
+boto3==1.4.5              # via -r ./requirements.in
 botocore==1.5.95          # via boto3, s3transfer
 chardet==3.0.4            # via aiohttp
 click==7.0                # via flask
 coverage==4.5.4           # via pytest-cov
 docutils==0.15.2          # via botocore
-flask-script==2.0.5
-flask==1.1.1
-gevent==1.2.1
-greenlet==0.4.12
-gunicorn==19.9.0
+flask-script==2.0.5       # via -r ./requirements.in
+flask==1.1.1              # via -r ./requirements.in, flask-script
+gevent==1.2.1             # via -r ./requirements.in
+greenlet==0.4.12          # via -r ./requirements.in, gevent
+gunicorn==19.9.0          # via -r ./requirements.in
 idna-ssl==1.1.0           # via aiohttp
 idna==2.8                 # via idna-ssl, yarl
 itsdangerous==1.1.0       # via flask
@@ -28,22 +29,21 @@ markupsafe==1.1.1         # via jinja2
 multidict==4.7.4          # via aiohttp, yarl
 psutil==5.6.3             # via rainbow-saddle
 py==1.8.0                 # via pytest
-pytest-cov==2.5.1
-pytest-mock==1.1
-pytest==3.1.1
+pytest-cov==2.5.1         # via -r ./requirements.in
+pytest-mock==1.1          # via -r ./requirements.in
+pytest==3.1.1             # via -r ./requirements.in, pytest-cov, pytest-mock
 python-dateutil==2.8.0    # via botocore
-python-json-logger==0.1.11
-python-redis-lock==3.2.0
-pyyaml==5.1
-rainbow-saddle==0.4.0
-redis==2.10.6
+python-json-logger==0.1.11  # via -r ./requirements.in
+python-redis-lock==3.2.0  # via -r ./requirements.in
+pyyaml==5.1               # via -r ./requirements.in
+rainbow-saddle==0.4.0     # via -r ./requirements.in
+redis==2.10.6             # via -r ./requirements.in, python-redis-lock
 s3transfer==0.1.13        # via boto3
 six==1.12.0               # via python-dateutil
-slackclient==2.5.0
-statsd==3.2.1
+statsd==3.2.1             # via -r ./requirements.in
 typing-extensions==3.7.4.1  # via aiohttp
 werkzeug==0.15.5          # via flask
 yarl==1.4.2               # via aiohttp
 
-pip==9.0.3
-setuptools==45.2.0
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools
