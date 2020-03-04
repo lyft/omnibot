@@ -60,7 +60,7 @@ boto3==1.4.5
 # License: MIT
 # Upstream url: https://github.com/slackapi/python-slackclient
 # temporarily using a branch to workaround blocking bugs in 2.5.0
--e git+https://github.com/lyft/python-slackclient@fixes-for-626-and-625#egg=slackclient
+-e git+https://github.com/lyft/python-slackclient@lyftmaster#egg=slackclient
 
 # Testing library
 # License: MIT

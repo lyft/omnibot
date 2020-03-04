@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=./requirements3.txt ./requirements.in
 #
--e git+https://github.com/lyft/python-slackclient@fixes-for-626-and-625#egg=slackclient  # via -r ./requirements.in
+-e git+https://github.com/lyft/python-slackclient@lyftmaster#egg=slackclient  # via -r ./requirements.in
 aiohttp==3.6.2            # via slackclient
 async-timeout==3.0.1      # via aiohttp
 attrs==19.3.0             # via aiohttp
