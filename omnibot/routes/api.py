@@ -9,7 +9,6 @@ configuration; see documentation on checks:
 """
 from __future__ import absolute_import
 import json
-import logging
 import time
 from functools import wraps
 
@@ -21,6 +20,7 @@ from flask import (
 )
 
 from omnibot import authnz
+from omnibot import logging
 from omnibot.processor import parse_kwargs
 from omnibot.services import sqs
 from omnibot.services import stats

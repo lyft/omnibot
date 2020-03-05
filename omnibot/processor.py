@@ -3,11 +3,11 @@ Core processing logic.
 """
 import re
 import json
-import logging
 import importlib
 
 import requests
 
+from omnibot import logging
 from omnibot import settings
 from omnibot.services import slack
 from omnibot.services.slack.message import Message, MessageUnsupportedError

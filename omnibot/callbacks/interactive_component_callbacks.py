@@ -3,7 +3,8 @@ Interactive component callbacks for internal omnibot functionality.
 """
 
 import json
-import logging
+
+from omnibot import logging
 
 logger = logging.getLogger(__name__)
 

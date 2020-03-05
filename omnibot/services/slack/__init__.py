@@ -2,11 +2,11 @@
 Slackclient wrapper.
 """
 import json
-import logging
 
 import gevent
 import slackclient
 
+from omnibot import logging
 from omnibot.services import omniredis
 
 logger = logging.getLogger(__name__)
