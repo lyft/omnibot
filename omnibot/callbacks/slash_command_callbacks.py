@@ -3,8 +3,8 @@ Slash command callbacks for internal omnibot functionality.
 """
 
 import json
+import logging
 
-from omnibot import logging
 from omnibot.services.slack import get_emoji
 
 logger = logging.getLogger(__name__)

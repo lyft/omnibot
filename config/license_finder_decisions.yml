@@ -1,115 +1,115 @@
 ---
-- - :permit
+- - :whitelist
   - MIT
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 01:55:51.429439100 Z
-- - :permit
+- - :whitelist
   - ISC
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:00:10.960824500 Z
-- - :permit
+- - :whitelist
   - BSD
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:00:48.608694400 Z
-- - :permit
+- - :whitelist
   - Python Software Foundation License
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:01:14.298710000 Z
-- - :permit
+- - :whitelist
   - Simplified BSD
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:01:28.972522900 Z
-- - :permit
+- - :whitelist
   - Apache 2.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:01:42.801093000 Z
-- - :permit
+- - :whitelist
   - CC0-1.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:01:57.707287400 Z
-- - :permit
+- - :whitelist
   - MIT/X11
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:02:08.599410600 Z
-- - :permit
+- - :whitelist
   - New BSD
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:02:20.566269000 Z
-- - :permit
+- - :whitelist
   - Expat license
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:04:52.898901000 Z
-- - :permit
+- - :whitelist
   - ASL
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:06:33.891629700 Z
-- - :permit
+- - :whitelist
   - Mozilla Public License 2.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:06:56.556790400 Z
-- - :permit
+- - :whitelist
   - LGPL
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:15:55.862389300 Z
-- - :permit
+- - :whitelist
   - Apache License v2.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:16:05.679307500 Z
-- - :permit
+- - :whitelist
   - Public Domain
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:16:14.403847400 Z
-- - :permit
+- - :whitelist
   - GNU LGPL
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2019-11-19 02:16:20.654080000 Z
 - - :approve
   - docutils
-  - :who:
+  - :who: 
     :why: Using public domain part of this
     :versions: []
     :when: 2019-11-22 01:45:34.996197115 Z
 - - :approve
   - idna
-  - :who:
+  - :who: 
     :why: Modified BSD, checked and valid
     :versions: []
     :when: 2019-11-22 01:45:53.040643508 Z
 - - :approve
   - python-dateutil
-  - :who:
+  - :who: 
     :why: BSD and Apache2 licensed
     :versions: []
     :when: 2019-11-22 01:46:11.170672095 Z

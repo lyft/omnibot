@@ -4,16 +4,16 @@ gevent.monkey.patch_all()
 import gevent.pool # noqa:E402
 import signal # noqa:E402
 import json # noqa:E402
+import logging # noqa:E402
 import time # noqa:E402
 import dateutil.parser # noqa:E402
+
+import redis_lock # noqa:E402
+
 from datetime import (
     datetime,
     timedelta
 ) # noqa:E402
-
-import redis_lock # noqa:E402
-
-from omnibot import logging # noqa:E402
 from omnibot import settings # noqa:E402
 from omnibot.services import omniredis # noqa:E402
 from omnibot.services import stats # noqa:E402

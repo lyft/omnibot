@@ -1,8 +1,8 @@
 from __future__ import absolute_import
 
+import logging
 import yaml
 
-from omnibot import logging
 from omnibot.utils.settings import bool_env, int_env, str_env
 
 logger = logging.getLogger(__name__)
@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 # Log config file used from any direct main entrypoint. You should
 # use gunicorn config for the web worker.
 LOG_CONFIG_FILE = str_env('LOG_CONFIG_FILE', '/etc/omnibot/logging.conf')
-LOG_MODULE = str_env('LOG_MODULE', 'logging')
 
 # Flask-related settings
 DEBUG = bool_env('DEBUG', False)
@@ -30,7 +29,7 @@ EXIT_ON_BAD_CONFIG = bool_env('EXIT_ON_BAD_CONFIG', True)
 CONFIG_FILE = str_env('CONFIG_FILE', '/etc/omnibot/omnibot.conf')
 try:
     with open(CONFIG_FILE) as _config_file:
-        _config = yaml.safe_load(_config_file)
+        _config = yaml.load(_config_file)
 except Exception:
     if EXIT_ON_BAD_CONFIG:
         raise

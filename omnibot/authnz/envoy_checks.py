@@ -1,8 +1,8 @@
+import logging
 import re
 
 from flask import request
 
-from omnibot import logging
 from omnibot import settings
 
 logger = logging.getLogger(__name__)
