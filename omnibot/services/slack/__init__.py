@@ -4,8 +4,7 @@ Slackclient wrapper.
 import json
 
 import gevent
-import slack
-from slack.errors import SlackClientError
+import slackclient
 
 from omnibot import logging
 from omnibot.services import omniredis
@@ -19,14 +18,6 @@ GEVENT_SLEEP_TIME = 5
 _client = {}
 
 
-def _get_sleep_time(response):
-    retry_after = response.get('headers', {}).get('Retry-After')
-    if retry_after:
-        return int(retry_after)
-    else:
-        return GEVENT_SLEEP_TIME
-
-
 def client(bot, client_type='oauth'):
     """
     Global Slack client.
@@ -37,12 +28,12 @@ def client(bot, client_type='oauth'):
         _client[team_name] = {}
     if bot.name not in _client[team_name]:
         _client[team_name][bot.name] = {
-            'oauth': slack.WebClient(
+            'oauth': slackclient.SlackClient(
                 bot.oauth_token
             )
         }
         if bot.oauth_bot_token:
-            _client[team_name][bot.name]['oauth_bot'] = slack.WebClient(
+            _client[team_name][bot.name]['oauth_bot'] = slackclient.SlackClient(
                 bot.oauth_bot_token
             )
     if client_type == 'oauth_bot':
@@ -61,15 +52,16 @@ def _get_channels(bot):
     retry = 0
     next_cursor = ''
     while True:
-        try:
-            channels_data = client(bot, client_type='oauth_bot').channels_list(
-                limit=500,
-                exclude_archived='true',
-                exclude_members='true',
-                cursor=next_cursor,
-            )
+        channels_data = client(bot, client_type='oauth_bot').api_call(
+            'channels.list',
+            exclude_archived=True,
+            exclude_members=True,
+            limit=1000,
+            cursor=next_cursor
+        )
+        if channels_data['ok']:
             channels.extend(channels_data['channels'])
-        except SlackClientError as e:
+        else:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
@@ -81,10 +73,10 @@ def _get_channels(bot):
                 'Call to channels.list failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=e.response.get('error')
+                    error=channels_data.get('error')
                 )
             )
-            gevent.sleep(_get_sleep_time(e.response))
+            gevent.sleep(GEVENT_SLEEP_TIME)
             continue
         next_cursor = channels_data.get(
             'response_metadata',
@@ -92,6 +84,7 @@ def _get_channels(bot):
         ).get('next_cursor')
         if not next_cursor:
             break
+        gevent.sleep(GEVENT_SLEEP_TIME)
     return channels
 
 
@@ -127,13 +120,14 @@ def _get_groups(bot):
     retry = 0
     next_cursor = ''
     while True:
-        try:
-            groups_data = client(bot, client_type='oauth_bot').groups_list(
-                limit=500,
-                cursor=next_cursor,
-            )
+        groups_data = client(bot, client_type='oauth_bot').api_call(
+            'groups.list',
+            limit=1000,
+            cursor=next_cursor
+        )
+        if groups_data['ok']:
             groups.extend(groups_data['groups'])
-        except SlackClientError as e:
+        else:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
@@ -143,10 +137,10 @@ def _get_groups(bot):
                 'Call to groups.list failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=e.response.get('error')
+                    error=groups_data.get('error')
                 )
             )
-            gevent.sleep(_get_sleep_time(e.response))
+            gevent.sleep(GEVENT_SLEEP_TIME)
             continue
         next_cursor = groups_data.get(
             'response_metadata',
@@ -154,6 +148,7 @@ def _get_groups(bot):
         ).get('next_cursor')
         if not next_cursor:
             break
+        gevent.sleep(GEVENT_SLEEP_TIME)
     return groups
 
 
@@ -190,13 +185,14 @@ def _get_ims(bot):
     retry = 0
     next_cursor = ''
     while True:
-        try:
-            im_data = client(bot, client_type='oauth_bot').im_list(
-                limit=500,
-                cursor=next_cursor,
-            )
+        im_data = client(bot, client_type='oauth_bot').api_call(
+            'im.list',
+            limit=1000,
+            cursor=next_cursor
+        )
+        if im_data['ok']:
             ims.extend(im_data['ims'])
-        except SlackClientError as e:
+        else:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
@@ -206,14 +202,15 @@ def _get_ims(bot):
                 'Call to im.list failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=e.response.get('error')
+                    error=im_data.get('error')
                 )
             )
-            gevent.sleep(_get_sleep_time(e.response))
+            gevent.sleep(GEVENT_SLEEP_TIME)
             continue
         next_cursor = im_data.get('response_metadata', {}).get('next_cursor')
         if not next_cursor:
             break
+        gevent.sleep(GEVENT_SLEEP_TIME)
     return ims
 
 
@@ -255,12 +252,13 @@ def get_im_channel_id(bot, user_id):
     retry = 0
     while True:
         users = user_id
-        try:
-            conversation_data = client(bot, client_type='oauth_bot').conversations_open(
-                users=users,
-            )
+        conversation_data = client(bot, client_type='oauth_bot').api_call(
+            'conversations.open',
+            users=users
+        )
+        if conversation_data['ok']:
             return conversation_data['channel']['id']
-        except SlackClientError as e:
+        else:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
@@ -270,10 +268,10 @@ def get_im_channel_id(bot, user_id):
                 'Call to conversations.open failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=e.response.get('error')
+                    error=conversation_data.get('error')
                 )
             )
-            gevent.sleep(_get_sleep_time(e.response))
+            gevent.sleep(GEVENT_SLEEP_TIME)
             continue
     return None
 
@@ -286,13 +284,14 @@ def _get_mpims(bot):
     retry = 0
     next_cursor = ''
     while True:
-        try:
-            mpim_data = client(bot, client_type='oauth_bot').mpim_list(
-                limit=500,
-                cursor=next_cursor,
-            )
+        mpim_data = client(bot, client_type='oauth_bot').api_call(
+            'mpim.list',
+            limit=1000,
+            cursor=next_cursor
+        )
+        if mpim_data['ok']:
             mpims.extend(mpim_data['groups'])
-        except SlackClientError as e:
+        else:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
@@ -302,14 +301,15 @@ def _get_mpims(bot):
                 'Call to mpim.list failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=e.response.get('error')
+                    error=mpim_data.get('error')
                 )
             )
-            gevent.sleep(_get_sleep_time(e.response))
+            gevent.sleep(GEVENT_SLEEP_TIME)
             continue
         next_cursor = mpim_data.get('response_metadata', {}).get('next_cursor')
         if not next_cursor:
             break
+        gevent.sleep(GEVENT_SLEEP_TIME)
     return mpims
 
 
@@ -341,18 +341,17 @@ def get_mpims(bot):
 def _get_emoji(bot):
     # TODO: split this retry logic into a generic retry function
     for retry in range(MAX_RETRIES):
-        try:
-            resp = client(bot).emoji_list()
+        resp = client(bot).api_call('emoji.list')
+        if resp['ok']:
             break
-        except SlackClientError as e:
-            logger.warning(
-                'Call to emoji.list failed, attempting'
-                ' retry #{retry}: {error}'.format(
-                    retry=retry,
-                    error=e.response.get('error')
-                )
+        logger.warning(
+            'Call to emoji.list failed, attempting'
+            ' retry #{retry}: {error}'.format(
+                retry=retry,
+                error=resp.get('error')
             )
-            gevent.sleep(_get_sleep_time(e.response))
+        )
+        gevent.sleep(GEVENT_SLEEP_TIME)
     else:
         logger.error('Exceeded max retries when calling emoji.list.')
         return {}
@@ -407,43 +406,45 @@ def get_channel(bot, channel):
     if cached_channel:
         return cached_channel
     logger.debug('Channel {} not in cache.'.format(channel))
-    try:
-        channel_data = client(bot).channels_info(channel=channel)
+    channel_data = client(bot).api_call(
+        'channels.info',
+        channel=channel
+    )
+    if channel_data['ok']:
         update_channel(bot, channel_data['channel'])
         return channel_data['channel']
-    except SlackClientError:
-        logger.debug(
-            'Channel {} is not a public channel, looking for'
-            ' private channel.'.format(channel)
-        )
-        # no channel, look for a private channel
-        try:
-            group_data = client(bot, client_type='oauth_bot').groups_info(
-                channel=channel,
-            )
-            update_group(bot, group_data['group'])
-            return group_data['group']
-        except SlackClientError:
-            logger.debug(
-                'Channel {} is not a private channel, skipping lookup'
-                ' for IMs.'.format(channel)
-            )
-            # OK. At this point it must either be an IM or MPIM that's brand new.
-            # We'll need to refresh and look in cache.
-            # Let's check IMs first.
-            update_ims([bot])
-            cached_channel = _get_channel_from_cache(bot, channel)
-            if cached_channel:
-                return cached_channel
-            # Now let's refresh and check MPIMs
-            update_mpims([bot])
-            cached_channel = _get_channel_from_cache(bot, channel)
-            if cached_channel:
-                return cached_channel
-            logger.warning(
-                'Failed to find channel={} via bot={}'.format(channel, bot.name)
-            )
-            return {}
+    logger.debug(
+        'Channel {} is not a public channel, looking for'
+        ' private channel.'.format(channel)
+    )
+    # no channel, look for a private channel
+    group_data = client(bot, client_type='oauth_bot').api_call(
+        'groups.info',
+        channel=channel
+    )
+    if group_data['ok']:
+        update_group(bot, group_data['group'])
+        return group_data['group']
+    logger.debug(
+        'Channel {} is not a private channel, skipping lookup'
+        ' for IMs.'.format(channel)
+    )
+    # OK. At this point it must either be an IM or MPIM that's brand new.
+    # We'll need to refresh and look in cache.
+    # Let's check IMs first.
+    update_ims([bot])
+    cached_channel = _get_channel_from_cache(bot, channel)
+    if cached_channel:
+        return cached_channel
+    # Now let's refresh and check MPIMs
+    update_mpims([bot])
+    cached_channel = _get_channel_from_cache(bot, channel)
+    if cached_channel:
+        return cached_channel
+    logger.warning(
+        'Failed to find channel={} via bot={}'.format(channel, bot.name)
+    )
+    return {}
 
 
 def _get_channel_name_from_cache(key, bot_name, value):
@@ -490,14 +491,15 @@ def _get_users(bot, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
     retry = 0
     next_cursor = ''
     while True:
-        try:
-            users_data = client(bot, client_type='oauth_bot').users_list(
-                limit=500,
-                presence='false',
-                cursor=next_cursor,
-            )
+        users_data = client(bot, client_type='oauth_bot').api_call(
+            'users.list',
+            presence=False,
+            limit=1000,
+            cursor=next_cursor
+        )
+        if users_data['ok']:
             users.extend(users_data['members'])
-        except SlackClientError as e:
+        else:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= max_retries:
@@ -507,7 +509,7 @@ def _get_users(bot, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
                 'Call to users.list failed, attempting'
                 ' retry #{retry}: {error}'.format(
                     retry=retry,
-                    error=e.response.get('error')
+                    error=users_data.get('error')
                 )
             )
             gevent.sleep(sleep * retry)
@@ -568,13 +570,14 @@ def get_user(bot, user_id):
     user = redis_client.hget('users:{}'.format(bot.team.name), user_id)
     if user:
         return json.loads(user)
-    try:
-        user = client(bot).users_info(
-            user=user_id,
-        )
+    user = client(bot).api_call(
+        'users.info',
+        user=user_id
+    )
+    if user['ok']:
         update_user(bot, user['user'])
         return user['user']
-    except SlackClientError:
+    else:
         logger.warning('Failed to find user={} via bot={}.'.format(
             user_id,
             bot

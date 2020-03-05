@@ -6,18 +6,17 @@ import json
 import importlib
 
 import requests
-from slack.errors import SlackClientError
 
 from omnibot import logging
 from omnibot import settings
 from omnibot.services import slack
-from omnibot.services import stats
-from omnibot.services.slack import parser
-from omnibot.services.slack.bot import Bot
-from omnibot.services.slack.interactive_component import InteractiveComponent
 from omnibot.services.slack.message import Message, MessageUnsupportedError
 from omnibot.services.slack.slash_command import SlashCommand
+from omnibot.services.slack.interactive_component import InteractiveComponent
+from omnibot.services import stats
+from omnibot.services.slack import parser
 from omnibot.services.slack.team import Team
+from omnibot.services.slack.bot import Bot
 from omnibot.utils import get_callback_id
 
 logger = logging.getLogger(__name__)
@@ -298,38 +297,34 @@ def _handle_post_message(message, kwargs):
         kwargs['thread_ts'] = thread_ts
     parse_kwargs(kwargs, message.bot, message.event_trace)
     try:
-        data = {
-            'channel': channel,
-        }
-        data.update(kwargs)
         ret = slack.client(
             message.bot,
             client_type='oauth_bot'
-        ).chat_postMessage(**data)
+        ).api_call(
+            'chat.postMessage',
+            channel=channel,
+            **kwargs
+        )
     except json.decoder.JSONDecodeError:
         logger.exception('JSON decode failure when parsing {}'.format(kwargs))
         return
-    except SlackClientError:
-        logger.error(ret, extra=message.event_trace)
-        return
     logger.debug(ret, extra=message.event_trace)
+    if not ret['ok']:
+        logger.error(ret, extra=message.event_trace)
 
 
 def _handle_action(action, container, kwargs):
     parse_kwargs(kwargs, container.bot, container.event_trace)
-    try:
-        ret = slack.client(
-            container.bot,
-            client_type='oauth_bot'
-        ).api_call(
-            action,
-            json=kwargs
-        )
-        logger.debug(ret)
-    except SlackClientError as e:
-        logger.exception('Error in handle action', kv={'error': str(e)})
-        # TODO (shekharkhedekar) validate errors
-        if e.response.get('error') == 'missing_scope':
+    ret = slack.client(
+        container.bot,
+        client_type='oauth_bot'
+    ).api_call(
+        action,
+        **kwargs
+    )
+    logger.debug(ret)
+    if not ret['ok']:
+        if ret.get('error') == 'missing_scope':
             logger.warning(
                 'action {} failed, attempting as user.'.format(action),
                 extra=container.event_trace
@@ -340,17 +335,16 @@ def _handle_action(action, container, kwargs):
                     client_type='oauth'
                 ).api_call(
                     action,
-                    json=kwargs
+                    **kwargs
                 )
             except json.decoder.JSONDecodeError:
                 logger.exception(
                     'JSON decode failure when parsing {}'.format(kwargs)
                 )
                 return
-            except Exception:
-                logger.error(ret, extra=container.event_trace)
             logger.debug(ret)
-
+            if not ret['ok']:
+                logger.error(ret, extra=container.event_trace)
         else:
             logger.error(ret, extra=container.event_trace)
 
