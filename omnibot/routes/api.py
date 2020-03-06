@@ -707,7 +707,7 @@ def _perform_action(bot, data):
                 'action failed in post_slack, attempting as user.',
                 extra={
                     'action': action,
-                    'team': bot.team_id,
+                    'team': bot.team.team_id,
                     'bot': bot.name,
                 },
             )
@@ -723,7 +723,7 @@ def _perform_action(bot, data):
                     ),
                     extra={
                         'action': action,
-                        'team': bot.team_id,
+                        'team': bot.team.team_id,
                         'bot': bot.name,
                     },
                 )
@@ -737,7 +737,7 @@ def _perform_action(bot, data):
                     ),
                     extra={
                         'action': action,
-                        'team': bot.team_id,
+                        'team': bot.team.team_id,
                         'bot': bot.name,
                     },
                 )
@@ -749,7 +749,7 @@ def _perform_action(bot, data):
                 ),
                 extra={
                     'action': action,
-                    'team': bot.team_id,
+                    'team': bot.team.team_id,
                     'bot': bot.name,
                 },
             )
