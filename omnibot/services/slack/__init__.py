@@ -256,7 +256,7 @@ def get_im_channel_id(bot, user_id):
         raw_im = redis_client.hget('ims:{}'.format(bot.team.name), imsmap_id)
         if raw_im:
             im = json.loads(raw_im)
-            if not im['is_user_deleted']:
+            if not im.get('is_user_deleted', False):
                 return im['id']
 
     retry = 0
@@ -560,7 +560,7 @@ def update_users(bot):
 def update_user(bot, user):
     if user['is_bot']:
         return
-    if user['deleted']:
+    if user.get('deleted', False):
         return
     profile = user.get('profile')
     if not profile:
