@@ -77,9 +77,11 @@ class Message(object):
             unsupported = True
         # For now, ignore all event subtypes
         elif self.subtype:
+            extra = {'subtype': self.subtype}
+            extra.update(self.event_trace)
             logger.debug(
-                'ignoring message with subtype: {}'.format(self.subtype),
-                extra=self.event_trace
+                'ignoring message with unsupported subtype',
+                extra=extra,
             )
             unsupported = True
         if unsupported:

@@ -65,9 +65,12 @@ def watch_users():
                 'watch_users',
                 expire=LOCK_EXPIRATION,
                 auto_renewal=True):
-            logger.info('Updating slack user list.')
             with statsd.timer('watch.users'):
                 for team_name, bot_name in settings.PRIMARY_SLACK_BOT.items():
+                    logger.info(
+                        'Updating slack user list.',
+                        extra={'team': team_name, 'bot': bot_name},
+                    )
                     team = Team.get_team_by_name(team_name)
                     bot = Bot.get_bot_by_name(team, bot_name)
                     slack.update_users(bot)
@@ -97,9 +100,12 @@ def watch_channels():
                 'watch_channels',
                 expire=LOCK_EXPIRATION,
                 auto_renewal=True):
-            logger.info('Updating slack channel list.')
             with statsd.timer('watch.channels'):
                 for team_name, bot_name in settings.PRIMARY_SLACK_BOT.items():
+                    logger.info(
+                        'Updating slack channel list.',
+                        extra={'team': team_name, 'bot': bot_name},
+                    )
                     team = Team.get_team_by_name(team_name)
                     bot = Bot.get_bot_by_name(team, bot_name)
                     slack.update_channels(bot)
@@ -129,11 +135,14 @@ def watch_groups():
                 'watch_groups',
                 expire=LOCK_EXPIRATION,
                 auto_renewal=True):
-            logger.info('Updating slack private channels list.')
             with statsd.timer('watch.groups'):
                 bots = []
                 for team_name, _bots in settings.SLACK_BOT_TOKENS.items():
                     for bot_name, bot_data in _bots.items():
+                        logger.info(
+                            'Updating slack private channels list.',
+                            extra={'team': team_name, 'bot': bot_name},
+                        )
                         team = Team.get_team_by_name(team_name)
                         bot = Bot.get_bot_by_name(team, bot_name)
                         bots.append(bot)
@@ -164,11 +173,14 @@ def watch_ims():
                 'watch_ims',
                 expire=LOCK_EXPIRATION,
                 auto_renewal=True):
-            logger.info('Updating slack im channels list.')
             with statsd.timer('watch.ims'):
                 bots = []
                 for team_name, _bots in settings.SLACK_BOT_TOKENS.items():
                     for bot_name, bot_data in _bots.items():
+                        logger.info(
+                            'Updating slack im channels list.',
+                            extra={'team': team_name, 'bot': bot_name},
+                        )
                         team = Team.get_team_by_name(team_name)
                         bot = Bot.get_bot_by_name(team, bot_name)
                         bots.append(bot)
@@ -200,11 +212,14 @@ def watch_mpims():
                 'watch_mpims',
                 expire=LOCK_EXPIRATION,
                 auto_renewal=True):
-            logger.info('Updating slack mpim channels list.')
             with statsd.timer('watch.mpims'):
                 bots = []
                 for team_name, _bots in settings.SLACK_BOT_TOKENS.items():
                     for bot_name, bot_data in _bots.items():
+                        logger.info(
+                            'Updating slack mpim channels list.',
+                            extra={'team': team_name, 'bot': bot_name},
+                        )
                         team = Team.get_team_by_name(team_name)
                         bot = Bot.get_bot_by_name(team, bot_name)
                         bots.append(bot)
@@ -235,9 +250,12 @@ def watch_emoji():
                 'watch_emoji',
                 expire=LOCK_EXPIRATION,
                 auto_renewal=True):
-            logger.info('Updating slack emoji map.')
             with statsd.timer('watch.emoji'):
                 for team_name, bot_name in settings.PRIMARY_SLACK_BOT.items():
+                    logger.info(
+                        'Updating slack emoji map.',
+                        extra={'team': team_name, 'bot': bot_name},
+                    )
                     team = Team.get_team_by_name(team_name)
                     bot = Bot.get_bot_by_name(team, bot_name)
                     slack.update_emoji(bot)

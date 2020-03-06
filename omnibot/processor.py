@@ -263,7 +263,7 @@ def parse_kwargs(kwargs, bot, event_trace=None):
     for attr, to_parse in omnibot_parse.items():
         if attr not in kwargs:
             logger.warning(
-                '{} not found in kwargs when parsing post response.',
+                '{} not found in kwargs when parsing post response.'.format(attr),
                 extra=event_trace
             )
         with statsd.timer('unexpand_metadata'):
@@ -306,7 +306,10 @@ def _handle_post_message(message, kwargs):
             **kwargs
         )
     except json.decoder.JSONDecodeError:
-        logger.exception('JSON decode failure when parsing {}'.format(kwargs))
+        logger.exception(
+            'JSON decode failure when parsing {}'.format(kwargs),
+            extra=message.event_trace,
+        )
         return
     logger.debug(ret, extra=message.event_trace)
     if not ret['ok']:
@@ -322,7 +325,10 @@ def _handle_action(action, container, kwargs):
         action,
         **kwargs
     )
-    logger.debug(ret)
+    logger.debug(
+        'return from action {}: {}'.format(action, ret),
+        extra=container.event_trace,
+    )
     if not ret['ok']:
         if ret.get('error') == 'missing_scope':
             logger.warning(
@@ -339,14 +345,25 @@ def _handle_action(action, container, kwargs):
                 )
             except json.decoder.JSONDecodeError:
                 logger.exception(
-                    'JSON decode failure when parsing {}'.format(kwargs)
+                    'JSON decode failure when parsing {}'.format(kwargs),
+                    extra=container.event_trace,
                 )
                 return
-            logger.debug(ret)
+            logger.debug(
+                'return from action {}: {}'.format(action, ret),
+                extra=container.event_trace,
+            )
             if not ret['ok']:
-                logger.error(ret, extra=container.event_trace)
+                logger.debug(
+                    'return from failed action {}: {}'.format(action, ret),
+                    extra=container.event_trace,
+                )
         else:
-            logger.error(ret, extra=container.event_trace)
+            if not ret['ok']:
+                logger.debug(
+                    'return from failed action {}: {}'.format(action, ret),
+                    extra=container.event_trace,
+                )
 
 
 def _handle_message_callback(message, callback):
@@ -365,7 +382,10 @@ def _handle_message_callback(message, callback):
                 extra=message.event_trace
             )
             continue
-        logger.debug(action)
+        logger.debug(
+            'action for callback: {}'.format(action),
+            extra=message.event_trace,
+        )
         if action['action'] == 'chat.postMessage':
             _handle_post_message(message, action['kwargs'])
         else:
@@ -384,7 +404,8 @@ def _handle_slash_command_callback(command, callback, response_type):
         logger.debug(
             'Handling response for callback (pre-parse): {}'.format(
                 json.dumps(command_response)
-            )
+            ),
+            extra=command.event_trace,
         )
         if 'response_type' not in command_response:
             command_response['response_type'] = response_type
@@ -392,7 +413,8 @@ def _handle_slash_command_callback(command, callback, response_type):
         logger.debug(
             'Handling response for callback (post-parse): {}'.format(
                 json.dumps(command_response)
-            )
+            ),
+            extra=command.event_trace,
         )
         r = requests.post(
             command.response_url,
@@ -415,21 +437,25 @@ def _handle_slash_command_callback(command, callback, response_type):
                 extra=command.event_trace
             )
             continue
-        logger.debug(action)
+        logger.debug(
+            'Action in response: {}'.format(action),
+            extra=command.event_trace,
+        )
         _handle_action(action['action'], command, action['kwargs'])
 
 
 def _handle_interactive_component_callback(component, callback, response_type):
     logger.info(
         'Handling callback for interactive component',
-        extra=component.event_trace
+        extra=component.event_trace,
     )
     response = _handle_callback(component, callback)
     for component_response in response.get('responses', []):
         logger.debug(
             'Handling response for callback (pre-parse): {}'.format(
                 json.dumps(component_response)
-            )
+            ),
+            extra=component.event_trace,
         )
         if 'response_type' not in component_response:
             component_response['response_type'] = response_type
@@ -437,7 +463,8 @@ def _handle_interactive_component_callback(component, callback, response_type):
         logger.debug(
             'Handling response for callback (post-parse): {}'.format(
                 json.dumps(component_response)
-            )
+            ),
+            extra=component.event_trace,
         )
         r = requests.post(
             component.response_url,
@@ -460,7 +487,10 @@ def _handle_interactive_component_callback(component, callback, response_type):
                 extra=component.event_trace
             )
             continue
-        logger.debug(action)
+        logger.debug(
+            'Action in response: {}'.format(action),
+            extra=component.event_trace,
+        )
         if action['action'] == 'chat.postMessage':
             _handle_post_message(component, action['kwargs'])
         else:
