@@ -44,18 +44,24 @@ def verify_bot(f):
         try:
             team = Team.get_team_by_name(team_name)
         except TeamInitializationError:
-            logger.warning('Failed to validate bot={} team={}.'.format(
-                bot_name,
-                team_name
-            ))
+            logger.warning(
+                'Failed to validate bot',
+                extra={
+                    'bot': bot_name,
+                    'team': team_name,
+                }
+            )
             return abort(404)
         try:
             Bot.get_bot_by_name(team, bot_name)
         except BotInitializationError:
-            logger.warning('Failed to validate bot={} team={}.'.format(
-                bot_name,
-                team_name
-            ))
+            logger.warning(
+                'Failed to validate bot',
+                extra={
+                    'bot': bot_name,
+                    'team': team_name,
+                }
+            )
             return abort(404)
         return f(*args, **kwargs)
     return decorated
@@ -74,7 +80,7 @@ def slack_event():
     Handle event subscription API webhooks from slack.
     """
     event = request.json
-    logger.debug(event)
+    logger.debug('Event received in API slack_event: {}'.format(event))
     # Every event should have a validation token
     if 'token' not in event:
         msg = 'No verification token in event.'
@@ -98,37 +104,53 @@ def slack_event():
         return jsonify({'status': 'failure', 'error': msg}), 403
     team_id = event.get('team_id')
     if team_id is None:
-        msg = 'No team_id in event.'
-        logger.error('{}, App={}'.format(msg, api_app_id))
+        logger.error(
+            'No team_id in event.',
+            extra={'app': api_app_id},
+        )
         return jsonify({'status': 'failure', 'error': msg}), 403
     try:
         team = Team.get_team_by_id(team_id)
     except TeamInitializationError:
-        msg = 'Unsupported team'
-        logger.warning('{}={}, App={}'.format(msg, team_id, api_app_id))
+        logger.warning(
+            'Unsupported team',
+            extra={'team': team_id, 'app': api_app_id},
+        )
         return jsonify({'status': 'failure', 'error': msg}), 403
     try:
         bot = Bot.get_bot_by_bot_id(team, api_app_id)
     except BotInitializationError:
-        msg = 'Unsupported bot'
-        logger.info('{}={}'.format(msg, api_app_id))
+        logger.info(
+            'Unsupported bot',
+            extra={'team': team_id, 'app': api_app_id},
+        )
         return jsonify({'status': 'ignored', 'warning': msg}), 200
     if event['token'] != bot.verification_token:
-        msg = 'Incorrect verification token in event for bot_id'
-        logger.error('{}={}'.format(msg, bot.bot_id))
+        logger.error(
+            'Incorrect verification token in event for bot',
+            extra={'team': team_id, 'app': api_app_id, 'bot': bot.name},
+        )
         return jsonify({'status': 'failure', 'error': msg}), 403
     if 'event' not in event:
-        msg = 'Request does not have an event. Processing will not proceed!'
-        logger.error('{}. Bot={}'.format(msg, bot.bot_id))
+        logger.error(
+            'Request does not have an event. Processing will not proceed!',
+            extra={'team': team_id, 'app': api_app_id, 'bot': bot.name},
+        )
         return jsonify({'status': 'failure', 'error': msg}), 403
     try:
         instrument_event(bot, event)
     except Exception:
-        logger.exception('Could not instrument request. Bot={}'.format(bot.bot_id))
+        logger.exception(
+            'Could not instrument request',
+            extra={'team': team_id, 'app': api_app_id, 'bot': bot.name},
+        )
     try:
         queue_event(bot, event, 'event')
     except Exception:
-        logger.exception('Could not queue request. Bot={}'.format(bot.bot_id))
+        logger.exception(
+            'Could not queue request.',
+            extra={'team': team_id, 'app': api_app_id, 'bot': bot.name},
+        )
         return jsonify({'status': 'failure'}), 500
     return jsonify({'status': 'success'}), 200
 
@@ -138,7 +160,9 @@ def slack_event():
 def slack_slash_command():
     # Slack sends slash commands as application/x-www-form-urlencoded
     command = request.form.to_dict()
-    logger.debug(command)
+    logger.debug(
+        'command received in API slack_slash_command: {}'.format(command)
+    )
     # Every event should have a validation token
     if 'token' not in command:
         msg = 'No verification token in slash command.'
@@ -151,8 +175,10 @@ def slack_slash_command():
     try:
         team = Team.get_team_by_id(command['team_id'])
     except TeamInitializationError:
-        msg = 'Unsupported team'
-        logger.warning('{}={}'.format(msg, command['team_id']))
+        logger.warning(
+            'Unsupported team',
+            extra={'team': command['team_id']},
+        )
         return jsonify({'status': 'failure', 'error': msg}), 403
     # Slash commands annoyingly don't send an app id, so we need to
     # verify
@@ -162,14 +188,20 @@ def slack_slash_command():
         msg = (
             'Token sent with slash command does not match any configured app.'
         )
-        logger.error(msg)
+        logger.error(
+            msg,
+            extra={'team': team.team_id},
+        )
         return jsonify({'status': 'failure', 'error': msg}), 403
     if team.team_id != bot.team.team_id:
         # This should never happen, but let's be paranoid.
         msg = (
             'Token sent with slash command does not match team in event.'
         )
-        logger.error(msg)
+        logger.error(
+            msg,
+            extra={'team': team.team_id},
+        )
         return jsonify({'status': 'failure', 'error': msg}), 403
     handler_found = None
     for slash_handler in bot.slash_command_handlers:
@@ -179,7 +211,10 @@ def slack_slash_command():
     if not handler_found:
         msg = ('This slash command does not have any omnibot handler'
                ' associated with it.')
-        logger.error(msg)
+        logger.error(
+            msg,
+            extra={'team': team.team_id, 'app': bot.bot_id, 'bot': bot.name},
+        )
         return jsonify({'response_type': 'ephemeral', 'text': msg}), 200
     # To avoid needing to look the bot up from its token when the dequeue this
     # command,:let's extend the payload with the bot id
@@ -194,7 +229,10 @@ def slack_slash_command():
             queue_event(bot, command, 'slash_command')
     except Exception:
         msg = 'Could not queue slash command.'
-        logger.exception(msg)
+        logger.exception(
+            msg,
+            extra={'team': team.team_id, 'app': bot.bot_id, 'bot': bot.name},
+        )
         return jsonify({'status': 'failure', 'error': msg}), 500
     if handler_found.get('dialog'):
         _perform_action(bot, {
@@ -213,7 +251,9 @@ def slack_interactive_component():
     # Slack sends interactive components as application/x-www-form-urlencoded,
     # json encoded inside of the payload field. What a whacky API.
     component = json.loads(request.form.to_dict().get('payload', {}))
-    logger.debug(component)
+    logger.debug(
+        'component received in API slack_slash_command: {}'.format(component)
+    )
     if (
         component.get('type') not in [
             'interactive_message',
@@ -239,7 +279,10 @@ def slack_interactive_component():
         team = Team.get_team_by_id(component['team']['id'])
     except TeamInitializationError:
         msg = 'Unsupported team'
-        logger.warning('{}={}'.format(msg, component['team']['id']))
+        logger.warning(
+            'Unsupported team',
+            extra={'team': component['team']['id']},
+        )
         return jsonify({'status': 'failure', 'error': msg}), 403
     # interactive components annoyingly don't send an app id, so we need
     # to verify
@@ -248,14 +291,20 @@ def slack_interactive_component():
     except BotInitializationError:
         msg = ('Token sent with interactive component does not match any'
                ' configured app.')
-        logger.error(msg)
+        logger.error(
+            msg,
+            extra={'team': team.team_id},
+        )
         return jsonify({'status': 'failure', 'error': msg}), 403
     if team.team_id != bot.team.team_id:
         # This should never happen, but let's be paranoid.
         msg = (
             'Token sent with slash command does not match team in event.'
         )
-        logger.error(msg)
+        logger.error(
+            msg,
+            extra={'team': team.team_id, 'app': bot.bot_id, 'bot': bot.name},
+        )
         return jsonify({'status': 'failure', 'error': msg}), 403
     handler_found = None
     for handler in bot.interactive_component_handlers:
@@ -265,7 +314,10 @@ def slack_interactive_component():
     if not handler_found:
         msg = ('This interactive component does not have any omnibot handler'
                ' associated with it.')
-        logger.error(msg)
+        logger.error(
+            msg,
+            extra={'team': team.team_id, 'app': bot.bot_id, 'bot': bot.name},
+        )
         return jsonify({'response_type': 'ephemeral', 'text': msg}), 200
     # To avoid needing to look the bot up from its token when the dequeue this
     # command,:let's extend the payload with the bot id
@@ -278,7 +330,10 @@ def slack_interactive_component():
             queue_event(bot, component, 'interactive_component')
     except Exception:
         msg = 'Could not queue interactive component.'
-        logger.exception(msg)
+        logger.exception(
+            msg,
+            extra={'team': team.team_id, 'app': bot.bot_id, 'bot': bot.name},
+        )
         return jsonify({'status': 'failure', 'error': msg}), 500
     # Open a dialog, if we have a trigger ID, and a dialog is defined for this
     # handler. Not all interactive components have a trigger ID.
@@ -611,11 +666,12 @@ def get_channel_by_name(team_name, bot_name, channel_name):
     channel = slack.get_channel_by_name(bot, channel_name)
     if channel is None:
         logger.debug(
-            'Failed to get channel for team={} bot={} channel={}.'.format(
-                team_name,
-                bot_name,
-                channel_name
-            )
+            'Failed to get channel',
+            extra={
+                'team': team_name,
+                'bot': bot_name,
+                'channel': channel_name,
+            },
         )
         return jsonify({'error': 'provided channel_name was not found.'}), 404
     return jsonify(channel)
@@ -646,9 +702,12 @@ def _perform_action(bot, data):
     if not ret['ok']:
         if ret.get('error') in ['missing_scope', 'not_allowed_token_type']:
             logger.warning(
-                'action={} failed in post_slack, attempting as user.'.format(
-                    action
-                )
+                'action failed in post_slack, attempting as user.',
+                extra={
+                    'action': action,
+                    'team': bot.team_id,
+                    'bot': bot.name,
+                },
             )
             try:
                 ret = slack.client(bot, client_type='oauth').api_call(
@@ -659,7 +718,12 @@ def _perform_action(bot, data):
                 logger.exception(
                     'JSON decode failure when parsing kwargs={}'.format(
                         kwargs
-                    )
+                    ),
+                    extra={
+                        'action': action,
+                        'team': bot.team_id,
+                        'bot': bot.name,
+                    },
                 )
                 return {'ok': False}
             logger.debug(ret)
@@ -668,14 +732,24 @@ def _perform_action(bot, data):
                     'action={} failed in post_slack: ret={}'.format(
                         action,
                         ret
-                    )
+                    ),
+                    extra={
+                        'action': action,
+                        'team': bot.team_id,
+                        'bot': bot.name,
+                    },
                 )
         else:
             logger.error(
                 'action={} failed in post_slack: ret={}'.format(
                     action,
                     ret
-                )
+                ),
+                extra={
+                    'action': action,
+                    'team': bot.team_id,
+                    'bot': bot.name,
+                },
             )
     return ret
 

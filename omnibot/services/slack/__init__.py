@@ -66,15 +66,17 @@ def _get_channels(bot):
             retry = retry + 1
             if retry >= MAX_RETRIES:
                 logger.error(
-                    'Exceeded max retries when calling channels.list.'
+                    'Exceeded max retries when calling channels.list.',
+                    extra={'bot': bot.name},
                 )
                 break
             logger.warning(
-                'Call to channels.list failed, attempting'
-                ' retry #{retry}: {error}'.format(
-                    retry=retry,
-                    error=channels_data.get('error')
-                )
+                'Call to channels.list failed, attempting retry',
+                extra={
+                    'retry': retry,
+                    'error': channels_data.get('error'),
+                    'bot': bot.name,
+                },
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
             continue
@@ -131,14 +133,18 @@ def _get_groups(bot):
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
-                logger.error('Exceeded max retries when calling groups.list.')
+                logger.error(
+                    'Exceeded max retries when calling groups.list.',
+                    extra={'bot': bot.name},
+                )
                 break
             logger.warning(
-                'Call to groups.list failed, attempting'
-                ' retry #{retry}: {error}'.format(
-                    retry=retry,
-                    error=groups_data.get('error')
-                )
+                'Call to groups.list failed, attempting retry',
+                extra={
+                    'retry': retry,
+                    'error': groups_data.get('error'),
+                    'bot': bot.name,
+                },
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
             continue
@@ -196,14 +202,18 @@ def _get_ims(bot):
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
-                logger.error('Exceeded max retries when calling im.list.')
+                logger.error(
+                    'Exceeded max retries when calling im.list.',
+                    extra={'bot': bot.name},
+                )
                 break
             logger.warning(
-                'Call to im.list failed, attempting'
-                ' retry #{retry}: {error}'.format(
-                    retry=retry,
-                    error=im_data.get('error')
-                )
+                'Call to im.list failed, attempting retry',
+                extra={
+                    'retry': retry,
+                    'error': im_data.get('error'),
+                    'bot': bot.name,
+                },
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
             continue
@@ -262,14 +272,18 @@ def get_im_channel_id(bot, user_id):
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
-                logger.error('Exceeded max retries when calling conversations.open.')
+                logger.error(
+                    'Exceeded max retries when calling conversations.open.',
+                    extra={'bot': bot.name},
+                )
                 break
             logger.warning(
-                'Call to conversations.open failed, attempting'
-                ' retry #{retry}: {error}'.format(
-                    retry=retry,
-                    error=conversation_data.get('error')
-                )
+                'Call to conversations.open failed, attempting retry',
+                extra={
+                    'retry': retry,
+                    'error': conversation_data.get('error'),
+                    'bot': bot.name,
+                },
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
             continue
@@ -295,14 +309,18 @@ def _get_mpims(bot):
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
-                logger.error('Exceeded max retries when calling mpim.list.')
+                logger.error(
+                    'Exceeded max retries when calling mpim.list.',
+                    extra={'bot': bot.name},
+                )
                 break
             logger.warning(
-                'Call to mpim.list failed, attempting'
-                ' retry #{retry}: {error}'.format(
-                    retry=retry,
-                    error=mpim_data.get('error')
-                )
+                'Call to mpim.list failed, attempting retry',
+                extra={
+                    'retry': retry,
+                    'error': mpim_data.get('error'),
+                    'bot': bot.name,
+                },
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
             continue
@@ -345,15 +363,19 @@ def _get_emoji(bot):
         if resp['ok']:
             break
         logger.warning(
-            'Call to emoji.list failed, attempting'
-            ' retry #{retry}: {error}'.format(
-                retry=retry,
-                error=resp.get('error')
-            )
+            'Call to emoji.list failed, attempting retry',
+            extra={
+                'retry': retry,
+                'error': resp.get('error'),
+                'bot': bot.name,
+            },
         )
         gevent.sleep(GEVENT_SLEEP_TIME)
     else:
-        logger.error('Exceeded max retries when calling emoji.list.')
+        logger.error(
+            'Exceeded max retries when calling emoji.list.',
+            extra={'bot': bot.name},
+        )
         return {}
 
     emoji = {}
@@ -401,34 +423,35 @@ def get_channel(bot, channel):
     """
     Get a channel, from its channel id
     """
-    logger.debug('Fetching channel: {}'.format(channel))
+    logger.debug(
+        'Fetching channel',
+        extra={'channel': channel, 'bot': bot.name},
+    )
     cached_channel = _get_channel_from_cache(bot, channel)
     if cached_channel:
         return cached_channel
-    logger.debug('Channel {} not in cache.'.format(channel))
+    logger.debug(
+        'Channel not in cache.',
+        extra={'channel': channel, 'bot': bot.name},
+    )
     channel_data = client(bot).api_call(
-        'channels.info',
+        'conversations.info',
         channel=channel
     )
     if channel_data['ok']:
         update_channel(bot, channel_data['channel'])
         return channel_data['channel']
     logger.debug(
-        'Channel {} is not a public channel, looking for'
-        ' private channel.'.format(channel)
+        'Channel is not a public channel, looking for private channel.',
+        extra={'channel': channel, 'bot': bot.name},
     )
-    # no channel, look for a private channel
-    group_data = client(bot, client_type='oauth_bot').api_call(
-        'groups.info',
+    channel_data = client(bot, client_type='oauth_bot').api_call(
+        'conversations.info',
         channel=channel
     )
-    if group_data['ok']:
-        update_group(bot, group_data['group'])
-        return group_data['group']
-    logger.debug(
-        'Channel {} is not a private channel, skipping lookup'
-        ' for IMs.'.format(channel)
-    )
+    if channel_data['ok']:
+        update_channel(bot, channel_data['channel'])
+        return channel_data['channel']
     # OK. At this point it must either be an IM or MPIM that's brand new.
     # We'll need to refresh and look in cache.
     # Let's check IMs first.
@@ -441,9 +464,10 @@ def get_channel(bot, channel):
     cached_channel = _get_channel_from_cache(bot, channel)
     if cached_channel:
         return cached_channel
-    logger.warning(
-        'Failed to find channel={} via bot={}'.format(channel, bot.name)
-    )
+    logger.warning('Failed to find channel', extra={
+        'channel': channel,
+        'bot': bot.name,
+    })
     return {}
 
 
@@ -503,14 +527,18 @@ def _get_users(bot, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= max_retries:
-                logger.error('Exceeded max retries when calling users.list.')
+                logger.error(
+                    'Exceeded max retries when calling users.list.',
+                    extra={'bot': bot.name},
+                )
                 break
             logger.warning(
-                'Call to users.list failed, attempting'
-                ' retry #{retry}: {error}'.format(
-                    retry=retry,
-                    error=users_data.get('error')
-                )
+                'Call to users.list failed, attempting retry',
+                extra={
+                    'retry': retry,
+                    'error': users_data.get('error'),
+                    'bot': bot.name,
+                },
             )
             gevent.sleep(sleep * retry)
             continue
@@ -578,11 +606,10 @@ def get_user(bot, user_id):
         update_user(bot, user['user'])
         return user['user']
     else:
-        logger.warning('Failed to find user={} via bot={}.'.format(
-            user_id,
-            bot
-        ))
-        logger.error(user)
+        logger.warning('Failed to find user', extra={
+            'user': user_id,
+            'bot': bot.name,
+        })
         return {}
 
 
