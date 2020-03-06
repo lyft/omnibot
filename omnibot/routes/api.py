@@ -104,36 +104,35 @@ def slack_event():
         return jsonify({'status': 'failure', 'error': msg}), 403
     team_id = event.get('team_id')
     if team_id is None:
+        msg = 'No team_id in event.'
         logger.error(
-            'No team_id in event.',
+            msg,
             extra={'app': api_app_id},
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
     try:
         team = Team.get_team_by_id(team_id)
     except TeamInitializationError:
-        logger.warning(
-            'Unsupported team',
-            extra={'team': team_id, 'app': api_app_id},
-        )
+        msg = 'Unsupported team'
+        logger.warning(msg, extra={'team': team_id, 'app': api_app_id})
         return jsonify({'status': 'failure', 'error': msg}), 403
     try:
         bot = Bot.get_bot_by_bot_id(team, api_app_id)
     except BotInitializationError:
-        logger.info(
-            'Unsupported bot',
-            extra={'team': team_id, 'app': api_app_id},
-        )
+        msg = 'Unsupported bot'
+        logger.info(msg, extra={'team': team_id, 'app': api_app_id})
         return jsonify({'status': 'ignored', 'warning': msg}), 200
     if event['token'] != bot.verification_token:
+        msg = 'Incorrect verification token in event for bot'
         logger.error(
-            'Incorrect verification token in event for bot',
+            msg,
             extra={'team': team_id, 'app': api_app_id, 'bot': bot.name},
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
     if 'event' not in event:
+        msg = 'Request does not have an event. Processing will not proceed!'
         logger.error(
-            'Request does not have an event. Processing will not proceed!',
+            msg,
             extra={'team': team_id, 'app': api_app_id, 'bot': bot.name},
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
@@ -175,8 +174,9 @@ def slack_slash_command():
     try:
         team = Team.get_team_by_id(command['team_id'])
     except TeamInitializationError:
+        msg = 'Unsupported team'
         logger.warning(
-            'Unsupported team',
+            msg,
             extra={'team': command['team_id']},
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
@@ -280,7 +280,7 @@ def slack_interactive_component():
     except TeamInitializationError:
         msg = 'Unsupported team'
         logger.warning(
-            'Unsupported team',
+            msg,
             extra={'team': component['team']['id']},
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
@@ -479,7 +479,7 @@ def get_team_id_by_name(team_name):
     :statuscode 200: success
     :statuscode 404: team is not configured
     """
-    logger.debug('Getting team id for team={}.'.format(team_name))
+    logger.debug('Getting team id', extra={'team': team_name})
     try:
         team = Team.get_team_by_name(team_name)
         return jsonify({'team_id': team.team_id})
@@ -535,11 +535,12 @@ def get_user_v2(team_name, bot_name, email):
                      specified bot.
     """
     logger.debug(
-        'Getting user for team={} bot={} email={}.'.format(
-            team_name,
-            bot_name,
-            email
-        )
+        'Getting user team={} bot={} email={}.',
+        extra={
+            'team': team_name,
+            'bot': bot_name,
+            'email': email,
+        }
     )
     try:
         team = Team.get_team_by_name(team_name)
@@ -649,11 +650,12 @@ def get_channel_by_name(team_name, bot_name, channel_name):
                      in the specified team using the specified bot.
     """
     logger.debug(
-        'Getting channel for team={} bot={} channel={}.'.format(
-            team_name,
-            bot_name,
-            channel_name
-        )
+        'Getting channel for team={} bot={} channel={}.',
+        extra={
+            'team': team_name,
+            'bot': bot_name,
+            'channel': channel_name,
+        },
     )
     try:
         team = Team.get_team_by_name(team_name)
@@ -705,7 +707,7 @@ def _perform_action(bot, data):
                 'action failed in post_slack, attempting as user.',
                 extra={
                     'action': action,
-                    'team': bot.team_id,
+                    'team': bot.team.team_id,
                     'bot': bot.name,
                 },
             )
@@ -721,7 +723,7 @@ def _perform_action(bot, data):
                     ),
                     extra={
                         'action': action,
-                        'team': bot.team_id,
+                        'team': bot.team.team_id,
                         'bot': bot.name,
                     },
                 )
@@ -735,7 +737,7 @@ def _perform_action(bot, data):
                     ),
                     extra={
                         'action': action,
-                        'team': bot.team_id,
+                        'team': bot.team.team_id,
                         'bot': bot.name,
                     },
                 )
@@ -747,7 +749,7 @@ def _perform_action(bot, data):
                 ),
                 extra={
                     'action': action,
-                    'team': bot.team_id,
+                    'team': bot.team.team_id,
                     'bot': bot.name,
                 },
             )
