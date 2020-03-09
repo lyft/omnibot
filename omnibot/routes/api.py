@@ -551,10 +551,14 @@ def get_user_v2(team_name, bot_name, email):
     except BotInitializationError:
         return jsonify({'error': 'provided bot name was not found.'}), 404
     user = slack.get_user_by_email(bot, email)
+    if not user:
+        return jsonify(
+            {'error': 'user not found'},
+        ), 404
     name = slack.get_name_from_user(user)
     return jsonify({
         'user': {
-            'email': user['profile']['email'],
+            'email': email,
             'name': name,
             'team_id': team.team_id,
             'user_id': user['id']
