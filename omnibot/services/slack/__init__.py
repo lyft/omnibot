@@ -654,3 +654,32 @@ def get_user_by_email(bot, email):
         if user_data:
             return json.loads(user_data)
     return {}
+
+
+def invite_user(bot, email, channels):
+    """
+    Invite a user to a team.
+    """
+    channel_ids = []
+    for channel in channels:
+        channel_ids.append(get_channel_by_name(bot, channel))
+    invite = client(bot, client_type='oauth').api_call(
+        'users.admin.invite',
+        channel_ids=[channel_ids],
+        email=email,
+        team_id=bot.team.team_id,
+    )
+    if invite['ok']:
+        return True
+    else:
+        extra = {
+            'team': bot.team.name,
+            'bot': bot.name,
+            'error': invite.get('error'),
+        }
+        if 'needed' in invite:
+            extra['needed'] = invite['needed']
+        if 'provided' in invite:
+            extra['provided'] = invite['provided']
+        logger.warning('Failed to invite user', extra=extra)
+        return False

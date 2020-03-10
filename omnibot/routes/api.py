@@ -1007,3 +1007,72 @@ def send_bot_im(team_name, bot_name, email):
         return jsonify(ret), 200
     else:
         return jsonify(ret), 400
+
+
+@blueprint.route(
+    '/api/v1/slack/invite_user/<team_name>/<bot_name>/<email>', methods=['POST']
+)
+@authnz.enforce_checks
+@verify_bot
+def invite_user(team_name, bot_name, email):
+    """
+    Invites a user to join the provided `team_name`, using the provided
+    `bot_name`, to a list of `channels`, using the user's `email`. `channels`
+    are provided in a JSON post body.
+
+    .. :quickref: Invite a user to a team
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+       GET /api/v1/slack/invite_user/myteam/mybot/myemail@example.com
+
+    :<json dict channels: list of channels to invite the user to (required)
+                          example:
+                          `"channels": ["#general", "#random"]`
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/json
+
+       {
+            "ok": true
+       }
+
+    :param team_name: The team to search for the given bot,
+                      as configured in omnibot.
+    :type team_name: str
+    :param bot_name: The bot sending the IM to the user,
+                     as configured in omnibot.
+    :type bot_name: str
+    :param email: The email address of user to send message to
+    :type email: str
+
+    :resheader Content-Type: application/json
+    :statuscode 200: success
+    :statuscode 400: slack call returned a non-OK status, or bad parameters
+                     were provided.
+    :statuscode 404: team, or bot unable to be found
+    """
+    data = request.json
+    try:
+        team = Team.get_team_by_name(team_name)
+        bot = Bot.get_bot_by_name(team, bot_name)
+    except TeamInitializationError:
+        return jsonify({'error': 'provided team name was not found.'}), 404
+    except BotInitializationError:
+        return jsonify({'error': 'provided bot name was not found.'}), 404
+    channels = data.get('channels', [])
+    if not channels:
+        return jsonify({
+            'error': 'channels is a required argument in POST body'
+        }), 404
+    invited = slack.invite_user(bot, email, channels)
+    if invited:
+        return jsonify({'ok': True}), 200
+    else:
+        return jsonify({'error': 'Failed to invite user.'}), 400
