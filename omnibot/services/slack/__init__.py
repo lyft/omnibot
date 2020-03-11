@@ -321,6 +321,7 @@ def get_channel(bot, channel):
     )
     cached_channel = _get_channel_from_cache(bot, channel)
     if cached_channel:
+        logger.debug(cached_channel)
         return cached_channel
     logger.debug(
         'Channel not in cache.',

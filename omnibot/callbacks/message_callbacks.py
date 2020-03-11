@@ -204,7 +204,10 @@ def channel_response_callback(container, channels):
         json.dumps(payload, indent=2))
     )
 
-    config_for_channel = channels.get(payload['channel']["name_normalized"])
+    if not payload['channel'].get('name_normalized'):
+        return {}
+
+    config_for_channel = channels.get(payload['channel']['name_normalized'])
 
     if not config_for_channel:
         return {}
@@ -214,7 +217,7 @@ def channel_response_callback(container, channels):
     except KeyError:
         logger.error(
             'Missing find in channel_response_callback for {}'.format(
-                payload['channel']["name_normalized"]
+                payload['channel']['name_normalized']
             ),
             extra=container.event_trace,
         )
@@ -237,7 +240,7 @@ def channel_response_callback(container, channels):
     except KeyError:
         logger.error(
             'Missing message in channel_response_callback for {}'.format(
-                payload['channel']["name_normalized"]
+                payload['channel']['name_normalized']
             ),
             extra=container.event_trace,
         )
