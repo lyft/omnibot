@@ -121,7 +121,7 @@ def channel_channel_callback(container):
         )
     )
 
-    if payload['channel']['name_normalized'] != 'channel-channel':
+    if payload['channel'].get('name_normalized') != 'channel-channel':
         return {}
 
     return {
