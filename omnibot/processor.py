@@ -17,7 +17,7 @@ from omnibot.services import stats
 from omnibot.services.slack import parser
 from omnibot.services.slack.team import Team
 from omnibot.services.slack.bot import Bot
-from omnibot.utils import get_callback_id
+from omnibot.utils import get_callback_id, merge_logging_context
 
 logger = logging.getLogger(__name__)
 
@@ -31,13 +31,13 @@ def process_event(event):
     bot = Bot.get_bot_by_bot_id(team, event['api_app_id'])
     event_info = event['event']
     event_type = event_info['type']
-    event_trace = {
-        'event_ts': event_info['event_ts'],
-        'event_type': event_type,
-        'app_id': event['api_app_id'],
-        'team_id': bot.team.team_id,
-        'bot_receiver': bot.name
-    }
+    event_trace = merge_logging_context(
+        {
+            'event_ts': event_info['event_ts'],
+            'event_type': event_type,
+        },
+        bot.logging_context,
+    )
     statsd.incr('event.process.attempt.{}'.format(event_type))
     if event_type == 'message' or event_type == 'app_mention':
         try:
@@ -115,13 +115,13 @@ def process_slash_command(command):
         command_name = command['command'][1:]
     else:
         command_name = command['command']
-    event_trace = {
-        'trigger_id': command['trigger_id'],
-        'command': command_name,
-        'app_id': bot.bot_id,
-        'team_id': bot.team.team_id,
-        'bot_receiver': bot.name
-    }
+    event_trace = merge_logging_context(
+        {
+            'trigger_id': command['trigger_id'],
+            'command': command_name,
+        },
+        bot.logging_context,
+    )
     statsd.incr('slash_command.process.attempt.{}'.format(command_name))
     try:
         with statsd.timer('process_slash_command'):
@@ -149,13 +149,13 @@ def process_interactive_component(component):
     statsd = stats.get_statsd_client()
     team = Team.get_team_by_id(component['team']['id'])
     bot = Bot.get_bot_by_bot_id(team, component['omnibot_bot_id'])
-    event_trace = {
-        'callback_id': get_callback_id(component),
-        'app_id': bot.bot_id,
-        'team_id': bot.team.team_id,
-        'bot_receiver': bot.name,
-        'component_type': component['type']
-    }
+    event_trace = merge_logging_context(
+        {
+            'callback_id': get_callback_id(component),
+            'component_type': component['type'],
+        },
+        bot.logging_context,
+    )
     statsd.incr(
         'interactive_component.process.attempt.{}'.format(
             get_callback_id(component)
@@ -299,7 +299,6 @@ def _handle_post_message(message, kwargs):
     try:
         ret = slack.client(
             message.bot,
-            client_type='oauth_bot'
         ).api_call(
             'chat.postMessage',
             channel=channel,
@@ -320,7 +319,6 @@ def _handle_action(action, container, kwargs):
     parse_kwargs(kwargs, container.bot, container.event_trace)
     ret = slack.client(
         container.bot,
-        client_type='oauth_bot'
     ).api_call(
         action,
         **kwargs
@@ -338,7 +336,7 @@ def _handle_action(action, container, kwargs):
             try:
                 ret = slack.client(
                     container.bot,
-                    client_type='oauth'
+                    client_type='user'
                 ).api_call(
                     action,
                     **kwargs

@@ -36,6 +36,13 @@ class Team(object):
     def team_id(self):
         return self._team_id
 
+    @property
+    def logging_context(self):
+        return {
+            'team': self.name,
+            'team_id': self.team_id,
+        }
+
 
 class TeamInitializationError(Exception):
     pass

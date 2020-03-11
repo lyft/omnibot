@@ -86,7 +86,8 @@ def specials_callback(container, channels):
                 logger.error(
                     "Misconfigured message string for {}".format(
                         payload['channel']["name_normalized"]
-                    )
+                    ),
+                    extra=container.event_trace,
                 )
                 text = fallback_text.format(special=special)
 
@@ -214,7 +215,8 @@ def channel_response_callback(container, channels):
         logger.error(
             'Missing find in channel_response_callback for {}'.format(
                 payload['channel']["name_normalized"]
-            )
+            ),
+            extra=container.event_trace,
         )
         return {}
 
@@ -236,7 +238,8 @@ def channel_response_callback(container, channels):
         logger.error(
             'Missing message in channel_response_callback for {}'.format(
                 payload['channel']["name_normalized"]
-            )
+            ),
+            extra=container.event_trace,
         )
         return {}
 

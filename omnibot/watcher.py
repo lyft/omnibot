@@ -31,9 +31,7 @@ def bootstrap():
     global STATE
 
     watch_emoji()
-    watch_ims()
-    watch_mpims()
-    watch_channels()
+    watch_conversations()
     watch_users()
 
     def finalizer(signal, frame):
@@ -87,153 +85,38 @@ def watch_users():
         )
 
 
-def watch_channels():
+def watch_conversations():
     try:
         redis_client = omniredis.get_redis_client(decode_responses=False)
-        last_run_key = "watch:channels:last_run_datetime"
+        last_run_key = "watch:conversation:last_run_datetime"
         if not _is_allowed_to_run(redis_client, last_run_key):
             return
 
         statsd = stats.get_statsd_client()
         with redis_lock.Lock(
                 redis_client,
-                'watch_channels',
+                'watch_conversation',
                 expire=LOCK_EXPIRATION,
                 auto_renewal=True):
-            with statsd.timer('watch.channels'):
+            with statsd.timer('watch.conversation'):
                 for team_name, bot_name in settings.PRIMARY_SLACK_BOT.items():
                     logger.info(
-                        'Updating slack channel list.',
+                        'Updating slack conversations list.',
                         extra={'team': team_name, 'bot': bot_name},
                     )
                     team = Team.get_team_by_name(team_name)
                     bot = Bot.get_bot_by_name(team, bot_name)
-                    slack.update_channels(bot)
+                    slack.update_conversations(bot)
             redis_client.set(last_run_key, datetime.now().isoformat())
     except Exception:
         logger.exception(
-            'Failed to update slack channel list.',
-            exc_info=True
+            'Failed to update slack conversations list.',
+            exc_info=True,
         )
     finally:
         return gevent.spawn_later(
             settings.WATCHER_SPAWN_WAIT_TIME_IN_SEC,
-            watch_channels
-        )
-
-
-def watch_groups():
-    try:
-        redis_client = omniredis.get_redis_client(decode_responses=False)
-        last_run_key = "watch:groups:last_run_datetime"
-        if not _is_allowed_to_run(redis_client, last_run_key):
-            return
-
-        statsd = stats.get_statsd_client()
-        with redis_lock.Lock(
-                redis_client,
-                'watch_groups',
-                expire=LOCK_EXPIRATION,
-                auto_renewal=True):
-            with statsd.timer('watch.groups'):
-                bots = []
-                for team_name, _bots in settings.SLACK_BOT_TOKENS.items():
-                    for bot_name, bot_data in _bots.items():
-                        logger.info(
-                            'Updating slack private channels list.',
-                            extra={'team': team_name, 'bot': bot_name},
-                        )
-                        team = Team.get_team_by_name(team_name)
-                        bot = Bot.get_bot_by_name(team, bot_name)
-                        bots.append(bot)
-                slack.update_groups(bots)
-            redis_client.set(last_run_key, datetime.now().isoformat())
-    except Exception:
-        logger.exception(
-            'Failed to update slack private channels list.',
-            exc_info=True
-        )
-    finally:
-        return gevent.spawn_later(
-            settings.WATCHER_SPAWN_WAIT_TIME_IN_SEC,
-            watch_groups
-        )
-
-
-def watch_ims():
-    try:
-        redis_client = omniredis.get_redis_client(decode_responses=False)
-        last_run_key = "watch:ims:last_run_datetime"
-        if not _is_allowed_to_run(redis_client, last_run_key):
-            return
-
-        statsd = stats.get_statsd_client()
-        with redis_lock.Lock(
-                redis_client,
-                'watch_ims',
-                expire=LOCK_EXPIRATION,
-                auto_renewal=True):
-            with statsd.timer('watch.ims'):
-                bots = []
-                for team_name, _bots in settings.SLACK_BOT_TOKENS.items():
-                    for bot_name, bot_data in _bots.items():
-                        logger.info(
-                            'Updating slack im channels list.',
-                            extra={'team': team_name, 'bot': bot_name},
-                        )
-                        team = Team.get_team_by_name(team_name)
-                        bot = Bot.get_bot_by_name(team, bot_name)
-                        bots.append(bot)
-                slack.update_ims(bots)
-            redis_client.set(last_run_key, datetime.now().isoformat())
-    except Exception:
-        logger.exception(
-            'Failed to update slack im channels list.',
-            exc_info=True
-        )
-    finally:
-        return gevent.spawn_later(
-            settings.WATCHER_SPAWN_WAIT_TIME_IN_SEC,
-            watch_ims
-        )
-
-
-def watch_mpims():
-    try:
-        redis_client = omniredis.get_redis_client(decode_responses=False)
-        last_run_key = "watch:mpims:last_run_datetime"
-        if not _is_allowed_to_run(redis_client, last_run_key):
-            return
-
-        statsd = stats.get_statsd_client()
-
-        with redis_lock.Lock(
-                redis_client,
-                'watch_mpims',
-                expire=LOCK_EXPIRATION,
-                auto_renewal=True):
-            with statsd.timer('watch.mpims'):
-                bots = []
-                for team_name, _bots in settings.SLACK_BOT_TOKENS.items():
-                    for bot_name, bot_data in _bots.items():
-                        logger.info(
-                            'Updating slack mpim channels list.',
-                            extra={'team': team_name, 'bot': bot_name},
-                        )
-                        team = Team.get_team_by_name(team_name)
-                        bot = Bot.get_bot_by_name(team, bot_name)
-                        bots.append(bot)
-                slack.update_mpims(bots)
-            redis_client.set(last_run_key, datetime.now().isoformat())
-    except Exception:
-        logger.exception(
-            'Failed to update slack mpim channels list.',
-            exc_info=True
-        )
-    finally:
-        return gevent.spawn_later(
-            settings.WATCHER_SPAWN_WAIT_TIME_IN_SEC,
-            watch_mpims
+            watch_conversations,
         )
 
 

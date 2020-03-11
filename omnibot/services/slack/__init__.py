@@ -8,6 +8,7 @@ import slackclient
 
 from omnibot import logging
 from omnibot.services import omniredis
+from omnibot.utils import merge_logging_context
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +19,7 @@ GEVENT_SLEEP_TIME = 5
 _client = {}
 
 
-def client(bot, client_type='oauth'):
+def client(bot, client_type='bot'):
     """
     Global Slack client.
     """
@@ -27,72 +28,104 @@ def client(bot, client_type='oauth'):
     if team_name not in _client:
         _client[team_name] = {}
     if bot.name not in _client[team_name]:
-        _client[team_name][bot.name] = {
-            'oauth': slackclient.SlackClient(
-                bot.oauth_token
-            )
-        }
+        _client[team_name][bot.name] = {}
         if bot.oauth_bot_token:
-            _client[team_name][bot.name]['oauth_bot'] = slackclient.SlackClient(
+            _client[team_name][bot.name]['bot'] = slackclient.SlackClient(
                 bot.oauth_bot_token
             )
-    if client_type == 'oauth_bot':
+        if bot.oauth_user_token:
+            _client[team_name][bot.name]['user'] = slackclient.SlackClient(
+                bot.oauth_user_token
+            )
+    if client_type == 'bot':
         try:
-            return _client[team_name][bot.name]['oauth_bot']
+            return _client[team_name][bot.name]['bot']
         except KeyError:
             pass
-    return _client[team_name][bot.name]['oauth']
+    elif client_type == 'user':
+        return _client[team_name][bot.name]['user']
 
 
-def _get_channels(bot):
+def _get_failure_context(result):
     """
-    Get all channels
+    Get the logging context from a failed slack call.
     """
-    channels = []
+    ret = {}
+    for attr in ['error', 'needed', 'provided']:
+        if attr in result:
+            ret[attr] = result[attr]
+    return ret
+
+
+def _get_conversations(bot):
+    """
+    Get all conversations
+    """
+    conversations = []
     retry = 0
     next_cursor = ''
     while True:
-        channels_data = client(bot, client_type='oauth_bot').api_call(
-            'channels.list',
+        conversations_data = client(bot).api_call(
+            'conversations.list',
             exclude_archived=True,
             exclude_members=True,
             limit=1000,
             cursor=next_cursor
         )
-        if channels_data['ok']:
-            channels.extend(channels_data['channels'])
+        if conversations_data['ok']:
+            conversations.extend(conversations_data['channels'])
         else:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
                 logger.error(
-                    'Exceeded max retries when calling channels.list.',
-                    extra={'bot': bot.name},
+                    'Exceeded max retries when calling conversations.list.',
+                    extra=bot.logging_context,
                 )
                 break
             logger.warning(
                 'Call to channels.list failed, attempting retry',
-                extra={
-                    'retry': retry,
-                    'error': channels_data.get('error'),
-                    'bot': bot.name,
-                },
+                extra=merge_logging_context(
+                    {'retry': retry},
+                    _get_failure_context(conversations_data),
+                    bot.logging_context,
+                ),
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
             continue
-        next_cursor = channels_data.get(
+        next_cursor = conversations_data.get(
             'response_metadata',
             {}
         ).get('next_cursor')
         if not next_cursor:
             break
         gevent.sleep(GEVENT_SLEEP_TIME)
-    return channels
+    return conversations
 
 
-def update_channels(bot):
-    for channel in _get_channels(bot):
-        update_channel(bot, channel)
+def update_conversations(bot):
+    for conversation in _get_conversations(bot):
+        if conversation.get('is_channel', False):
+            update_channel(bot, conversation)
+        elif conversation.get('is_group', False):
+            update_group(bot, conversation)
+        elif conversation.get('is_im', False):
+            update_im(bot, conversation)
+        elif conversation.get('is_mpim', False):
+            update_mpim(bot, conversation)
+        else:
+            logger.info(
+                'Not updating unsupported conversation.',
+                extra=merge_logging_context(
+                    bot.logging_context,
+                    {'channel': conversation['id']},
+                ),
+            )
+
+
+def get_conversations(bot):
+    redis_client = omniredis.get_redis_client()
+    return redis_client.hscan_iter('conversations:{}'.format(bot.team.name))
 
 
 def update_channel(bot, channel):
@@ -114,56 +147,6 @@ def get_channels(bot):
     return redis_client.hscan_iter('channels:{}'.format(bot.team.name))
 
 
-def _get_groups(bot):
-    """
-    Get all private channels
-    """
-    groups = []
-    retry = 0
-    next_cursor = ''
-    while True:
-        groups_data = client(bot, client_type='oauth_bot').api_call(
-            'groups.list',
-            limit=1000,
-            cursor=next_cursor
-        )
-        if groups_data['ok']:
-            groups.extend(groups_data['groups'])
-        else:
-            # TODO: split this retry logic into a generic retry function
-            retry = retry + 1
-            if retry >= MAX_RETRIES:
-                logger.error(
-                    'Exceeded max retries when calling groups.list.',
-                    extra={'bot': bot.name},
-                )
-                break
-            logger.warning(
-                'Call to groups.list failed, attempting retry',
-                extra={
-                    'retry': retry,
-                    'error': groups_data.get('error'),
-                    'bot': bot.name,
-                },
-            )
-            gevent.sleep(GEVENT_SLEEP_TIME)
-            continue
-        next_cursor = groups_data.get(
-            'response_metadata',
-            {}
-        ).get('next_cursor')
-        if not next_cursor:
-            break
-        gevent.sleep(GEVENT_SLEEP_TIME)
-    return groups
-
-
-def update_groups(bots):
-    for bot in bots:
-        for group in _get_groups(bot):
-            update_group(bot, group)
-
-
 def update_group(bot, group):
     redis_client = omniredis.get_redis_client()
     redis_client.hset(
@@ -181,53 +164,6 @@ def update_group(bot, group):
 def get_groups(bot):
     redis_client = omniredis.get_redis_client()
     return redis_client.hscan_iter('groups:{}'.format(bot.team.name))
-
-
-def _get_ims(bot):
-    """
-    Get all im channels
-    """
-    ims = []
-    retry = 0
-    next_cursor = ''
-    while True:
-        im_data = client(bot, client_type='oauth_bot').api_call(
-            'im.list',
-            limit=1000,
-            cursor=next_cursor
-        )
-        if im_data['ok']:
-            ims.extend(im_data['ims'])
-        else:
-            # TODO: split this retry logic into a generic retry function
-            retry = retry + 1
-            if retry >= MAX_RETRIES:
-                logger.error(
-                    'Exceeded max retries when calling im.list.',
-                    extra={'bot': bot.name},
-                )
-                break
-            logger.warning(
-                'Call to im.list failed, attempting retry',
-                extra={
-                    'retry': retry,
-                    'error': im_data.get('error'),
-                    'bot': bot.name,
-                },
-            )
-            gevent.sleep(GEVENT_SLEEP_TIME)
-            continue
-        next_cursor = im_data.get('response_metadata', {}).get('next_cursor')
-        if not next_cursor:
-            break
-        gevent.sleep(GEVENT_SLEEP_TIME)
-    return ims
-
-
-def update_ims(bots):
-    for bot in bots:
-        for im in _get_ims(bot):
-            update_im(bot, im)
 
 
 def update_im(bot, im):
@@ -262,7 +198,7 @@ def get_im_channel_id(bot, user_id):
     retry = 0
     while True:
         users = user_id
-        conversation_data = client(bot, client_type='oauth_bot').api_call(
+        conversation_data = client(bot).api_call(
             'conversations.open',
             users=users
         )
@@ -274,67 +210,20 @@ def get_im_channel_id(bot, user_id):
             if retry >= MAX_RETRIES:
                 logger.error(
                     'Exceeded max retries when calling conversations.open.',
-                    extra={'bot': bot.name},
+                    extra=bot.logging_context,
                 )
                 break
             logger.warning(
                 'Call to conversations.open failed, attempting retry',
-                extra={
-                    'retry': retry,
-                    'error': conversation_data.get('error'),
-                    'bot': bot.name,
-                },
+                extra=merge_logging_context(
+                    {'retry': retry},
+                    _get_failure_context(conversation_data),
+                    bot.logging_context,
+                ),
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
             continue
     return None
-
-
-def _get_mpims(bot):
-    """
-    Get all mpim channels
-    """
-    mpims = []
-    retry = 0
-    next_cursor = ''
-    while True:
-        mpim_data = client(bot, client_type='oauth_bot').api_call(
-            'mpim.list',
-            limit=1000,
-            cursor=next_cursor
-        )
-        if mpim_data['ok']:
-            mpims.extend(mpim_data['groups'])
-        else:
-            # TODO: split this retry logic into a generic retry function
-            retry = retry + 1
-            if retry >= MAX_RETRIES:
-                logger.error(
-                    'Exceeded max retries when calling mpim.list.',
-                    extra={'bot': bot.name},
-                )
-                break
-            logger.warning(
-                'Call to mpim.list failed, attempting retry',
-                extra={
-                    'retry': retry,
-                    'error': mpim_data.get('error'),
-                    'bot': bot.name,
-                },
-            )
-            gevent.sleep(GEVENT_SLEEP_TIME)
-            continue
-        next_cursor = mpim_data.get('response_metadata', {}).get('next_cursor')
-        if not next_cursor:
-            break
-        gevent.sleep(GEVENT_SLEEP_TIME)
-    return mpims
-
-
-def update_mpims(bots):
-    for bot in bots:
-        for mpim in _get_mpims(bot):
-            update_mpim(bot, mpim)
 
 
 def update_mpim(bot, mpim):
@@ -364,17 +253,17 @@ def _get_emoji(bot):
             break
         logger.warning(
             'Call to emoji.list failed, attempting retry',
-            extra={
-                'retry': retry,
-                'error': resp.get('error'),
-                'bot': bot.name,
-            },
+            extra=merge_logging_context(
+                {'retry': retry},
+                _get_failure_context(resp),
+                bot.logging_context,
+            ),
         )
         gevent.sleep(GEVENT_SLEEP_TIME)
     else:
         logger.error(
             'Exceeded max retries when calling emoji.list.',
-            extra={'bot': bot.name},
+            extra=bot.logging_context,
         )
         return {}
 
@@ -425,14 +314,20 @@ def get_channel(bot, channel):
     """
     logger.debug(
         'Fetching channel',
-        extra={'channel': channel, 'bot': bot.name},
+        extra=merge_logging_context(
+            {'channel': channel},
+            bot.logging_context,
+        )
     )
     cached_channel = _get_channel_from_cache(bot, channel)
     if cached_channel:
         return cached_channel
     logger.debug(
         'Channel not in cache.',
-        extra={'channel': channel, 'bot': bot.name},
+        extra=merge_logging_context(
+            {'channel': channel},
+            bot.logging_context,
+        )
     )
     channel_data = client(bot).api_call(
         'conversations.info',
@@ -443,31 +338,18 @@ def get_channel(bot, channel):
         return channel_data['channel']
     logger.debug(
         'Channel is not a public channel, looking for private channel.',
-        extra={'channel': channel, 'bot': bot.name},
+        extra=merge_logging_context(
+            {'channel': channel},
+            bot.logging_context,
+        )
     )
-    channel_data = client(bot, client_type='oauth_bot').api_call(
+    channel_data = client(bot).api_call(
         'conversations.info',
         channel=channel
     )
     if channel_data['ok']:
         update_channel(bot, channel_data['channel'])
         return channel_data['channel']
-    # OK. At this point it must either be an IM or MPIM that's brand new.
-    # We'll need to refresh and look in cache.
-    # Let's check IMs first.
-    update_ims([bot])
-    cached_channel = _get_channel_from_cache(bot, channel)
-    if cached_channel:
-        return cached_channel
-    # Now let's refresh and check MPIMs
-    update_mpims([bot])
-    cached_channel = _get_channel_from_cache(bot, channel)
-    if cached_channel:
-        return cached_channel
-    logger.warning('Failed to find channel', extra={
-        'channel': channel,
-        'bot': bot.name,
-    })
     return {}
 
 
@@ -515,7 +397,7 @@ def _get_users(bot, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
     retry = 0
     next_cursor = ''
     while True:
-        users_data = client(bot, client_type='oauth_bot').api_call(
+        users_data = client(bot).api_call(
             'users.list',
             presence=False,
             limit=1000,
@@ -529,16 +411,16 @@ def _get_users(bot, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
             if retry >= max_retries:
                 logger.error(
                     'Exceeded max retries when calling users.list.',
-                    extra={'bot': bot.name},
+                    extra=bot.logging_context,
                 )
                 break
             logger.warning(
                 'Call to users.list failed, attempting retry',
-                extra={
-                    'retry': retry,
-                    'error': users_data.get('error'),
-                    'bot': bot.name,
-                },
+                extra=merge_logging_context(
+                    {'retry': retry},
+                    _get_failure_context(users_data),
+                    bot.logging_context,
+                ),
             )
             gevent.sleep(sleep * retry)
             continue
@@ -606,10 +488,13 @@ def get_user(bot, user_id):
         update_user(bot, user['user'])
         return user['user']
     else:
-        logger.warning('Failed to find user', extra={
-            'user': user_id,
-            'bot': bot.name,
-        })
+        logger.warning(
+            'Failed to find user',
+            extra=merge_logging_context(
+                {'user': user_id},
+                bot.logging_context,
+            ),
+        )
         return {}
 
 
