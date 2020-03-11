@@ -331,20 +331,6 @@ def get_channel(bot, channel):
     if channel_data['ok']:
         update_channel(bot, channel_data['channel'])
         return channel_data['channel']
-    logger.debug(
-        'Channel is not a public channel, looking for private channel.',
-        extra=merge_logging_context(
-            {'channel': channel},
-            bot.logging_context,
-        )
-    )
-    channel_data = client(bot).api_call(
-        'conversations.info',
-        channel=channel
-    )
-    if channel_data['ok']:
-        update_channel(bot, channel_data['channel'])
-        return channel_data['channel']
     return {}
 
 
