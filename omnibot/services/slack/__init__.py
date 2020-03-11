@@ -123,11 +123,6 @@ def update_conversations(bot):
             )
 
 
-def get_conversations(bot):
-    redis_client = omniredis.get_redis_client()
-    return redis_client.hscan_iter('conversations:{}'.format(bot.team.name))
-
-
 def update_channel(bot, channel):
     redis_client = omniredis.get_redis_client()
     redis_client.hset(
