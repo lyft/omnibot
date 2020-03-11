@@ -16,7 +16,7 @@ def test_slack_bot_tokens():
     assert 'test2ndteam' in settings.SLACK_BOT_TOKENS
     required_keys = [
         'verification_token',
-        'oauth_token',
+        'oauth_user_token',
         'oauth_bot_token',
         'app_id'
     ]
@@ -30,7 +30,7 @@ def test_slack_bot_tokens():
     assert 'echobot' in settings.SLACK_BOT_TOKENS['test2ndteam']
     for key in required_keys:
         assert key in settings.SLACK_BOT_TOKENS['test2ndteam']['echobot']
-    assert settings.SLACK_BOT_TOKENS['test2ndteam']['echobot']['oauth_token'] != ''
+    assert settings.SLACK_BOT_TOKENS['test2ndteam']['echobot']['oauth_user_token'] != ''
     assert settings.SLACK_BOT_TOKENS['test2ndteam']['echobot']['oauth_bot_token'] == ''
     # missing verification token
     assert 'pingbot' not in settings.SLACK_BOT_TOKENS['test2ndteam']
