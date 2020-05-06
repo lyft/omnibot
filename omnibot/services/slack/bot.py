@@ -63,6 +63,8 @@ class Bot(object):
                     name = bot_name
                     _bot_data = bot_data
                     break
+            if name is not None:
+                break
         if not _bot_data:
             raise BotInitializationError('Invalid bot')
         team = Team.get_team_by_name(team_name)
