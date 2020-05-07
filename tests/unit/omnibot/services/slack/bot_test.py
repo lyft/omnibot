@@ -24,13 +24,13 @@ def test_team():
     assert _bot.verification_token == '1234'
 
     _team = Team.get_team_by_name('testteam')
-    _bot = Bot.get_bot_by_verification_token('1234')
-    assert _bot.name == 'echobot'
-    assert _bot.bot_id == 'A12345678'
+    _bot = Bot.get_bot_by_verification_token('5555')
+    assert _bot.name == 'pingbot'
+    assert _bot.bot_id == 'AABCDEF12'
     assert _bot.team == _team
-    assert _bot.oauth_token == '1234'
-    assert _bot.oauth_bot_token == '1234'
-    assert _bot.verification_token == '1234'
+    assert _bot.oauth_token == '5555'
+    assert _bot.oauth_bot_token == '5555'
+    assert _bot.verification_token == '5555'
 
     with pytest.raises(BotInitializationError):
         _bot = Bot.get_bot_by_name(_team, 'fakebot')
