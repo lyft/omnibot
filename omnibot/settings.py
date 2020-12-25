@@ -67,7 +67,7 @@ for team, bots in _config.get('bots', {}).items():
         # oauth token.
         if not _v_token:
             logger.warning(
-                '{} bot missing verification token.'.format(bot_name)
+                '{} {} bot missing verification token.'.format(bot_id.upper(), bot_name)
             )
             continue
         if not _o_token and not _o_bot_token:
