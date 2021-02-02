@@ -370,7 +370,7 @@ def _handle_message_callback(message, callback):
             message.match_type,
             message.match
         ),
-        extra=message.event_trace
+        extra={**message.event_trace, 'callback': callback},
     )
     response = _handle_callback(message, callback)
     for action in response.get('actions', []):
@@ -395,7 +395,7 @@ def _handle_slash_command_callback(command, callback, response_type):
         'Handling callback for slash_command: command="{}"'.format(
             command.command
         ),
-        extra=command.event_trace
+        extra={**command.event_trace, 'callback': callback},
     )
     response = _handle_callback(command, callback)
     for command_response in response.get('responses', []):
@@ -445,7 +445,7 @@ def _handle_slash_command_callback(command, callback, response_type):
 def _handle_interactive_component_callback(component, callback, response_type):
     logger.info(
         'Handling callback for interactive component',
-        extra=component.event_trace,
+        extra={**component.event_trace, 'callback': callback},
     )
     response = _handle_callback(component, callback)
     for component_response in response.get('responses', []):
