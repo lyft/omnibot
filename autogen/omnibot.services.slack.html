@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>omnibot.services.slack package &mdash; omnibot 1.0.3-452b3d documentation</title>
+  <title>omnibot.services.slack package &mdash; omnibot 1.0.3-095e51 documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                1.0.3-452b3d
+                1.0.3-095e51
               </div>
             
           
@@ -371,6 +371,11 @@
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="omnibot.services.slack.bot.Bot.logging_context">
+<em class="property">property </em><code class="sig-name descname">logging_context</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.logging_context" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="omnibot.services.slack.bot.Bot.message_handlers">
 <em class="property">property </em><code class="sig-name descname">message_handlers</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.message_handlers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -386,8 +391,8 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="omnibot.services.slack.bot.Bot.oauth_token">
-<em class="property">property </em><code class="sig-name descname">oauth_token</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.oauth_token" title="Permalink to this definition">¶</a></dt>
+<dt id="omnibot.services.slack.bot.Bot.oauth_user_token">
+<em class="property">property </em><code class="sig-name descname">oauth_user_token</code><a class="headerlink" href="#omnibot.services.slack.bot.Bot.oauth_user_token" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -874,6 +879,11 @@ If this message isn’t from a bot, this will return None.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="omnibot.services.slack.team.Team.logging_context">
+<em class="property">property </em><code class="sig-name descname">logging_context</code><a class="headerlink" href="#omnibot.services.slack.team.Team.logging_context" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="omnibot.services.slack.team.Team.name">
 <em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#omnibot.services.slack.team.Team.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -897,7 +907,7 @@ If this message isn’t from a bot, this will return None.</p>
 <p>Slackclient wrapper.</p>
 <dl class="function">
 <dt id="omnibot.services.slack.client">
-<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">client</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">client_type='oauth'</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.client" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">client</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">client_type='bot'</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.client" title="Permalink to this definition">¶</a></dt>
 <dd><p>Global Slack client.</p>
 </dd></dl>
 
@@ -976,8 +986,8 @@ cache. If the channel isn’t in cache, it will return None.</p>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="omnibot.services.slack.update_channels">
-<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_channels</code><span class="sig-paren">(</span><em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_channels" title="Permalink to this definition">¶</a></dt>
+<dt id="omnibot.services.slack.update_conversations">
+<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_conversations</code><span class="sig-paren">(</span><em class="sig-param">bot</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_conversations" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -991,28 +1001,13 @@ cache. If the channel isn’t in cache, it will return None.</p>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="omnibot.services.slack.update_groups">
-<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_groups</code><span class="sig-paren">(</span><em class="sig-param">bots</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_groups" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
 <dt id="omnibot.services.slack.update_im">
 <code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_im</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">im</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_im" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="omnibot.services.slack.update_ims">
-<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_ims</code><span class="sig-paren">(</span><em class="sig-param">bots</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_ims" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
 <dt id="omnibot.services.slack.update_mpim">
 <code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_mpim</code><span class="sig-paren">(</span><em class="sig-param">bot</em>, <em class="sig-param">mpim</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_mpim" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="omnibot.services.slack.update_mpims">
-<code class="sig-prename descclassname">omnibot.services.slack.</code><code class="sig-name descname">update_mpims</code><span class="sig-paren">(</span><em class="sig-param">bots</em><span class="sig-paren">)</span><a class="headerlink" href="#omnibot.services.slack.update_mpims" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
