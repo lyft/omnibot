@@ -1,5 +1,6 @@
 from omnibot import settings
 from omnibot.services.slack.team import Team
+from omnibot.utils import merge_logging_context
 
 
 class Bot(object):
@@ -90,9 +91,9 @@ class Bot(object):
             return None
 
     @property
-    def oauth_token(self):
+    def oauth_user_token(self):
         try:
-            return self._bot_data.get('oauth_token')
+            return self._bot_data.get('oauth_user_token')
         except KeyError:
             return None
 
@@ -114,6 +115,16 @@ class Bot(object):
     @property
     def message_handlers(self):
         return self._message_handlers
+
+    @property
+    def logging_context(self):
+        return merge_logging_context(
+            {
+                'bot': self.name,
+                'bot_id': self.bot_id,
+            },
+            self.team.logging_context
+        )
 
 
 class BotInitializationError(Exception):

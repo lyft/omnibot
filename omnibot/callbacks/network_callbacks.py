@@ -35,7 +35,7 @@ def http_callback(container, request_kwargs=None, client_kwargs=None):
     if request_kwargs is None:
         logger.error(
             'http_callback called without request_kwargs',
-            extra=container.event_trace
+            extra=container.event_trace,
         )
         return {}
     client = _get_requests_session()
@@ -58,7 +58,8 @@ def http_callback(container, request_kwargs=None, client_kwargs=None):
             'Failed to make request to {} with error: {}'.format(
                 url,
                 str(e)
-            )
+            ),
+            extra=container.event_trace,
         )
         return {}
     if response.status_code != requests.codes.ok:

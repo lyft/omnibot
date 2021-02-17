@@ -29,7 +29,7 @@ from omnibot.services.slack.team import Team
 from omnibot.services.slack.team import TeamInitializationError
 from omnibot.services.slack.bot import Bot
 from omnibot.services.slack.bot import BotInitializationError
-from omnibot.utils import get_callback_id
+from omnibot.utils import get_callback_id, merge_logging_context
 
 logger = logging.getLogger(__name__)
 
@@ -107,33 +107,33 @@ def slack_event():
         msg = 'No team_id in event.'
         logger.error(
             msg,
-            extra={'app': api_app_id},
+            extra={'bot_id': api_app_id},
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
     try:
         team = Team.get_team_by_id(team_id)
     except TeamInitializationError:
         msg = 'Unsupported team'
-        logger.warning(msg, extra={'team': team_id, 'app': api_app_id})
+        logger.warning(msg, extra={'team_id': team_id, 'bot_id': api_app_id})
         return jsonify({'status': 'failure', 'error': msg}), 403
     try:
         bot = Bot.get_bot_by_bot_id(team, api_app_id)
     except BotInitializationError:
         msg = 'Unsupported bot'
-        logger.info(msg, extra={'team': team_id, 'app': api_app_id})
+        logger.info(msg, extra={'team_id': team_id, 'bot_id': api_app_id})
         return jsonify({'status': 'ignored', 'warning': msg}), 200
     if event['token'] != bot.verification_token:
         msg = 'Incorrect verification token in event for bot'
         logger.error(
             msg,
-            extra={'team': team_id, 'app': api_app_id, 'bot': bot.name},
+            extra=bot.logging_context,
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
     if 'event' not in event:
         msg = 'Request does not have an event. Processing will not proceed!'
         logger.error(
             msg,
-            extra={'team': team_id, 'app': api_app_id, 'bot': bot.name},
+            extra=bot.logging_context,
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
     try:
@@ -141,14 +141,14 @@ def slack_event():
     except Exception:
         logger.exception(
             'Could not instrument request',
-            extra={'team': team_id, 'app': api_app_id, 'bot': bot.name},
+            extra=bot.logging_context,
         )
     try:
         queue_event(bot, event, 'event')
     except Exception:
         logger.exception(
             'Could not queue request.',
-            extra={'team': team_id, 'app': api_app_id, 'bot': bot.name},
+            extra=bot.logging_context,
         )
         return jsonify({'status': 'failure'}), 500
     return jsonify({'status': 'success'}), 200
@@ -177,7 +177,7 @@ def slack_slash_command():
         msg = 'Unsupported team'
         logger.warning(
             msg,
-            extra={'team': command['team_id']},
+            extra={'team_id': command['team_id']},
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
     # Slash commands annoyingly don't send an app id, so we need to
@@ -190,7 +190,7 @@ def slack_slash_command():
         )
         logger.error(
             msg,
-            extra={'team': team.team_id},
+            extra=team.logging_context,
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
     if team.team_id != bot.team.team_id:
@@ -200,7 +200,10 @@ def slack_slash_command():
         )
         logger.error(
             msg,
-            extra={'team': team.team_id},
+            extra=merge_logging_context(
+                {'expected_team_id': team.team_id},
+                bot.logging_context,
+            )
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
     handler_found = None
@@ -213,7 +216,7 @@ def slack_slash_command():
                ' associated with it.')
         logger.error(
             msg,
-            extra={'team': team.team_id, 'app': bot.bot_id, 'bot': bot.name},
+            extra=bot.logging_context,
         )
         return jsonify({'response_type': 'ephemeral', 'text': msg}), 200
     # To avoid needing to look the bot up from its token when the dequeue this
@@ -281,7 +284,7 @@ def slack_interactive_component():
         msg = 'Unsupported team'
         logger.warning(
             msg,
-            extra={'team': component['team']['id']},
+            extra={'team_id': component['team']['id']},
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
     # interactive components annoyingly don't send an app id, so we need
@@ -293,7 +296,7 @@ def slack_interactive_component():
                ' configured app.')
         logger.error(
             msg,
-            extra={'team': team.team_id},
+            extra=team.logging_context,
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
     if team.team_id != bot.team.team_id:
@@ -303,7 +306,10 @@ def slack_interactive_component():
         )
         logger.error(
             msg,
-            extra={'team': team.team_id, 'app': bot.bot_id, 'bot': bot.name},
+            extra=merge_logging_context(
+                {'expected_team_id': team.team_id},
+                bot.logging_context,
+            ),
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
     handler_found = None
@@ -316,7 +322,7 @@ def slack_interactive_component():
                ' associated with it.')
         logger.error(
             msg,
-            extra={'team': team.team_id, 'app': bot.bot_id, 'bot': bot.name},
+            extra=bot.logging_context,
         )
         return jsonify({'response_type': 'ephemeral', 'text': msg}), 200
     # To avoid needing to look the bot up from its token when the dequeue this
@@ -332,7 +338,7 @@ def slack_interactive_component():
         msg = 'Could not queue interactive component.'
         logger.exception(
             msg,
-            extra={'team': team.team_id, 'app': bot.bot_id, 'bot': bot.name},
+            extra=bot.logging_context,
         )
         return jsonify({'status': 'failure', 'error': msg}), 500
     # Open a dialog, if we have a trigger ID, and a dialog is defined for this
@@ -398,18 +404,19 @@ def instrument_event(bot, event):
         logger.warning(
             'Event is greater than 20s delayed in'
             ' delivery ({} ms)'.format(latency),
-            extra={
-                'event_ts': event_info['event_ts'],
-                'app_id': event['api_app_id'],
-                'team_id': event['team_id'],
-                'event_type': event_info['type'],
-                'bot_receiver': bot.name,
-                'retry': retry
-            }
+            extra=merge_logging_context(
+                {
+                    'event_ts': event_info['event_ts'],
+                    'event_type': event_info['type'],
+                    'retry': retry
+                },
+                bot.logging_context,
+            )
         )
     if retry_reason:
         logger.warning(
-            'Incoming message is a retry: reason="{}"'.format(retry_reason)
+            'Incoming message is a retry: reason="{}"'.format(retry_reason),
+            extra=bot.logging_context,
         )
 
 
@@ -673,11 +680,10 @@ def get_channel_by_name(team_name, bot_name, channel_name):
     if channel is None:
         logger.debug(
             'Failed to get channel',
-            extra={
-                'team': team_name,
-                'bot': bot_name,
-                'channel': channel_name,
-            },
+            extra=merge_logging_context(
+                {'channel': channel_name},
+                bot.logging_context,
+            ),
         )
         return jsonify({'error': 'provided channel_name was not found.'}), 404
     return jsonify(channel)
@@ -693,14 +699,14 @@ def _perform_action(bot, data):
     action = data['action']
     kwargs = data['kwargs']
     logger.debug(
-        'Posting for team={} bot={} action={}'.format(
-            bot.team.name,
-            bot.name,
-            action
-        )
+        'Performing action',
+        extra=merge_logging_context(
+            {'action': action},
+            bot.logging_context,
+        ),
     )
     parse_kwargs(kwargs, bot)
-    ret = slack.client(bot, client_type='oauth_bot').api_call(
+    ret = slack.client(bot).api_call(
         action,
         **kwargs
     )
@@ -709,14 +715,13 @@ def _perform_action(bot, data):
         if ret.get('error') in ['missing_scope', 'not_allowed_token_type']:
             logger.warning(
                 'action failed in post_slack, attempting as user.',
-                extra={
-                    'action': action,
-                    'team': bot.team.team_id,
-                    'bot': bot.name,
-                },
+                extra=merge_logging_context(
+                    {'action': action},
+                    bot.logging_context,
+                ),
             )
             try:
-                ret = slack.client(bot, client_type='oauth').api_call(
+                ret = slack.client(bot, client_type='user').api_call(
                     action,
                     **kwargs
                 )
@@ -725,37 +730,32 @@ def _perform_action(bot, data):
                     'JSON decode failure when parsing kwargs={}'.format(
                         kwargs
                     ),
-                    extra={
-                        'action': action,
-                        'team': bot.team.team_id,
-                        'bot': bot.name,
-                    },
+                    extra=merge_logging_context(
+                        {'action': action},
+                        bot.logging_context,
+                    ),
                 )
                 return {'ok': False}
             logger.debug(ret)
             if not ret['ok']:
                 logger.error(
-                    'action={} failed in post_slack: ret={}'.format(
-                        action,
+                    'action failed in post_slack: ret={}'.format(
                         ret
                     ),
-                    extra={
-                        'action': action,
-                        'team': bot.team.team_id,
-                        'bot': bot.name,
-                    },
+                    extra=merge_logging_context(
+                        {'action': action},
+                        bot.logging_context,
+                    ),
                 )
         else:
             logger.error(
-                'action={} failed in post_slack: ret={}'.format(
-                    action,
+                'action failed in post_slack: ret={}'.format(
                     ret
                 ),
-                extra={
-                    'action': action,
-                    'team': bot.team.team_id,
-                    'bot': bot.name,
-                },
+                extra=merge_logging_context(
+                    {'action': action},
+                    bot.logging_context,
+                ),
             )
     return ret
 

@@ -58,9 +58,14 @@ def envoy_internal_check(header='x-envoy-internal'):
         internal_only = policy.get('internal_only', True)
         if (method_match and path_match) and not internal_only:
             return True
-    msg = ('Received an external request to internal endpoint={} method={}'
-           ' header_value={}')
-    logger.warning(msg.format(request.path, request.method, envoy_internal))
+    logger.warning(
+        'Received an external request to internal endpoint',
+        extra={
+            'endpoint': request.path,
+            'method': request.method,
+            'header_value': envoy_internal,
+        },
+    )
     return False
 
 
@@ -124,9 +129,10 @@ def envoy_permissions_check(header='x-envoy-downstream-service-cluster'):
                 if _check_permission(permission):
                     return True
     logger.warning(
-        'Received an unauthorized request from={} to endpoint={}'.format(
-            envoy_identity,
-            request.path
-        )
+        'Received an unauthorized request',
+        extra={
+            'from': envoy_identity,
+            'endpoint': request.path,
+        },
     )
     return False

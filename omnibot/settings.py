@@ -77,7 +77,7 @@ for team, bots in _config.get('bots', {}).items():
             continue
         SLACK_BOT_TOKENS[team][bot_name] = {}
         SLACK_BOT_TOKENS[team][bot_name]['verification_token'] = _v_token
-        SLACK_BOT_TOKENS[team][bot_name]['oauth_token'] = _o_token
+        SLACK_BOT_TOKENS[team][bot_name]['oauth_user_token'] = _o_token
         SLACK_BOT_TOKENS[team][bot_name]['oauth_bot_token'] = _o_bot_token
         SLACK_BOT_TOKENS[team][bot_name]['app_id'] = bot_id
 

@@ -12,3 +12,13 @@ def get_callback_id(component):
         return action.get('block_id')
     else:
         return component.get('callback_id')
+
+
+def merge_logging_context(*args):
+    '''
+    Merge return a merged dict of the logging context dicts passed in.
+    '''
+    ret = {}
+    for arg in args:
+        ret.update(arg)
+    return ret
