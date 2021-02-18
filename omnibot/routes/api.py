@@ -743,7 +743,7 @@ def _perform_action(bot, data):
                         ret
                     ),
                     extra=merge_logging_context(
-                        {'action': action},
+                        {'action': action, 'kwargs': kwargs},
                         bot.logging_context,
                     ),
                 )
@@ -753,7 +753,7 @@ def _perform_action(bot, data):
                     ret
                 ),
                 extra=merge_logging_context(
-                    {'action': action},
+                    {'action': action, 'kwargs': kwargs},
                     bot.logging_context,
                 ),
             )
