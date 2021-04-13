@@ -3,6 +3,8 @@ import re
 from omnibot.services import slack
 from omnibot.services import stats
 
+SPACE_REGEX = re.compile(r'[\s\u00A0]')
+
 
 def extract_users(text, bot):
     statsd = stats.get_statsd_client()
@@ -178,7 +180,7 @@ def extract_mentions(text, bot, channel):
     with statsd.timer('parser.extract_mentions'):
         to_me = False
         at_me = '@{}'.format(bot.name)
-        if text.split(' ')[0] == at_me:
+        if SPACE_REGEX.split(text)[0] == at_me:
             to_me = True
         directed = channel.get('is_im') or to_me
         return directed
