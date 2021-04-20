@@ -23,7 +23,7 @@ jinja2==2.10.1            # via flask
 jmespath==0.9.4           # via boto3, botocore
 markupsafe==1.1.1         # via jinja2
 psutil==5.6.3             # via rainbow-saddle
-py==1.8.0                 # via pytest
+py==1.10.0                 # via pytest
 pytest-cov==2.5.1
 pytest-mock==1.1
 pytest==3.1.1
