@@ -370,7 +370,6 @@ def _handle_message_callback(message, callback):
             message.match_type,
             message.match
         ),
-        extra={**message.event_trace, 'callback': callback},
     )
     response = _handle_callback(message, callback)
     for action in response.get('actions', []):
