@@ -1,0 +1,50 @@
+{
+  "token": "ABCDEFGHIJKLMNOPQRSTUVWX",
+  "team_id": "TEST_TEAM_ID",
+  "api_app_id": "TEST_APP_ID",
+  "event": {
+    "client_msg_id": "TEST_CLIENT_MSG_ID",
+    "type": "message",
+    "text": "test message",
+    "user": "TEST_USER_ID",
+    "ts": "1620758555.000400",
+    "team": "TEST_TEAM_ID",
+    "blocks": [
+      {
+        "type": "rich_text",
+        "block_id": "ceQ",
+        "elements": [
+          {
+            "type": "rich_text_section",
+            "elements": [
+              {
+                "type": "text",
+                "text": "test message"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "channel": "TEST_CHANNEL_ID",
+    "event_ts": "1620758555.000400",
+    "channel_type": "channel"
+  },
+  "type": "event_callback",
+  "event_id": "TEST_EVENT_ID",
+  "event_time": 1620758555,
+  "authed_users": [
+    "TEST_USER_ID"
+  ],
+  "authorizations": [
+    {
+      "enterprise_id": null,
+      "team_id": "TEST_TEAM_ID",
+      "user_id": "TEST_USER_ID",
+      "is_bot": false,
+      "is_enterprise_install": false
+    }
+  ],
+  "is_ext_shared_channel": false,
+  "event_context": "2-message-TEST_TEAM_ID-TEST_APP_ID-TEST_CHANNEL_ID"
+}
