@@ -1,4 +1,4 @@
-# piptools: python3only
+# piptools: python3.8
 
 
 # WSGI HTTP Server for UNIX
@@ -39,12 +39,12 @@ statsd==3.2.1
 # Coroutine-based network library
 # License: MIT
 # Upstream url: http://www.gevent.org/
-gevent==1.2.1
+gevent==21.1.2
 
 # Lightweight in-process concurrent programming
 # License: MIT
 # Upstream url: https://github.com/python-greenlet/greenlet
-greenlet==0.4.12
+greenlet==1.1.0
 
 # YAML parser and emitter for Python
 # License: MIT
@@ -64,17 +64,17 @@ slackclient==1.0.7
 # Testing library
 # License: MIT
 # Upstream url: https://github.com/pytest-dev/pytest
-pytest==3.1.1
+pytest==6.2.4
 
 # Thin-wrapper around the mock package for easier use with py.test
 # License: MIT
 # Upstream url: https://github.com/pytest-dev/pytest-mock/
-pytest-mock==1.1
+pytest-mock==3.6.1
 
 # Code coverage plugin for py.test
 # License: MIT
 # Upstream url: https://github.com/pytest-dev/pytest-cov
-pytest-cov==2.5.1
+pytest-cov==2.11.1
 
 # Python client for Redis key-value store
 # License: MIT
