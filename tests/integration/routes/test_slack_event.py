@@ -1,3 +1,5 @@
+import json
+from typing import Dict, Any  # noqa: F401
 from unittest.mock import MagicMock
 
 from flask import Response  # noqa: F401
@@ -46,3 +48,126 @@ def test_event_callback_test_message(
         assert resp.json["status"] == "success"
         instrument.assert_called_once()
         queue.assert_called_once()
+
+
+def test_misisng_verification_token(
+    client: Client, instrument: MagicMock, queue: MagicMock
+):
+    with get_mock_data("event/url_verification.json") as json_data:
+        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data.pop("token", None)
+        resp: Response = client.post(
+            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+        )
+        assert resp.status_code == 403
+        assert resp.json["status"] == "failure"
+        assert resp.json["error"] == "No verification token in event."
+        instrument.assert_not_called()
+        queue.assert_not_called()
+
+
+def test_invalid_verification_token(
+    client: Client, instrument: MagicMock, queue: MagicMock
+):
+    with get_mock_data("event/url_verification.json") as json_data:
+        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data["token"] = "something random"
+        resp: Response = client.post(
+            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+        )
+        assert resp.status_code == 403
+        assert resp.json["status"] == "failure"
+        assert resp.json["error"] == "url_verification failed."
+        instrument.assert_not_called()
+        queue.assert_not_called()
+
+
+def test_missing_app_id(client: Client, instrument: MagicMock, queue: MagicMock):
+    with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
+        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data.pop("api_app_id", None)
+        resp: Response = client.post(
+            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+        )
+        assert resp.status_code == 403
+        assert resp.json["status"] == "failure"
+        assert resp.json["error"] == "No api_app_id in event."
+        instrument.assert_not_called()
+        queue.assert_not_called()
+
+
+def test_missing_team_id(client: Client, instrument: MagicMock, queue: MagicMock):
+    with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
+        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data.pop("team_id", None)
+        resp: Response = client.post(
+            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+        )
+        assert resp.status_code == 403
+        assert resp.json["status"] == "failure"
+        assert resp.json["error"] == "No team_id in event."
+        instrument.assert_not_called()
+        queue.assert_not_called()
+
+
+def test_invalid_team(client: Client, instrument: MagicMock, queue: MagicMock):
+    with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
+        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data["team_id"] = "something random"
+        resp: Response = client.post(
+            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+        )
+        assert resp.status_code == 403
+        assert resp.json["status"] == "failure"
+        assert resp.json["error"] == "Unsupported team"
+        instrument.assert_not_called()
+        queue.assert_not_called()
+
+
+def test_invalid_bot(client: Client, instrument: MagicMock, queue: MagicMock):
+    with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
+        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data["api_app_id"] = "something random"
+        resp: Response = client.post(
+            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+        )
+        assert resp.status_code == 200
+        assert resp.json["status"] == "ignored"
+        assert resp.json["warning"] == "Unsupported bot"
+        instrument.assert_not_called()
+        queue.assert_not_called()
+
+
+def test_invalid_verification_token_for_valid_bot(
+    client: Client, instrument: MagicMock, queue: MagicMock
+):
+    with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
+        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data["token"] = "something random"
+        resp: Response = client.post(
+            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+        )
+        assert resp.status_code == 403
+        assert resp.json["status"] == "failure"
+        assert resp.json["error"] == "Incorrect verification token in event for bot"
+        instrument.assert_not_called()
+        queue.assert_not_called()
+
+
+def test_event_missing_event_block(
+    client: Client, instrument: MagicMock, queue: MagicMock
+):
+    with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
+        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data.pop("event", None)
+        resp: Response = client.post(
+            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+        )
+        assert resp.status_code == 403
+        assert resp.json["status"] == "failure"
+        assert (
+            resp.json["error"]
+            == "Request does not have an event. Processing will not proceed!"
+        )
+        instrument.assert_not_called()
+        queue.assert_not_called()
