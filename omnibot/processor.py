@@ -374,7 +374,7 @@ def _handle_message_callback(message, callback):
             **message.event_trace,
             'module': callback['module'],
             'request_kwargs': callback.get('kwargs', {}).get('request_kwargs', {}),
-            'client_kwargs': callback.get('kwargs', {}).get('client_kwargs', {}).get('service', ""),
+            'client_kwargs': {'service': callback.get('kwargs', {}).get('client_kwargs', {}).get('service', "")},
         },
     )
     response = _handle_callback(message, callback)
