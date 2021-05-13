@@ -2,6 +2,7 @@
 # so that all unit tests are reported as part of the tests package.
 
 import os
+from os import path
 
 # Inject mandatory environment variables
 
@@ -28,6 +29,9 @@ env_settings = [
     ('CREDENTIALS_SLACK_VERIFICATION_TOKEN_A99999999', '1234'),
 ]
 
-os.environ['CONFIG_FILE'] = 'data/test_omnibot_config.yaml'
+ROOT_DIR = path.dirname(path.abspath(__file__))
+TEST_CONFIG = path.abspath(path.join(ROOT_DIR, "..", "data/test_omnibot_config.yaml"))
+
+os.environ["CONFIG_FILE"] = TEST_CONFIG
 for env_setting in env_settings:
     os.environ[env_setting[0]] = os.getenv(env_setting[0], env_setting[1])
