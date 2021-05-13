@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 import pytest
 from flask import testing
 from pytest_mock import MockerFixture
@@ -35,11 +37,11 @@ def client() -> Client:
         yield c
 
 
-@pytest.fixture(autouse=True)
-def mock_queue_event(mocker: MockerFixture):
-    """
-    Auto-use fixture that prevents validated omnibot requests from actually attempting
-    to enqueue an event into SQS.
-    """
-    mocker.patch("omnibot.routes.api.instrument_event")
-    mocker.patch("omnibot.routes.api.queue_event")
+@pytest.fixture
+def instrument(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch("omnibot.routes.api.instrument_event")
+
+
+@pytest.fixture
+def queue(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch("omnibot.routes.api.queue_event")
