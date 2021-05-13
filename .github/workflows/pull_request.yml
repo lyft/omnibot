@@ -24,6 +24,8 @@ jobs:
           ruby-version: 2.x
       - name: Install license finder
         run: gem install license_finder
+      - name: Allow gevent Zope license
+        run: license_finder permitted_licenses add "Zope Public License"
       - name: Setup python 3.6
         uses: actions/setup-python@v1
         with:
