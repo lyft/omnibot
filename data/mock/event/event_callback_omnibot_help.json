@@ -1,7 +1,7 @@
 {
   "token": "ABCDEFGHIJKLMNOPQRSTUVWX",
   "team_id": "TEST_TEAM_ID",
-  "api_app_id": "TEST_APP_ID",
+  "api_app_id": "TEST_OMNIBOT_ID",
   "event": {
     "client_msg_id": "TEST_CLIENT_MSG_ID",
     "type": "message",
@@ -50,5 +50,5 @@
     }
   ],
   "is_ext_shared_channel": false,
-  "event_context": "2-message-TEST_TEAM_ID-TEST_APP_ID-TEST_CHANNEL_ID"
+  "event_context": "2-message-TEST_TEAM_ID-TEST_OMNIBOT_ID-TEST_CHANNEL_ID"
 }

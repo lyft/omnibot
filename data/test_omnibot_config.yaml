@@ -48,12 +48,15 @@ authorization:
 help_handler: "omnibot.handlers.message_handlers:help_handler"
 team_fallback: "testteam"
 teams:
+  "TEST_TEAM_ID": "TEST_TEAM_ID"
   "testteam": "T12345678"
   "test2ndteam": "TABCDEF12"
 primary_bot:
   "testteam": "testteambot"
   "test2ndteam": "test2ndteambot"
 bots:
+  "TEST_TEAM_ID":
+      "TEST_OMNIBOT_ID": "TEST_OMNIBOT_ID"
   "testteam":
       "echobot": "A12345678"
       "pingbot": "AABCDEF12"
