@@ -80,11 +80,15 @@ handlers:
             label: "Echo this text"
             name: "echo_element"
       bots:
+        "test-team-name":
+          - "TEST_OMNIBOT_NAME"
         "testteam":
           - "echobot"
     - callback_id: "echo_dialog_1"
       response_type: "in_channel"
       bots:
+        "test-team-name":
+          - "TEST_OMNIBOT_NAME"
         "testteam":
           - "echobot"
       callbacks:
