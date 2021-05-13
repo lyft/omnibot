@@ -9,9 +9,7 @@ _ENDPOINT = "/api/v1/slack/slash_command"
 
 
 def test_user_issues_echo_command(client: Client):
-    with get_mock_data(
-        "slash_command/user_issues_echo_command.json"
-    ) as json_data:
+    with get_mock_data("slash_command/user_issues_echo_command.json") as json_data:
         resp: BaseResponse = client.post(
             _ENDPOINT,
             data=json.loads(json_data.read()),

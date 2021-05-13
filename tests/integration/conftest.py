@@ -1,9 +1,9 @@
 import pytest
+from flask import testing
 from pytest_mock import MockerFixture
+from werkzeug.datastructures import Headers
 from werkzeug.test import Client
 
-from flask import testing
-from werkzeug.datastructures import Headers
 from omnibot.app import app
 from omnibot.routes import api
 
