@@ -116,7 +116,7 @@ def test_interactive_component(mocker):
     _component = InteractiveComponent(_bot, component, event_trace)
     assert _component.event_trace == event_trace
     assert _component.bot == _bot
-    assert _component.component_type is 'message_action'
+    assert _component.component_type == 'message_action'
     assert _component.callback_id == 'echobot_action_test'
     assert _component.action_ts == '1234567.12'
     assert _component.trigger_id == '376604117319.165116859648.515402022613c2893a80d6268c463e54'  # noqa:E501
