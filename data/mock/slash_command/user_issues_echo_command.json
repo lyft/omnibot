@@ -1,15 +1,15 @@
 {
   "token": "ABCDEFGHIJKLMNOPQRSTUVWX",
   "team_id": "TEST_TEAM_ID",
-  "team_domain": "lyft-test-sandbox",
+  "team_domain": "test-team-name",
   "channel_id": "TEST_CHANNEL_ID",
   "channel_name": "test-omnibot-cx",
   "user_id": "TEST_USER_ID",
   "user_name": "testusername",
-  "command": "/omnibottest",
+  "command": "/echo",
   "text": "test",
-  "api_app_id": "TEST_APP_ID",
+  "api_app_id": "TEST_OMNIBOT_ID",
   "is_enterprise_install": "false",
   "response_url": "https://hooks.slack.com/commands/TEST_TEAM_ID/temp/test",
-  "trigger_id": "2039511523991.165116859648.bd8f802e879770bc64eb76252aca8e24"
+  "trigger_id": "TEST_TRIGGER_ID"
 }

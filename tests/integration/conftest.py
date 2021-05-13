@@ -1,4 +1,5 @@
 import pytest
+from pytest_mock import MockerFixture
 from werkzeug.test import Client
 
 from flask import testing
@@ -23,3 +24,9 @@ def client() -> Client:
     app.test_client_class = TestClient
     with app.test_client() as c:
         yield c
+
+
+@pytest.fixture(autouse=True)
+def mock_queue_event(mocker: MockerFixture):
+    mocker.patch("omnibot.routes.api.instrument_event")
+    mocker.patch("omnibot.routes.api.queue_event")

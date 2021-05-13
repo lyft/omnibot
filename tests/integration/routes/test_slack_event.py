@@ -1,17 +1,9 @@
-import pytest
-from pytest_mock import MockerFixture
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 
 from tests.data import get_mock_data
 
 _ENDPOINT = "/api/v1/slack/event"
-
-
-@pytest.fixture(autouse=True)
-def mock_queue_event(mocker: MockerFixture):
-    mocker.patch("omnibot.routes.api.instrument_event")
-    mocker.patch("omnibot.routes.api.queue_event")
 
 
 def test_url_verification(client: Client):
