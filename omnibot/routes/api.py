@@ -180,8 +180,7 @@ def slack_slash_command():
             extra={'team_id': command['team_id']},
         )
         return jsonify({'status': 'failure', 'error': msg}), 403
-    # Slash commands annoyingly don't send an app id, so we need to
-    # verify
+    # Slash commands annoyingly don't send an app id, so we need to verify
     try:
         bot = Bot.get_bot_by_verification_token(command['token'])
     except BotInitializationError:
