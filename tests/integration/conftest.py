@@ -11,6 +11,11 @@ app.register_blueprint(api.blueprint)
 
 
 class TestClient(testing.FlaskClient):
+    """
+    Overrides the default Flask test client to apply envoy headers so that the envoy
+    checks pass.
+    """
+
     def open(self, *args, **kwargs):
         envoy_test_headers = Headers({"x-envoy-downstream-service-cluster": "envoy"})
         headers = kwargs.pop("headers", Headers())
@@ -21,6 +26,10 @@ class TestClient(testing.FlaskClient):
 
 @pytest.fixture(scope="session")
 def client() -> Client:
+    """
+    Returns a werkzeug compatible Flask test client for testing the full request to
+    response flow for all omnibot endpoints.
+    """
     app.test_client_class = TestClient
     with app.test_client() as c:
         yield c
@@ -28,5 +37,9 @@ def client() -> Client:
 
 @pytest.fixture(autouse=True)
 def mock_queue_event(mocker: MockerFixture):
+    """
+    Auto-use fixture that prevents validated omnibot requests from actually attempting
+    to enqueue an event into SQS.
+    """
     mocker.patch("omnibot.routes.api.instrument_event")
     mocker.patch("omnibot.routes.api.queue_event")
