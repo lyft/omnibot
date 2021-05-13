@@ -1,4 +1,5 @@
 import json
+from typing import Any, Dict  # noqa: F401
 from unittest.mock import MagicMock
 
 import pytest
@@ -40,5 +41,119 @@ def test_message_action_on_test_message(
             content_type="application/x-www-form-urlencoded",
         )
         assert resp.status_code == 200
+        assert resp.json["response_type"] == "in_channel"
         queue.assert_not_called()
         slackclient.assert_called_once()
+
+
+def test_invalid_component_type(
+    client: Client, queue: MagicMock, slackclient: MagicMock
+):
+    with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
+        payload: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: Dict[str, Any] = json.loads(payload["payload"])
+        modified_data["type"] = "not a valid type"
+        resp: Response = client.post(
+            _ENDPOINT,
+            data={"payload": json.dumps(modified_data)},
+            content_type="application/x-www-form-urlencoded",
+        )
+        assert resp.status_code == 400
+        assert resp.json["status"] == "failure"
+        assert (
+            resp.json["error"]
+            == "Unsupported type=not a valid type in interactive component."
+        )
+        queue.assert_not_called()
+        slackclient.assert_not_called()
+
+
+def test_missing_token(client: Client, queue: MagicMock, slackclient: MagicMock):
+    with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
+        payload: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: Dict[str, Any] = json.loads(payload["payload"])
+        modified_data.pop("token", None)
+        resp: Response = client.post(
+            _ENDPOINT,
+            data={"payload": json.dumps(modified_data)},
+            content_type="application/x-www-form-urlencoded",
+        )
+        assert resp.status_code == 403
+        assert resp.json["status"] == "failure"
+        assert resp.json["error"] == "No verification token in interactive component."
+        queue.assert_not_called()
+        slackclient.assert_not_called()
+
+
+def test_missing_team(client: Client, queue: MagicMock, slackclient: MagicMock):
+    with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
+        payload: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: Dict[str, Any] = json.loads(payload["payload"])
+        modified_data.pop("team", None)
+        resp: Response = client.post(
+            _ENDPOINT,
+            data={"payload": json.dumps(modified_data)},
+            content_type="application/x-www-form-urlencoded",
+        )
+        assert resp.status_code == 403
+        assert resp.json["status"] == "failure"
+        assert resp.json["error"] == "No team id in interactive component."
+        queue.assert_not_called()
+        slackclient.assert_not_called()
+
+
+def test_unsupported_team(client: Client, queue: MagicMock, slackclient: MagicMock):
+    with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
+        payload: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: Dict[str, Any] = json.loads(payload["payload"])
+        modified_data["team"]["id"] = "something random"
+        resp: Response = client.post(
+            _ENDPOINT,
+            data={"payload": json.dumps(modified_data)},
+            content_type="application/x-www-form-urlencoded",
+        )
+        assert resp.status_code == 403
+        assert resp.json["status"] == "failure"
+        assert resp.json["error"] == "Unsupported team"
+        queue.assert_not_called()
+        slackclient.assert_not_called()
+
+
+def test_invalid_token(client: Client, queue: MagicMock, slackclient: MagicMock):
+    with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
+        payload: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: Dict[str, Any] = json.loads(payload["payload"])
+        modified_data["token"] = "something random"
+        resp: Response = client.post(
+            _ENDPOINT,
+            data={"payload": json.dumps(modified_data)},
+            content_type="application/x-www-form-urlencoded",
+        )
+        assert resp.status_code == 403
+        assert resp.json["status"] == "failure"
+        assert (
+            resp.json["error"]
+            == "Token sent with interactive component does not match any configured app."  # noqa: E501
+        )
+        queue.assert_not_called()
+        slackclient.assert_not_called()
+
+
+def test_invalid_callback_id(client: Client, queue: MagicMock, slackclient: MagicMock):
+    with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
+        payload: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: Dict[str, Any] = json.loads(payload["payload"])
+        modified_data["callback_id"] = "something random"
+        resp: Response = client.post(
+            _ENDPOINT,
+            data={"payload": json.dumps(modified_data)},
+            content_type="application/x-www-form-urlencoded",
+        )
+        assert resp.status_code == 200
+        assert resp.json["response_type"] == "ephemeral"
+        assert (
+            resp.json["text"]
+            == "This interactive component does not have any omnibot handler associated with it."  # noqa: E501
+        )
+        queue.assert_not_called()
+        slackclient.assert_not_called()
