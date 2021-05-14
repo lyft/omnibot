@@ -1,10 +1,11 @@
 import json
 from typing import Any, Dict  # noqa: F401
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, call
 
 import pytest
 from flask import Response  # noqa: F401
 from pytest_mock import MockerFixture
+from slackclient import SlackClient
 from werkzeug.test import Client
 
 from tests.data import get_mock_data
@@ -14,12 +15,12 @@ _ENDPOINT = "/api/v1/slack/interactive"
 
 
 @pytest.fixture
-def slackclient(mocker: MockerFixture) -> MagicMock:
-    return mocker.patch("omnibot.services.slack.client")
+def slack_api_call(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch.object(SlackClient, "api_call")
 
 
 def test_dialog_submission_echo_test(
-    client: Client, queue: MagicMock, slackclient: MagicMock
+    client: Client, queue: MagicMock, slack_api_call: MagicMock
 ):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
         event: Dict[str, Any] = json.loads(json_data.read())
@@ -35,11 +36,11 @@ def test_dialog_submission_echo_test(
         queue.assert_called_once_with(
             get_test_bot(), component, "interactive_component"
         )
-        slackclient.assert_not_called()
+        slack_api_call.assert_not_called()
 
 
 def test_message_action_on_test_message(
-    client: Client, queue: MagicMock, slackclient: MagicMock
+    client: Client, queue: MagicMock, slack_api_call: MagicMock
 ):
     with get_mock_data("interactive/message_action_on_test_message.json") as json_data:
         resp: Response = client.post(
@@ -50,11 +51,22 @@ def test_message_action_on_test_message(
         assert resp.status_code == 200
         assert resp.json["response_type"] == "in_channel"
         queue.assert_not_called()
-        slackclient.assert_called_once()
+        slack_api_call.assert_called_once_with(
+            "dialog.open",
+            dialog={
+                "title": "Echo dialog",
+                "submit_label": "submit",
+                "callback_id": "echo_dialog_1",
+                "elements": [
+                    {"type": "text", "label": "Echo this text", "name": "echo_element"}
+                ],
+            },
+            trigger_id="TEST_TRIGGER_ID",
+        )
 
 
 def test_invalid_component_type(
-    client: Client, queue: MagicMock, slackclient: MagicMock
+    client: Client, queue: MagicMock, slack_api_call: MagicMock
 ):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
         payload: Dict[str, Any] = json.loads(json_data.read())
@@ -72,10 +84,10 @@ def test_invalid_component_type(
             == "Unsupported type=not a valid type in interactive component."
         )
         queue.assert_not_called()
-        slackclient.assert_not_called()
+        slack_api_call.assert_not_called()
 
 
-def test_missing_token(client: Client, queue: MagicMock, slackclient: MagicMock):
+def test_missing_token(client: Client, queue: MagicMock, slack_api_call: MagicMock):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
         payload: Dict[str, Any] = json.loads(json_data.read())
         modified_data: Dict[str, Any] = json.loads(payload["payload"])
@@ -89,10 +101,10 @@ def test_missing_token(client: Client, queue: MagicMock, slackclient: MagicMock)
         assert resp.json["status"] == "failure"
         assert resp.json["error"] == "No verification token in interactive component."
         queue.assert_not_called()
-        slackclient.assert_not_called()
+        slack_api_call.assert_not_called()
 
 
-def test_missing_team(client: Client, queue: MagicMock, slackclient: MagicMock):
+def test_missing_team(client: Client, queue: MagicMock, slack_api_call: MagicMock):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
         payload: Dict[str, Any] = json.loads(json_data.read())
         modified_data: Dict[str, Any] = json.loads(payload["payload"])
@@ -106,10 +118,10 @@ def test_missing_team(client: Client, queue: MagicMock, slackclient: MagicMock):
         assert resp.json["status"] == "failure"
         assert resp.json["error"] == "No team id in interactive component."
         queue.assert_not_called()
-        slackclient.assert_not_called()
+        slack_api_call.assert_not_called()
 
 
-def test_unsupported_team(client: Client, queue: MagicMock, slackclient: MagicMock):
+def test_unsupported_team(client: Client, queue: MagicMock, slack_api_call: MagicMock):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
         payload: Dict[str, Any] = json.loads(json_data.read())
         modified_data: Dict[str, Any] = json.loads(payload["payload"])
@@ -123,10 +135,10 @@ def test_unsupported_team(client: Client, queue: MagicMock, slackclient: MagicMo
         assert resp.json["status"] == "failure"
         assert resp.json["error"] == "Unsupported team"
         queue.assert_not_called()
-        slackclient.assert_not_called()
+        slack_api_call.assert_not_called()
 
 
-def test_invalid_token(client: Client, queue: MagicMock, slackclient: MagicMock):
+def test_invalid_token(client: Client, queue: MagicMock, slack_api_call: MagicMock):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
         payload: Dict[str, Any] = json.loads(json_data.read())
         modified_data: Dict[str, Any] = json.loads(payload["payload"])
@@ -143,10 +155,12 @@ def test_invalid_token(client: Client, queue: MagicMock, slackclient: MagicMock)
             == "Token sent with interactive component does not match any configured app."  # noqa: E501
         )
         queue.assert_not_called()
-        slackclient.assert_not_called()
+        slack_api_call.assert_not_called()
 
 
-def test_invalid_callback_id(client: Client, queue: MagicMock, slackclient: MagicMock):
+def test_invalid_callback_id(
+    client: Client, queue: MagicMock, slack_api_call: MagicMock
+):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
         payload: Dict[str, Any] = json.loads(json_data.read())
         modified_data: Dict[str, Any] = json.loads(payload["payload"])
@@ -163,4 +177,4 @@ def test_invalid_callback_id(client: Client, queue: MagicMock, slackclient: Magi
             == "This interactive component does not have any omnibot handler associated with it."  # noqa: E501
         )
         queue.assert_not_called()
-        slackclient.assert_not_called()
+        slack_api_call.assert_not_called()
