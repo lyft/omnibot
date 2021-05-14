@@ -8,6 +8,7 @@ from pytest_mock import MockerFixture
 from werkzeug.test import Client
 
 from tests.data import get_mock_data
+from tests.integration.routes import get_test_bot
 
 _ENDPOINT = "/api/v1/slack/interactive"
 
@@ -21,13 +22,19 @@ def test_dialog_submission_echo_test(
     client: Client, queue: MagicMock, slackclient: MagicMock
 ):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
+        event: Dict[str, Any] = json.loads(json_data.read())
         resp: Response = client.post(
             _ENDPOINT,
-            data=json.loads(json_data.read()),
+            data=event,
             content_type="application/x-www-form-urlencoded",
         )
         assert resp.status_code == 200
-        queue.assert_called_once()
+
+        component = json.loads(event["payload"])
+        component["omnibot_bot_id"] = "TEST_OMNIBOT_ID"
+        queue.assert_called_once_with(
+            get_test_bot(), component, "interactive_component"
+        )
         slackclient.assert_not_called()
 
 
