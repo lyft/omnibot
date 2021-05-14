@@ -98,7 +98,6 @@ def test_missing_handler(client: Client, queue: MagicMock):
         assert resp.json["response_type"] == "ephemeral"
         assert (
             resp.json["text"]
-            == "This slash command does not have any omnibot handler associated with it."
-            # noqa: E501
+            == "This slash command does not have any omnibot handler associated with it."  # noqa: E501
         )
         queue.assert_not_called()
