@@ -1,6 +1,25 @@
 tests.integration package
 =========================
 
+Subpackages
+-----------
+
+.. toctree::
+
+   tests.integration.routes
+
+Submodules
+----------
+
+tests.integration.conftest module
+---------------------------------
+
+.. automodule:: tests.integration.conftest
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 Module contents
 ---------------
 

@@ -1,0 +1,538 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tests.integration.routes package &mdash; omnibot 1.0.3-24b0f2 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/omnibot.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> omnibot
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.3-24b0f2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#quickstart-for-testing">Quickstart for testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#docker-installation">Docker installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#to-run-omnibot-in-docker">To run omnibot in Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#to-build-the-image">To build the image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#pip-installation">pip installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#make-a-virtualenv-and-install-pip-requirements">Make a virtualenv and install pip requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#manual-installation">Manual installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#clone-omnibot">Clone omnibot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#id1">Make a virtualenv and install pip requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#run-omnibot">Run omnibot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#example-minimal-configuration">Example Minimal Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#basic-configuration">Basic Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#configuration-file-configuration">Configuration File Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#teams">Teams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#bots">Bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#bot-credential-configuration">Bot Credential Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#urls-configuration-for-use-in-slack-app-dashboard">URLs Configuration for Use in Slack App Dashboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#sqs-configuration">SQS Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#redis-configuration">Redis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#statsd-configuration">Statsd Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#logging-configuration">Logging Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#handler-configuration">Handler Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#common-handler-configuration">Common Handler Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#message-handlers">Message Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#interactive-component-handlers">Interactive Component Handlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#slash-command-handlers">Slash Command Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#api-access-control-configuration">API Access Control Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../adding_new_slack_apps.html">Adding new slack apps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../adding_new_slack_apps.html#adding-normal-slack-apps">Adding normal slack apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adding_new_slack_apps.html#adding-a-slack-app-for-use-as-a-primary-bot">Adding a slack app for use as a primary bot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../observability.html">Observability</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../observability.html#stats">Stats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#delivery-and-processing">Delivery and Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#webhook-worker-gevent-pool">Webhook Worker Gevent Pool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#watcher-worker-latency">Watcher Worker Latency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../observability.html#logs">Logs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#event-subscription-tracing-data">Event Subscription Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#slash-command-tracing-data">Slash Command Tracing Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observability.html#interactive-component-tracing-data">Interactive Component Tracing Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Quickstart and Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development.html#quickstart">Quickstart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development.html#developing-new-bots">Developing new bots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development.html#making-and-testing-changes-to-omnibot-using-docker-and-docker-compose">Making and testing changes to omnibot using docker and docker-compose</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../receivers.html">Omnibot receiver libraries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../receivers.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../event_parsing.html">Event parsing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../event_parsing.html#event-subscription-events">Event Subscription Events</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../event_parsing.html#message-events">Message Events</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../event_parsing.html#interactive-component-events">Interactive Component Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../event_parsing.html#slash-command-events">Slash Command Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../slack_proxying.html">Slack proxying</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../slack_proxying.html#message-handlers">Message handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../slack_proxying.html#slash-command-and-interactive-component-handlers">Slash command and interactive component handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../writing_new_callbacks.html">Writing new callback functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#code-of-conduct">Code of conduct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#contributing-code">Contributing code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#sign-the-contributor-license-agreement-cla">Sign the Contributor License Agreement (CLA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#file-issues-in-github">File issues in Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#submit-pull-requests">Submit pull requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#adding-new-dependencies-to-requirements">Adding new dependencies to requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../contributing.html#approving-licenses-or-dependencies">Approving licenses or dependencies</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API endpoint</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#api-route-documentation">API route documentation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Python module documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="omnibot.html">omnibot package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.authnz.html">omnibot.authnz package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.authnz.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.authnz.html#module-omnibot.authnz.envoy_checks">omnibot.authnz.envoy_checks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.authnz.html#module-omnibot.authnz">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.callbacks.html">omnibot.callbacks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.interactive_component_callbacks">omnibot.callbacks.interactive_component_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.message_callbacks">omnibot.callbacks.message_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.network_callbacks">omnibot.callbacks.network_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks.slash_command_callbacks">omnibot.callbacks.slash_command_callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.callbacks.html#module-omnibot.callbacks">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.routes.html">omnibot.routes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.routes.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.routes.html#module-omnibot.routes.api">omnibot.routes.api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.routes.html#module-omnibot.routes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.scripts.html">omnibot.scripts package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#module-omnibot.scripts.omniredis">omnibot.scripts.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#module-omnibot.scripts.utils">omnibot.scripts.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.scripts.html#module-omnibot.scripts">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.services.html">omnibot.services package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services.omniredis">omnibot.services.omniredis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services.sqs">omnibot.services.sqs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services.stats">omnibot.services.stats module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.services.html#module-omnibot.services">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="omnibot.utils.html">omnibot.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.utils.html#module-omnibot.utils.settings">omnibot.utils.settings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="omnibot.utils.html#module-omnibot.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.app">omnibot.app module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.processor">omnibot.processor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.settings">omnibot.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.setup_logging">omnibot.setup_logging module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.watcher">omnibot.watcher module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.webhook_worker">omnibot.webhook_worker module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot.wsgi">omnibot.wsgi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="omnibot.html#module-omnibot">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">omnibot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>tests.integration.routes package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/autogen/tests.integration.routes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tests-integration-routes-package">
+<h1>tests.integration.routes package<a class="headerlink" href="#tests-integration-routes-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-tests.integration.routes.test_healthcheck">
+<span id="tests-integration-routes-test-healthcheck-module"></span><h2>tests.integration.routes.test_healthcheck module<a class="headerlink" href="#module-tests.integration.routes.test_healthcheck" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="tests.integration.routes.test_healthcheck.test_healthcheck">
+<code class="sig-prename descclassname">tests.integration.routes.test_healthcheck.</code><code class="sig-name descname">test_healthcheck</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_healthcheck.test_healthcheck" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tests.integration.routes.test_interactive">
+<span id="tests-integration-routes-test-interactive-module"></span><h2>tests.integration.routes.test_interactive module<a class="headerlink" href="#module-tests.integration.routes.test_interactive" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="tests.integration.routes.test_interactive.slack_api_call">
+<code class="sig-prename descclassname">tests.integration.routes.test_interactive.</code><code class="sig-name descname">slack_api_call</code><span class="sig-paren">(</span><em class="sig-param">mocker: pytest_mock.plugin.MockerFixture</em><span class="sig-paren">)</span> &#x2192; unittest.mock.MagicMock<a class="headerlink" href="#tests.integration.routes.test_interactive.slack_api_call" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_interactive.test_dialog_submission_echo_test">
+<code class="sig-prename descclassname">tests.integration.routes.test_interactive.</code><code class="sig-name descname">test_dialog_submission_echo_test</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em>, <em class="sig-param">slack_api_call: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_interactive.test_dialog_submission_echo_test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_interactive.test_invalid_callback_id">
+<code class="sig-prename descclassname">tests.integration.routes.test_interactive.</code><code class="sig-name descname">test_invalid_callback_id</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em>, <em class="sig-param">slack_api_call: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_interactive.test_invalid_callback_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_interactive.test_invalid_component_type">
+<code class="sig-prename descclassname">tests.integration.routes.test_interactive.</code><code class="sig-name descname">test_invalid_component_type</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em>, <em class="sig-param">slack_api_call: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_interactive.test_invalid_component_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_interactive.test_invalid_token">
+<code class="sig-prename descclassname">tests.integration.routes.test_interactive.</code><code class="sig-name descname">test_invalid_token</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em>, <em class="sig-param">slack_api_call: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_interactive.test_invalid_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_interactive.test_message_action_on_test_message">
+<code class="sig-prename descclassname">tests.integration.routes.test_interactive.</code><code class="sig-name descname">test_message_action_on_test_message</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em>, <em class="sig-param">slack_api_call: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_interactive.test_message_action_on_test_message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_interactive.test_missing_team">
+<code class="sig-prename descclassname">tests.integration.routes.test_interactive.</code><code class="sig-name descname">test_missing_team</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em>, <em class="sig-param">slack_api_call: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_interactive.test_missing_team" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_interactive.test_missing_token">
+<code class="sig-prename descclassname">tests.integration.routes.test_interactive.</code><code class="sig-name descname">test_missing_token</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em>, <em class="sig-param">slack_api_call: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_interactive.test_missing_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_interactive.test_unsupported_team">
+<code class="sig-prename descclassname">tests.integration.routes.test_interactive.</code><code class="sig-name descname">test_unsupported_team</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em>, <em class="sig-param">slack_api_call: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_interactive.test_unsupported_team" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tests.integration.routes.test_slack_event">
+<span id="tests-integration-routes-test-slack-event-module"></span><h2>tests.integration.routes.test_slack_event module<a class="headerlink" href="#module-tests.integration.routes.test_slack_event" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="tests.integration.routes.test_slack_event.test_event_callback_omnibot_help">
+<code class="sig-prename descclassname">tests.integration.routes.test_slack_event.</code><code class="sig-name descname">test_event_callback_omnibot_help</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">instrument: unittest.mock.MagicMock</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slack_event.test_event_callback_omnibot_help" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slack_event.test_event_callback_test_message">
+<code class="sig-prename descclassname">tests.integration.routes.test_slack_event.</code><code class="sig-name descname">test_event_callback_test_message</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">instrument: unittest.mock.MagicMock</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slack_event.test_event_callback_test_message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slack_event.test_event_missing_event_block">
+<code class="sig-prename descclassname">tests.integration.routes.test_slack_event.</code><code class="sig-name descname">test_event_missing_event_block</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">instrument: unittest.mock.MagicMock</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slack_event.test_event_missing_event_block" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slack_event.test_invalid_bot">
+<code class="sig-prename descclassname">tests.integration.routes.test_slack_event.</code><code class="sig-name descname">test_invalid_bot</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">instrument: unittest.mock.MagicMock</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slack_event.test_invalid_bot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slack_event.test_invalid_team">
+<code class="sig-prename descclassname">tests.integration.routes.test_slack_event.</code><code class="sig-name descname">test_invalid_team</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">instrument: unittest.mock.MagicMock</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slack_event.test_invalid_team" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slack_event.test_invalid_verification_token">
+<code class="sig-prename descclassname">tests.integration.routes.test_slack_event.</code><code class="sig-name descname">test_invalid_verification_token</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">instrument: unittest.mock.MagicMock</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slack_event.test_invalid_verification_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slack_event.test_invalid_verification_token_for_valid_bot">
+<code class="sig-prename descclassname">tests.integration.routes.test_slack_event.</code><code class="sig-name descname">test_invalid_verification_token_for_valid_bot</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">instrument: unittest.mock.MagicMock</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slack_event.test_invalid_verification_token_for_valid_bot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slack_event.test_misisng_verification_token">
+<code class="sig-prename descclassname">tests.integration.routes.test_slack_event.</code><code class="sig-name descname">test_misisng_verification_token</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">instrument: unittest.mock.MagicMock</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slack_event.test_misisng_verification_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slack_event.test_missing_app_id">
+<code class="sig-prename descclassname">tests.integration.routes.test_slack_event.</code><code class="sig-name descname">test_missing_app_id</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">instrument: unittest.mock.MagicMock</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slack_event.test_missing_app_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slack_event.test_missing_team_id">
+<code class="sig-prename descclassname">tests.integration.routes.test_slack_event.</code><code class="sig-name descname">test_missing_team_id</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">instrument: unittest.mock.MagicMock</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slack_event.test_missing_team_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slack_event.test_url_verification">
+<code class="sig-prename descclassname">tests.integration.routes.test_slack_event.</code><code class="sig-name descname">test_url_verification</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">instrument: unittest.mock.MagicMock</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slack_event.test_url_verification" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tests.integration.routes.test_slash_command">
+<span id="tests-integration-routes-test-slash-command-module"></span><h2>tests.integration.routes.test_slash_command module<a class="headerlink" href="#module-tests.integration.routes.test_slash_command" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="tests.integration.routes.test_slash_command.test_invalid_verification_token">
+<code class="sig-prename descclassname">tests.integration.routes.test_slash_command.</code><code class="sig-name descname">test_invalid_verification_token</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slash_command.test_invalid_verification_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slash_command.test_missing_handler">
+<code class="sig-prename descclassname">tests.integration.routes.test_slash_command.</code><code class="sig-name descname">test_missing_handler</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slash_command.test_missing_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slash_command.test_missing_team_id">
+<code class="sig-prename descclassname">tests.integration.routes.test_slash_command.</code><code class="sig-name descname">test_missing_team_id</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slash_command.test_missing_team_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slash_command.test_missing_token">
+<code class="sig-prename descclassname">tests.integration.routes.test_slash_command.</code><code class="sig-name descname">test_missing_token</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slash_command.test_missing_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slash_command.test_unsupported_team">
+<code class="sig-prename descclassname">tests.integration.routes.test_slash_command.</code><code class="sig-name descname">test_unsupported_team</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slash_command.test_unsupported_team" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.test_slash_command.test_user_issues_echo_command">
+<code class="sig-prename descclassname">tests.integration.routes.test_slash_command.</code><code class="sig-name descname">test_user_issues_echo_command</code><span class="sig-paren">(</span><em class="sig-param">client: werkzeug.test.Client</em>, <em class="sig-param">queue: unittest.mock.MagicMock</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.test_slash_command.test_user_issues_echo_command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tests.integration.routes">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tests.integration.routes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="tests.integration.routes.BotMatcher">
+<em class="property">class </em><code class="sig-prename descclassname">tests.integration.routes.</code><code class="sig-name descname">BotMatcher</code><span class="sig-paren">(</span><em class="sig-param">expected: omnibot.services.slack.bot.Bot</em><span class="sig-paren">)</span><a class="headerlink" href="#tests.integration.routes.BotMatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tests.integration.routes.get_test_bot">
+<code class="sig-prename descclassname">tests.integration.routes.</code><code class="sig-name descname">get_test_bot</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; tests.integration.routes.BotMatcher<a class="headerlink" href="#tests.integration.routes.get_test_bot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019-2021, Omnibot Project Authors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

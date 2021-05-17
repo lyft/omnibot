@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>tests package &mdash; omnibot 1.0.3-1e10bd documentation</title>
+  <title>tests package &mdash; omnibot 1.0.3-24b0f2 documentation</title>
   
 
   
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                1.0.3-1e10bd
+                1.0.3-24b0f2
               </div>
             
           
@@ -333,7 +333,25 @@
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="tests.data.html">tests.data package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tests.data.html#module-tests.data">Module contents</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="tests.integration.html">tests.integration package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tests.integration.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.integration.routes.html">tests.integration.routes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.integration.routes.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.integration.routes.html#module-tests.integration.routes.test_healthcheck">tests.integration.routes.test_healthcheck module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.integration.routes.html#module-tests.integration.routes.test_interactive">tests.integration.routes.test_interactive module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.integration.routes.html#module-tests.integration.routes.test_slack_event">tests.integration.routes.test_slack_event module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.integration.routes.html#module-tests.integration.routes.test_slash_command">tests.integration.routes.test_slash_command module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.integration.routes.html#module-tests.integration.routes">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.integration.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.integration.html#tests-integration-conftest-module">tests.integration.conftest module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.integration.html#module-tests.integration">Module contents</a></li>
 </ul>
 </li>
@@ -398,14 +416,8 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="tests.conftest.client">
-<code class="sig-prename descclassname">tests.conftest.</code><code class="sig-name descname">client</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.client" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a Flask client for the app.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="tests.conftest.settings">
-<code class="sig-prename descclassname">tests.conftest.</code><code class="sig-name descname">settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.settings" title="Permalink to this definition">¶</a></dt>
+<dt id="tests.conftest.settings_override">
+<code class="sig-prename descclassname">tests.conftest.</code><code class="sig-name descname">settings_override</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.settings_override" title="Permalink to this definition">¶</a></dt>
 <dd><p>A py.test fixture for temporarily overriding settings during a test.
 When called, this will override global settings using the provided values.
 The new settings will exist during the scope of the test function, and will
@@ -413,7 +425,7 @@ get reset to the original values automatically after the test.</p>
 <p>Usage:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>def test_my_function(settings):</dt><dd><p>settings(MY_SETTING=’my value’)
+<dt>def test_my_function(settings_override):</dt><dd><p>settings(MY_SETTING=’my value’)
 # do_something()</p>
 </dd>
 </dl>

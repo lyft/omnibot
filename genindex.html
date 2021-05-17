@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; omnibot 1.0.3-1e10bd documentation</title>
+  <title>Index &mdash; omnibot 1.0.3-24b0f2 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.0.3-1e10bd
+                1.0.3-24b0f2
               </div>
             
           
@@ -398,6 +398,8 @@
       </ul></li>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.bot.BotInitializationError">BotInitializationError</a>
 </li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.BotMatcher">BotMatcher (class in tests.integration.routes)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -424,10 +426,10 @@
         <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.slash_command.SlashCommand.channel_id">(omnibot.services.slack.slash_command.SlashCommand property)</a>
 </li>
       </ul></li>
-      <li><a href="autogen/omnibot.callbacks.html#omnibot.callbacks.message_callbacks.channel_response_callback">channel_response_callback() (in module omnibot.callbacks.message_callbacks)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autogen/omnibot.callbacks.html#omnibot.callbacks.message_callbacks.channel_response_callback">channel_response_callback() (in module omnibot.callbacks.message_callbacks)</a>
+</li>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.message.Message.channels">channels() (omnibot.services.slack.message.Message property)</a>
 
       <ul>
@@ -435,11 +437,7 @@
 </li>
       </ul></li>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.client">client() (in module omnibot.services.slack)</a>
-
-      <ul>
-        <li><a href="autogen/tests.html#tests.conftest.client">(in module tests.conftest)</a>
 </li>
-      </ul></li>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.slash_command.SlashCommand.command">command() (omnibot.services.slack.slash_command.SlashCommand property)</a>
 </li>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.message.Message.command_text">command_text() (omnibot.services.slack.message.Message property)</a>
@@ -566,11 +564,13 @@
 </li>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.get_groups">get_groups() (in module omnibot.services.slack)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.get_im_channel_id">get_im_channel_id() (in module omnibot.services.slack)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.get_ims">get_ims() (in module omnibot.services.slack)</a>
+</li>
+      <li><a href="autogen/tests.data.html#tests.data.get_mock_data">get_mock_data() (in module tests.data)</a>
 </li>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.get_mpims">get_mpims() (in module omnibot.services.slack)</a>
 </li>
@@ -587,6 +587,8 @@
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.team.Team.get_team_by_name">get_team_by_name() (omnibot.services.slack.team.Team class method)</a>
 </li>
       <li><a href="autogen/omnibot.routes.html#omnibot.routes.api.get_team_id_by_name">get_team_id_by_name() (in module omnibot.routes.api)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.get_test_bot">get_test_bot() (in module tests.integration.routes)</a>
 </li>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.get_user">get_user() (in module omnibot.services.slack)</a>
 </li>
@@ -852,20 +854,22 @@
 </li>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.message.Message.set_match">set_match() (omnibot.services.slack.message.Message method)</a>
 </li>
-      <li><a href="autogen/tests.html#tests.conftest.settings">settings() (in module tests.conftest)</a>
+      <li><a href="autogen/tests.html#tests.conftest.settings_override">settings_override() (in module tests.conftest)</a>
 </li>
       <li><a href="autogen/tests.html#tests.conftest.SettingsOverrider">SettingsOverrider (class in tests.conftest)</a>
 </li>
       <li><a href="autogen/omnibot.routes.html#omnibot.routes.api.slack_action_v2">slack_action_v2() (in module omnibot.routes.api)</a>
 </li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_interactive.slack_api_call">slack_api_call() (in module tests.integration.routes.test_interactive)</a>
+</li>
       <li><a href="autogen/omnibot.routes.html#omnibot.routes.api.slack_event">slack_event() (in module omnibot.routes.api)</a>
 </li>
       <li><a href="autogen/omnibot.routes.html#omnibot.routes.api.slack_interactive_component">slack_interactive_component() (in module omnibot.routes.api)</a>
 </li>
-      <li><a href="autogen/omnibot.routes.html#omnibot.routes.api.slack_slash_command">slack_slash_command() (in module omnibot.routes.api)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autogen/omnibot.routes.html#omnibot.routes.api.slack_slash_command">slack_slash_command() (in module omnibot.routes.api)</a>
+</li>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.bot.Bot.slash_command_handlers">slash_command_handlers() (omnibot.services.slack.bot.Bot property)</a>
 </li>
       <li><a href="autogen/omnibot.services.slack.html#omnibot.services.slack.slash_command.SlashCommand">SlashCommand (class in omnibot.services.slack.slash_command)</a>
@@ -912,11 +916,19 @@
 </li>
       <li><a href="autogen/omnibot.callbacks.html#omnibot.callbacks.message_callbacks.test_callback">test_callback() (in module omnibot.callbacks.message_callbacks)</a>
 </li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_interactive.test_dialog_submission_echo_test">test_dialog_submission_echo_test() (in module tests.integration.routes.test_interactive)</a>
+</li>
       <li><a href="autogen/tests.unit.omnibot.authnz.html#tests.unit.omnibot.authnz.authnz_test.test_enforce_checks">test_enforce_checks() (in module tests.unit.omnibot.authnz.authnz_test)</a>
 </li>
       <li><a href="autogen/tests.unit.omnibot.authnz.html#tests.unit.omnibot.authnz.envoy_checks_test.test_envoy_internal_check">test_envoy_internal_check() (in module tests.unit.omnibot.authnz.envoy_checks_test)</a>
 </li>
       <li><a href="autogen/tests.unit.omnibot.authnz.html#tests.unit.omnibot.authnz.envoy_checks_test.test_envoy_permissions_check">test_envoy_permissions_check() (in module tests.unit.omnibot.authnz.envoy_checks_test)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slack_event.test_event_callback_omnibot_help">test_event_callback_omnibot_help() (in module tests.integration.routes.test_slack_event)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slack_event.test_event_callback_test_message">test_event_callback_test_message() (in module tests.integration.routes.test_slack_event)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slack_event.test_event_missing_event_block">test_event_missing_event_block() (in module tests.integration.routes.test_slack_event)</a>
 </li>
       <li><a href="autogen/tests.unit.omnibot.services.slack.html#tests.unit.omnibot.services.slack.parser_test.test_extract_mentions">test_extract_mentions() (in module tests.unit.omnibot.services.slack.parser_test)</a>
 </li>
@@ -924,12 +936,56 @@
 </li>
       <li><a href="autogen/tests.unit.omnibot.html#tests.unit.omnibot.settings_test.test_handlers">test_handlers() (in module tests.unit.omnibot.settings_test)</a>
 </li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_healthcheck.test_healthcheck">test_healthcheck() (in module tests.integration.routes.test_healthcheck)</a>
+</li>
       <li><a href="autogen/tests.unit.omnibot.services.slack.html#tests.unit.omnibot.services.slack.interactive_component_test.test_interactive_block_component">test_interactive_block_component() (in module tests.unit.omnibot.services.slack.interactive_component_test)</a>
 </li>
       <li><a href="autogen/tests.unit.omnibot.services.slack.html#tests.unit.omnibot.services.slack.interactive_component_test.test_interactive_component">test_interactive_component() (in module tests.unit.omnibot.services.slack.interactive_component_test)</a>
 </li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slack_event.test_invalid_bot">test_invalid_bot() (in module tests.integration.routes.test_slack_event)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_interactive.test_invalid_callback_id">test_invalid_callback_id() (in module tests.integration.routes.test_interactive)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_interactive.test_invalid_component_type">test_invalid_component_type() (in module tests.integration.routes.test_interactive)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slack_event.test_invalid_team">test_invalid_team() (in module tests.integration.routes.test_slack_event)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_interactive.test_invalid_token">test_invalid_token() (in module tests.integration.routes.test_interactive)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slack_event.test_invalid_verification_token">test_invalid_verification_token() (in module tests.integration.routes.test_slack_event)</a>
+
+      <ul>
+        <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slash_command.test_invalid_verification_token">(in module tests.integration.routes.test_slash_command)</a>
+</li>
+      </ul></li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slack_event.test_invalid_verification_token_for_valid_bot">test_invalid_verification_token_for_valid_bot() (in module tests.integration.routes.test_slack_event)</a>
+</li>
       <li><a href="autogen/tests.unit.omnibot.services.slack.html#tests.unit.omnibot.services.slack.message_test.test_message">test_message() (in module tests.unit.omnibot.services.slack.message_test)</a>
 </li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_interactive.test_message_action_on_test_message">test_message_action_on_test_message() (in module tests.integration.routes.test_interactive)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slack_event.test_misisng_verification_token">test_misisng_verification_token() (in module tests.integration.routes.test_slack_event)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slack_event.test_missing_app_id">test_missing_app_id() (in module tests.integration.routes.test_slack_event)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slash_command.test_missing_handler">test_missing_handler() (in module tests.integration.routes.test_slash_command)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_interactive.test_missing_team">test_missing_team() (in module tests.integration.routes.test_interactive)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slack_event.test_missing_team_id">test_missing_team_id() (in module tests.integration.routes.test_slack_event)</a>
+
+      <ul>
+        <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slash_command.test_missing_team_id">(in module tests.integration.routes.test_slash_command)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_interactive.test_missing_token">test_missing_token() (in module tests.integration.routes.test_interactive)</a>
+
+      <ul>
+        <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slash_command.test_missing_token">(in module tests.integration.routes.test_slash_command)</a>
+</li>
+      </ul></li>
       <li><a href="autogen/tests.unit.omnibot.services.slack.html#tests.unit.omnibot.services.slack.parser_test.test_not_supported_extract">test_not_supported_extract() (in module tests.unit.omnibot.services.slack.parser_test)</a>
 </li>
       <li><a href="autogen/tests.unit.omnibot.html#tests.unit.omnibot.settings_test.test_primary_slack_bot">test_primary_slack_bot() (in module tests.unit.omnibot.settings_test)</a>
@@ -938,19 +994,39 @@
 </li>
       <li><a href="autogen/tests.unit.omnibot.html#tests.unit.omnibot.settings_test.test_slack_teams">test_slack_teams() (in module tests.unit.omnibot.settings_test)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autogen/tests.unit.omnibot.services.slack.html#tests.unit.omnibot.services.slack.bot_test.test_team">test_team() (in module tests.unit.omnibot.services.slack.bot_test)</a>
 
       <ul>
         <li><a href="autogen/tests.unit.omnibot.services.slack.html#tests.unit.omnibot.services.slack.team_test.test_team">(in module tests.unit.omnibot.services.slack.team_test)</a>
 </li>
       </ul></li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_interactive.test_unsupported_team">test_unsupported_team() (in module tests.integration.routes.test_interactive)</a>
+
+      <ul>
+        <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slash_command.test_unsupported_team">(in module tests.integration.routes.test_slash_command)</a>
+</li>
+      </ul></li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slack_event.test_url_verification">test_url_verification() (in module tests.integration.routes.test_slack_event)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#tests.integration.routes.test_slash_command.test_user_issues_echo_command">test_user_issues_echo_command() (in module tests.integration.routes.test_slash_command)</a>
+</li>
       <li><a href="autogen/tests.html#module-tests">tests (module)</a>
 </li>
       <li><a href="autogen/tests.html#module-tests.conftest">tests.conftest (module)</a>
 </li>
+      <li><a href="autogen/tests.data.html#module-tests.data">tests.data (module)</a>
+</li>
       <li><a href="autogen/tests.integration.html#module-tests.integration">tests.integration (module)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#module-tests.integration.routes">tests.integration.routes (module)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#module-tests.integration.routes.test_healthcheck">tests.integration.routes.test_healthcheck (module)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#module-tests.integration.routes.test_interactive">tests.integration.routes.test_interactive (module)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#module-tests.integration.routes.test_slack_event">tests.integration.routes.test_slack_event (module)</a>
+</li>
+      <li><a href="autogen/tests.integration.routes.html#module-tests.integration.routes.test_slash_command">tests.integration.routes.test_slash_command (module)</a>
 </li>
       <li><a href="autogen/tests.unit.html#module-tests.unit">tests.unit (module)</a>
 </li>

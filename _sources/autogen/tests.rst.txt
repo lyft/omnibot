@@ -6,6 +6,7 @@ Subpackages
 
 .. toctree::
 
+   tests.data
    tests.integration
    tests.unit
 
