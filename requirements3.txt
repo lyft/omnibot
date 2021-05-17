@@ -27,7 +27,7 @@ jmespath==0.9.4           # via boto3, botocore
 markupsafe==1.1.1         # via jinja2
 packaging==20.9           # via pytest
 pluggy==0.13.1            # via pytest
-psutil==5.6.3             # via rainbow-saddle
+psutil==5.6.6             # via rainbow-saddle
 py==1.10.0                # via pytest
 pyparsing==2.4.7          # via packaging
 pytest-cov==2.11.1        # via -r requirements.in
