@@ -22,7 +22,7 @@ idna==2.8                 # via requests
 importlib-metadata==4.0.1  # via pluggy, pytest
 iniconfig==1.1.1          # via pytest
 itsdangerous==1.1.0       # via flask
-jinja2==2.10.1            # via flask
+jinja2==2.11.3            # via flask
 jmespath==0.9.4           # via boto3, botocore
 markupsafe==1.1.1         # via jinja2
 packaging==20.9           # via pytest
