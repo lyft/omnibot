@@ -57,7 +57,7 @@ def enforce_checks(f):
             function = getattr(module, function_name)
             func_kwargs = check.get('kwargs', {})
             response = function(**func_kwargs)
-            if response is not True:
+            if not response:
                 return abort(403)
         return f(*args, **kwargs)
     return decorated

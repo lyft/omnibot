@@ -1,30 +1,25 @@
 import pytest
-import omnibot
 
-
-@pytest.fixture
-def client():
-    "Returns a Flask client for the app."
-    return omnibot.app.test_client()
+from omnibot import settings
 
 
 class SettingsOverrider(object):
     def __call__(self, **kwargs):
         """Override global settings with the keyword arguments."""
-        self.orig_values = {k: omnibot.settings.get(k) for k in kwargs.keys()}
+        self.orig_values = {k: settings.get(k) for k in kwargs.keys()}
         for k, v in kwargs.items():
-            setattr(omnibot.settings, k, v)
+            setattr(settings, k, v)
 
     def reset(self):
         """Reset settings overrides to their original values."""
-        if not hasattr(self, 'orig_values'):
-            raise ValueError('No overriden values to reset')
+        if not hasattr(self, "orig_values"):
+            raise ValueError("No overriden values to reset")
         for k, v in self.orig_values.items():
-            setattr(omnibot.settings, k, v)
+            setattr(settings, k, v)
 
 
-@pytest.yield_fixture
-def settings():
+@pytest.fixture
+def settings_override():
     """A py.test fixture for temporarily overriding settings during a test.
     When called, this will override global settings using the provided values.
     The new settings will exist during the scope of the test function, and will
@@ -32,7 +27,7 @@ def settings():
 
     Usage:
 
-        def test_my_function(settings):
+        def test_my_function(settings_override):
             settings(MY_SETTING='my value')
             # do_something()
 

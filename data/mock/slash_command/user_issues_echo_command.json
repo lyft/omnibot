@@ -1,0 +1,15 @@
+{
+  "token": "ABCDEFGHIJKLMNOPQRSTUVWX",
+  "team_id": "TEST_TEAM_ID",
+  "team_domain": "test-team-name",
+  "channel_id": "TEST_CHANNEL_ID",
+  "channel_name": "test-omnibot-cx",
+  "user_id": "TEST_USER_ID",
+  "user_name": "testusername",
+  "command": "/echo",
+  "text": "test",
+  "api_app_id": "TEST_OMNIBOT_ID",
+  "is_enterprise_install": "false",
+  "response_url": "https://hooks.slack.com/commands/TEST_TEAM_ID/temp/test",
+  "trigger_id": "TEST_TRIGGER_ID"
+}

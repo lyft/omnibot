@@ -48,12 +48,15 @@ authorization:
 help_handler: "omnibot.handlers.message_handlers:help_handler"
 team_fallback: "testteam"
 teams:
+  "test-team-name": "TEST_TEAM_ID"
   "testteam": "T12345678"
   "test2ndteam": "TABCDEF12"
 primary_bot:
   "testteam": "testteambot"
   "test2ndteam": "test2ndteambot"
 bots:
+  "test-team-name":
+      "TEST_OMNIBOT_NAME": "TEST_OMNIBOT_ID"
   "testteam":
       "echobot": "A12345678"
       "pingbot": "AABCDEF12"
@@ -77,11 +80,15 @@ handlers:
             label: "Echo this text"
             name: "echo_element"
       bots:
+        "test-team-name":
+          - "TEST_OMNIBOT_NAME"
         "testteam":
           - "echobot"
     - callback_id: "echo_dialog_1"
       response_type: "in_channel"
       bots:
+        "test-team-name":
+          - "TEST_OMNIBOT_NAME"
         "testteam":
           - "echobot"
       callbacks:
@@ -92,6 +99,8 @@ handlers:
       bots:
         "testteam":
           - "echobot"
+        "test-team-name":
+          - "TEST_OMNIBOT_NAME"
       callbacks:
         - module: "omnibot.handlers.slash_command_handlers:echo_handler"
     - command: "/ping"

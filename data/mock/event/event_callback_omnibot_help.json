@@ -1,0 +1,54 @@
+{
+  "token": "ABCDEFGHIJKLMNOPQRSTUVWX",
+  "team_id": "TEST_TEAM_ID",
+  "api_app_id": "TEST_OMNIBOT_ID",
+  "event": {
+    "client_msg_id": "TEST_CLIENT_MSG_ID",
+    "type": "message",
+    "text": "<@TEST_OMNIBOT_ID> help",
+    "user": "TEST_USER_ID",
+    "ts": "1620758634.000600",
+    "team": "TEST_TEAM_ID",
+    "blocks": [
+      {
+        "type": "rich_text",
+        "block_id": "62mZA",
+        "elements": [
+          {
+            "type": "rich_text_section",
+            "elements": [
+              {
+                "type": "user",
+                "user_id": "TEST_OMNIBOT_ID"
+              },
+              {
+                "type": "text",
+                "text": " help"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "channel": "TEST_CHANNEL_ID",
+    "event_ts": "1620758634.000600",
+    "channel_type": "channel"
+  },
+  "type": "event_callback",
+  "event_id": "TEST_EVENT_ID",
+  "event_time": 1620758634,
+  "authed_users": [
+    "TEST_USER_ID"
+  ],
+  "authorizations": [
+    {
+      "enterprise_id": null,
+      "team_id": "TEST_TEAM_ID",
+      "user_id": "TEST_USER_ID",
+      "is_bot": false,
+      "is_enterprise_install": false
+    }
+  ],
+  "is_ext_shared_channel": false,
+  "event_context": "2-message-TEST_TEAM_ID-TEST_OMNIBOT_ID-TEST_CHANNEL_ID"
+}
