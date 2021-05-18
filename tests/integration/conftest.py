@@ -4,6 +4,7 @@ from unittest.mock import MagicMock
 import pytest
 from flask import testing
 from pytest_mock import MockerFixture
+from slackclient import SlackClient
 from werkzeug.datastructures import Headers
 from werkzeug.test import Client
 
@@ -78,10 +79,6 @@ def queue(mocker: MockerFixture) -> MagicMock:
     return mocker.patch("omnibot.routes.api.queue_event")
 
 
-@pytest.fixture(scope="function")
-def aws_credentials():
-    """Mocked AWS Credentials for moto."""
-    os.environ["AWS_ACCESS_KEY_ID"] = "testing"
-    os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
-    os.environ["AWS_SECURITY_TOKEN"] = "testing"
-    os.environ["AWS_SESSION_TOKEN"] = "testing"
+@pytest.fixture
+def slack_api_call(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch.object(SlackClient, "api_call")

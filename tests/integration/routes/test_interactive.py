@@ -2,21 +2,13 @@ import json
 from typing import Any, Dict  # noqa: F401
 from unittest.mock import MagicMock
 
-import pytest
 from flask import Response  # noqa: F401
-from pytest_mock import MockerFixture
-from slackclient import SlackClient
 from werkzeug.test import Client
 
 from tests.data import get_mock_data
 from tests.integration.routes import get_test_bot
 
 _ENDPOINT = "/api/v1/slack/interactive"
-
-
-@pytest.fixture
-def slack_api_call(mocker: MockerFixture) -> MagicMock:
-    return mocker.patch.object(SlackClient, "api_call")
 
 
 def test_dialog_submission_echo_test(
@@ -152,7 +144,8 @@ def test_invalid_token(client: Client, queue: MagicMock, slack_api_call: MagicMo
         assert resp.json["status"] == "failure"
         assert (
             resp.json["error"]
-            == "Token sent with interactive component does not match any configured app."  # noqa: E501
+            == "Token sent with interactive component does not match any configured app."
+            # noqa: E501
         )
         queue.assert_not_called()
         slack_api_call.assert_not_called()
@@ -174,7 +167,8 @@ def test_invalid_callback_id(
         assert resp.json["response_type"] == "ephemeral"
         assert (
             resp.json["text"]
-            == "This interactive component does not have any omnibot handler associated with it."  # noqa: E501
+            == "This interactive component does not have any omnibot handler associated with it."
+            # noqa: E501
         )
         queue.assert_not_called()
         slack_api_call.assert_not_called()

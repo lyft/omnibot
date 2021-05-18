@@ -32,11 +32,17 @@ authorization:
         - "/api/v1/slack/get_team/test-invalid-team-name"
         - "/api/v1/slack/get_user/test-team-name/TEST_OMNIBOT_NAME/.*"
         - "/api/v1/slack/get_channel/test-team-name/TEST_OMNIBOT_NAME/test-channel"
+        - "/api/v1/slack/get_ims/test-team-name/TEST_OMNIBOT_NAME"
         - "/api/v1/slack/get_team/testteam"
         - "/api/v1/slack/get_user/testteam/echobot/.*"
         - "/api/v1/slack/get_channel/testteam/echobot/.*"
         - "/api/v1/slack/get_ims/testteam/echobot"
         - "/api/v1/slack/send_im/testteam/echobot/.*"
+    omnibot_write:
+      methods:
+        - "POST"
+      paths:
+        - "/api/v1/slack/send_im/test-team-name/TEST_OMNIBOT_NAME/.*"
     pingbot_slack_action:
       methods:
         - "POST"
@@ -47,6 +53,7 @@ authorization:
       - "slack_api"
     "someservice":
       - "omnibot_read_only"
+      - "omnibot_write"
     "service.*":
       - "pingbot_slack_action"
 help_handler: "omnibot.handlers.message_handlers:help_handler"
