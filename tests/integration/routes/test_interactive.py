@@ -144,8 +144,7 @@ def test_invalid_token(client: Client, queue: MagicMock, slack_api_call: MagicMo
         assert resp.json["status"] == "failure"
         assert (
             resp.json["error"]
-            == "Token sent with interactive component does not match any configured app."
-            # noqa: E501
+            == "Token sent with interactive component does not match any configured app."  # noqa: E501
         )
         queue.assert_not_called()
         slack_api_call.assert_not_called()
@@ -167,8 +166,7 @@ def test_invalid_callback_id(
         assert resp.json["response_type"] == "ephemeral"
         assert (
             resp.json["text"]
-            == "This interactive component does not have any omnibot handler associated with it."
-            # noqa: E501
+            == "This interactive component does not have any omnibot handler associated with it."  # noqa: E501
         )
         queue.assert_not_called()
         slack_api_call.assert_not_called()
