@@ -27,13 +27,43 @@ class TestClient(testing.FlaskClient):
         return super().open(*args, **kwargs)
 
 
+class TestInternalClient(testing.FlaskClient):
+    """
+    Overrides the default Flask test client to apply internal envoy headers so that the
+    authorization checks pass.
+    """
+
+    def open(self, *args, **kwargs):
+        envoy_test_headers = Headers(
+            {
+                "x-envoy-downstream-service-cluster": "someservice",
+                "x-envoy-internal": "true",
+            }
+        )
+        headers = kwargs.pop("headers", Headers())
+        headers.extend(envoy_test_headers)
+        kwargs["headers"] = headers
+        return super().open(*args, **kwargs)
+
+
 @pytest.fixture(scope="session")
 def client() -> Client:
     """
     Returns a werkzeug compatible Flask test client for testing the full request to
-    response flow for all omnibot endpoints.
+    response flow for all Slack API related omnibot endpoints.
     """
     app.test_client_class = TestClient
+    with app.test_client() as c:
+        yield c
+
+
+@pytest.fixture(scope="session")
+def internal_client() -> Client:
+    """
+    Returns a werkzeug compatible Flask test client for testing the full request to
+    response flow for all internal-related omnibot endpoints.
+    """
+    app.test_client_class = TestInternalClient
     with app.test_client() as c:
         yield c
 
