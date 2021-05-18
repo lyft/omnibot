@@ -31,6 +31,7 @@ authorization:
         - "/api/v1/slack/get_team/test-team-name"
         - "/api/v1/slack/get_team/test-invalid-team-name"
         - "/api/v1/slack/get_user/test-team-name/TEST_OMNIBOT_NAME/.*"
+        - "/api/v1/slack/get_channel/test-team-name/TEST_OMNIBOT_NAME/test-channel"
         - "/api/v1/slack/get_team/testteam"
         - "/api/v1/slack/get_user/testteam/echobot/.*"
         - "/api/v1/slack/get_channel/testteam/echobot/.*"
