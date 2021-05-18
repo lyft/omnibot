@@ -13,6 +13,7 @@ authorization:
           - "/api/v1/slack/send_im/.*"
           # Set one very specific route, so we can test a failure case
           - "/api/v2/slack/action/test2ndteam/pingbot"
+          - "/api/v2/slack/action/test-team-name/TEST_OMNIBOT_NAME"
     - module: "omnibot.authnz.envoy_checks:envoy_internal_check"
     - module: "omnibot.authnz.envoy_checks:envoy_permissions_check"
   permissions:
@@ -43,6 +44,7 @@ authorization:
         - "POST"
       paths:
         - "/api/v1/slack/send_im/test-team-name/TEST_OMNIBOT_NAME/.*"
+        - "/api/v2/slack/action/test-team-name/TEST_OMNIBOT_NAME"
     pingbot_slack_action:
       methods:
         - "POST"

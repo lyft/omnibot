@@ -4,6 +4,8 @@ from flask import Response  # noqa: F401
 from pytest_mock import MockerFixture
 from werkzeug.test import Client
 
+from tests.integration.routes import get_test_bot
+
 
 def test_get_bot_ims(internal_client: Client, mocker: MockerFixture):
     get_ims = mocker.patch("omnibot.services.slack.get_ims")
@@ -28,3 +30,4 @@ def test_get_bot_ims(internal_client: Client, mocker: MockerFixture):
     )
     assert resp.status_code == 200
     assert resp.json == {"ims": [mock_im]}
+    get_ims.assert_called_once_with(get_test_bot())
