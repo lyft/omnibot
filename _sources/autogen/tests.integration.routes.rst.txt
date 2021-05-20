@@ -4,6 +4,38 @@ tests.integration.routes package
 Submodules
 ----------
 
+tests.integration.routes.test\_get\_channel module
+--------------------------------------------------
+
+.. automodule:: tests.integration.routes.test_get_channel
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.integration.routes.test\_get\_ims module
+----------------------------------------------
+
+.. automodule:: tests.integration.routes.test_get_ims
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.integration.routes.test\_get\_team module
+-----------------------------------------------
+
+.. automodule:: tests.integration.routes.test_get_team
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.integration.routes.test\_get\_user\_v2 module
+---------------------------------------------------
+
+.. automodule:: tests.integration.routes.test_get_user_v2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 tests.integration.routes.test\_healthcheck module
 -------------------------------------------------
 
@@ -16,6 +48,22 @@ tests.integration.routes.test\_interactive module
 -------------------------------------------------
 
 .. automodule:: tests.integration.routes.test_interactive
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.integration.routes.test\_send\_im module
+----------------------------------------------
+
+.. automodule:: tests.integration.routes.test_send_im
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.integration.routes.test\_slack\_action module
+---------------------------------------------------
+
+.. automodule:: tests.integration.routes.test_slack_action
    :members:
    :undoc-members:
    :show-inheritance:
