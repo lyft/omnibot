@@ -60,7 +60,7 @@ def watch_users():
         statsd = stats.get_statsd_client()
         with redis_lock.Lock(
                 redis_client,
-                'watch_users',
+                '{watch_users}:watch_users',
                 expire=LOCK_EXPIRATION,
                 auto_renewal=True):
             with statsd.timer('watch.users'):
@@ -95,7 +95,7 @@ def watch_conversations():
         statsd = stats.get_statsd_client()
         with redis_lock.Lock(
                 redis_client,
-                'watch_conversation',
+                '{watch_conversation}:watch_conversation',
                 expire=LOCK_EXPIRATION,
                 auto_renewal=True):
             with statsd.timer('watch.conversation'):
@@ -130,7 +130,7 @@ def watch_emoji():
         statsd = stats.get_statsd_client()
         with redis_lock.Lock(
                 redis_client,
-                'watch_emoji',
+                '{watch_emoji}:watch_emoji',
                 expire=LOCK_EXPIRATION,
                 auto_renewal=True):
             with statsd.timer('watch.emoji'):
