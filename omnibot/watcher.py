@@ -60,6 +60,9 @@ def watch_users():
         statsd = stats.get_statsd_client()
         with redis_lock.Lock(
                 redis_client,
+                # we prepend an elasticache {hash_key}
+                # to this and other redis locks
+                # so that they can function in clustered mode
                 '{watch_users}:watch_users',
                 expire=LOCK_EXPIRATION,
                 auto_renewal=True):
