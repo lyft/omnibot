@@ -634,7 +634,7 @@ def get_channel_by_name(team_name, bot_name, channel_name):
              "last_set": 1507156612
            },
            "purpose": {
-             "value": "This channel is for team-wide communication."
+             "value": "This channel is for team-wide communication.",
              "creator": "",
              "last_set": 0
            },
