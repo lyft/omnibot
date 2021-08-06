@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Writing new callback functions &mdash; omnibot 1.0.3-0e7cf1 documentation</title>
+  <title>Writing new callback functions &mdash; omnibot 1.0.3-8e9cc2 documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                1.0.3-0e7cf1
+                1.0.3-8e9cc2
               </div>
             
           
@@ -332,25 +332,25 @@
   <div class="section" id="writing-new-callback-functions">
 <h1>Writing new callback functions<a class="headerlink" href="#writing-new-callback-functions" title="Permalink to this headline">¶</a></h1>
 <p>Callbacks are part of a handler configuration. When a handler is matched, the defined callback will be called with the payload container for the handler type, and with whatever arguments are defined as part of the callback. As an example, let’s take a look at an example handler configuration, with an existing callback function:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">message_handlers</span><span class="p p-Indicator">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">match</span><span class="p p-Indicator">:</span> <span class="s">&quot;event&quot;</span>
-    <span class="l l-Scalar l-Scalar-Plain">match_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;command&quot;</span>
-    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&quot;create</span><span class="nv"> </span><span class="s">events</span><span class="nv"> </span><span class="s">using</span><span class="nv"> </span><span class="s">eventbot&quot;</span>
-    <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">message_handlers</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">match</span><span class="p">:</span> <span class="s">&quot;event&quot;</span>
+    <span class="nt">match_type</span><span class="p">:</span> <span class="s">&quot;command&quot;</span>
+    <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;create</span><span class="nv"> </span><span class="s">events</span><span class="nv"> </span><span class="s">using</span><span class="nv"> </span><span class="s">eventbot&quot;</span>
+    <span class="nt">bots</span><span class="p">:</span>
       <span class="s">&quot;your-team-name-here&quot;</span><span class="p p-Indicator">:</span>
         <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
-    <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.network_callbacks:http_callback&quot;</span>
-        <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
-          <span class="l l-Scalar l-Scalar-Plain">request_kwargs</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">url</span><span class="p p-Indicator">:</span> <span class="s">&quot;http://eventbot/api/v1/eventbot&quot;</span>
+    <span class="nt">callbacks</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">module</span><span class="p">:</span> <span class="s">&quot;omnibot.callbacks.network_callbacks:http_callback&quot;</span>
+        <span class="nt">kwargs</span><span class="p">:</span>
+          <span class="nt">request_kwargs</span><span class="p">:</span>
+            <span class="nt">url</span><span class="p">:</span> <span class="s">&quot;http://eventbot/api/v1/eventbot&quot;</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">http_callback</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">request_kwargs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">client_kwargs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">http_callback</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">request_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">client_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="c1"># TODO: support client kwargs</span>
-    <span class="k">if</span> <span class="n">client_kwargs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">client_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">client_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">if</span> <span class="n">request_kwargs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">request_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
             <span class="s1">&#39;http_callback called without request_kwargs&#39;</span><span class="p">,</span>
             <span class="n">extra</span><span class="o">=</span><span class="n">container</span><span class="o">.</span><span class="n">event_trace</span>
@@ -373,14 +373,14 @@
         <span class="p">)</span>
     <span class="k">except</span> <span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="s1">&#39;Failed to make request to {} with error: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s1">&#39;Failed to make request to </span><span class="si">{}</span><span class="s1"> with error: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">url</span><span class="p">,</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="n">requests</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Got status code {0} for {1}, with response: {2}&#39;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Got status code </span><span class="si">{0}</span><span class="s1"> for </span><span class="si">{1}</span><span class="s1">, with response: </span><span class="si">{2}</span><span class="s1">&#39;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span>
@@ -396,14 +396,14 @@
 <p>A callback is just a function within a python module, which requires a positional argument, which is by convention named <code class="docutils literal notranslate"><span class="pre">container</span></code>, and can accept any keyword arguments you’d like to define, which are passed in from the configuration.</p>
 <p>Callback functions should always return a dictionary. The return format is dependent on the type of handler, and is defined in the <a class="reference internal" href="slack_proxying.html"><span class="doc">slack proxying documentation</span></a>.</p>
 <p>Let’s look at a more explicit example of a handler/callback combo that directly responds to an event, rather than proxying a backend service:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">slash_command_handlers</span><span class="p p-Indicator">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="s">&#39;/tableflip&#39;</span>
-    <span class="l l-Scalar l-Scalar-Plain">response_type</span><span class="p p-Indicator">:</span> <span class="s">&#39;ephemeral&#39;</span>
-    <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">slash_command_handlers</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">command</span><span class="p">:</span> <span class="s">&#39;/tableflip&#39;</span>
+    <span class="nt">response_type</span><span class="p">:</span> <span class="s">&#39;ephemeral&#39;</span>
+    <span class="nt">bots</span><span class="p">:</span>
       <span class="s">&quot;lyft-test-sandbox&quot;</span><span class="p p-Indicator">:</span>
         <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
-    <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.slash_command_callbacks:tableflip_callback&quot;</span>
+    <span class="nt">callbacks</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">module</span><span class="p">:</span> <span class="s">&quot;omnibot.callbacks.slash_command_callbacks:tableflip_callback&quot;</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">tableflip_callback</span><span class="p">(</span><span class="n">container</span><span class="p">):</span>
@@ -411,7 +411,7 @@
 <span class="sd">    Respond back with a tableflip</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">payload</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">payload</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;tableflip callback payload: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;tableflip callback payload: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span>

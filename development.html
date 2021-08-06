@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quickstart and Development &mdash; omnibot 1.0.3-0e7cf1 documentation</title>
+  <title>Quickstart and Development &mdash; omnibot 1.0.3-8e9cc2 documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                1.0.3-0e7cf1
+                1.0.3-8e9cc2
               </div>
             
           
@@ -369,41 +369,41 @@
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">config/development/omnibot.conf</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># The basic authorization block required to accept events from slack</span>
-<span class="l l-Scalar l-Scalar-Plain">authorization</span><span class="p p-Indicator">:</span>
-  <span class="l l-Scalar l-Scalar-Plain">checks</span><span class="p p-Indicator">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.authnz:allowed_paths&quot;</span>
-      <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">paths</span><span class="p p-Indicator">:</span>
+<span class="nt">authorization</span><span class="p">:</span>
+  <span class="nt">checks</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">module</span><span class="p">:</span> <span class="s">&quot;omnibot.authnz:allowed_paths&quot;</span>
+      <span class="nt">kwargs</span><span class="p">:</span>
+        <span class="nt">paths</span><span class="p">:</span>
           <span class="p p-Indicator">-</span> <span class="s">&quot;/api/v1/slack/event&quot;</span>
           <span class="p p-Indicator">-</span> <span class="s">&quot;/api/v1/slack/slash_command&quot;</span>
           <span class="p p-Indicator">-</span> <span class="s">&quot;/api/v1/slack/interactive&quot;</span>
 <span class="c1"># A friendly name to associate with your team, and its team ID</span>
 <span class="c1"># The friendly name is used in API endpoints you may make accessible</span>
-<span class="l l-Scalar l-Scalar-Plain">teams</span><span class="p p-Indicator">:</span>
+<span class="nt">teams</span><span class="p">:</span>
   <span class="s">&quot;friendly-name-for-your-team&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;T12345678&quot;</span>
 <span class="c1"># The dict of bots associated with your team. The friendly name for your bot is used</span>
 <span class="c1"># to reference the bot in the config, and also in API endpoints you may make accessible.</span>
-<span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+<span class="nt">bots</span><span class="p">:</span>
   <span class="s">&quot;friendly-name-for-your-team&quot;</span><span class="p p-Indicator">:</span>
     <span class="s">&quot;your-slack-app-name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;A87654321&quot;</span>
 <span class="c1"># The bot that omnibot proxy will use to poll slack for user, channel, etc. info</span>
-<span class="l l-Scalar l-Scalar-Plain">primary_bot</span><span class="p p-Indicator">:</span>
+<span class="nt">primary_bot</span><span class="p">:</span>
   <span class="s">&quot;friendly-name-for-your-team&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;your-slack-app-name&quot;</span>
 <span class="c1"># Event handlers, for routing incoming slack events to callback functions</span>
-<span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
-  <span class="l l-Scalar l-Scalar-Plain">message_handlers</span><span class="p p-Indicator">:</span>
+<span class="nt">handlers</span><span class="p">:</span>
+  <span class="nt">message_handlers</span><span class="p">:</span>
     <span class="c1"># A command handler that matches any command sent to your-slack-app-name, in</span>
     <span class="c1"># friendly-name-for-your-team and sends it to a test_handler.</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">match</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span>
-      <span class="l l-Scalar l-Scalar-Plain">match_type</span><span class="p p-Indicator">:</span> <span class="s">&quot;command&quot;</span>
-      <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="s">&quot;testing&quot;</span>
-      <span class="l l-Scalar l-Scalar-Plain">bots</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">match</span><span class="p">:</span> <span class="s">&quot;&quot;</span>
+      <span class="nt">match_type</span><span class="p">:</span> <span class="s">&quot;command&quot;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;testing&quot;</span>
+      <span class="nt">bots</span><span class="p">:</span>
         <span class="s">&quot;friendly-name-for-your-team&quot;</span>
            <span class="p p-Indicator">-</span> <span class="s">&quot;your-slack-app-name&quot;</span>
-      <span class="l l-Scalar l-Scalar-Plain">callbacks</span><span class="p p-Indicator">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">module</span><span class="p p-Indicator">:</span> <span class="s">&quot;omnibot.callbacks.message_callbacks:test_callback&quot;</span>
-          <span class="l l-Scalar l-Scalar-Plain">kwargs</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">text</span><span class="p p-Indicator">:</span> <span class="s">&#39;test&#39;</span>
+      <span class="nt">callbacks</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="nt">module</span><span class="p">:</span> <span class="s">&quot;omnibot.callbacks.message_callbacks:test_callback&quot;</span>
+          <span class="nt">kwargs</span><span class="p">:</span>
+            <span class="nt">text</span><span class="p">:</span> <span class="s">&#39;test&#39;</span>
 </pre></div>
 </div>
 <p>Start omnibot, using docker-compose:</p>
