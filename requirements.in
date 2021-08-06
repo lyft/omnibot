@@ -49,7 +49,7 @@ greenlet==1.1.0
 # YAML parser and emitter for Python
 # License: MIT
 # Upstream url: http://pyyaml.org/wiki/PyYAML
-PyYAML==5.1
+PyYAML==5.4
 
 # The AWS SDK for Python
 # License: Apache2
