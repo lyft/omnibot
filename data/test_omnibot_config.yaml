@@ -13,6 +13,7 @@ authorization:
           - "/api/v1/slack/send_im/.*"
           # Set one very specific route, so we can test a failure case
           - "/api/v2/slack/action/test2ndteam/pingbot"
+          - "/api/v2/slack/action/test-team-name/TEST_OMNIBOT_NAME"
     - module: "omnibot.authnz.envoy_checks:envoy_internal_check"
     - module: "omnibot.authnz.envoy_checks:envoy_permissions_check"
   permissions:
@@ -28,11 +29,22 @@ authorization:
       methods:
         - "GET"
       paths:
+        - "/api/v1/slack/get_team/test-team-name"
+        - "/api/v1/slack/get_team/test-invalid-team-name"
+        - "/api/v1/slack/get_user/test-team-name/TEST_OMNIBOT_NAME/.*"
+        - "/api/v1/slack/get_channel/test-team-name/TEST_OMNIBOT_NAME/test-channel"
+        - "/api/v1/slack/get_ims/test-team-name/TEST_OMNIBOT_NAME"
         - "/api/v1/slack/get_team/testteam"
         - "/api/v1/slack/get_user/testteam/echobot/.*"
         - "/api/v1/slack/get_channel/testteam/echobot/.*"
         - "/api/v1/slack/get_ims/testteam/echobot"
         - "/api/v1/slack/send_im/testteam/echobot/.*"
+    omnibot_write:
+      methods:
+        - "POST"
+      paths:
+        - "/api/v1/slack/send_im/test-team-name/TEST_OMNIBOT_NAME/.*"
+        - "/api/v2/slack/action/test-team-name/TEST_OMNIBOT_NAME"
     pingbot_slack_action:
       methods:
         - "POST"
@@ -43,6 +55,7 @@ authorization:
       - "slack_api"
     "someservice":
       - "omnibot_read_only"
+      - "omnibot_write"
     "service.*":
       - "pingbot_slack_action"
 help_handler: "omnibot.handlers.message_handlers:help_handler"

@@ -2,21 +2,13 @@ import json
 from typing import Any, Dict  # noqa: F401
 from unittest.mock import MagicMock
 
-import pytest
 from flask import Response  # noqa: F401
-from pytest_mock import MockerFixture
-from slackclient import SlackClient
 from werkzeug.test import Client
 
 from tests.data import get_mock_data
 from tests.integration.routes import get_test_bot
 
 _ENDPOINT = "/api/v1/slack/interactive"
-
-
-@pytest.fixture
-def slack_api_call(mocker: MockerFixture) -> MagicMock:
-    return mocker.patch.object(SlackClient, "api_call")
 
 
 def test_dialog_submission_echo_test(
