@@ -57,7 +57,7 @@ def _get_failure_context(result):
     return ret
 
 
-def _get_conversations(bot):
+def _get_conversations(bot, team):
     """
     Get all conversations
     """
@@ -70,7 +70,8 @@ def _get_conversations(bot):
             exclude_archived=True,
             exclude_members=True,
             limit=1000,
-            cursor=next_cursor
+            cursor=next_cursor,
+            team_id=team.team_id
         )
         if conversations_data['ok']:
             conversations.extend(conversations_data['channels'])
@@ -103,8 +104,8 @@ def _get_conversations(bot):
     return conversations
 
 
-def update_conversations(bot):
-    for conversation in _get_conversations(bot):
+def update_conversations(bot, team):
+    for conversation in _get_conversations(bot, team):
         if conversation.get('is_channel', False):
             update_channel(bot, conversation)
         elif conversation.get('is_group', False):
@@ -373,7 +374,7 @@ def get_channel_by_name(bot, channel):
     return None
 
 
-def _get_users(bot, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
+def _get_users(bot, team, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
     users = []
     retry = 0
     next_cursor = ''
@@ -382,7 +383,8 @@ def _get_users(bot, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
             'users.list',
             presence=False,
             limit=1000,
-            cursor=next_cursor
+            cursor=next_cursor,
+            team_id=team.team_id
         )
         if users_data['ok']:
             users.extend(users_data['members'])
@@ -415,8 +417,8 @@ def _get_users(bot, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
     return users
 
 
-def update_users(bot):
-    for user in _get_users(bot):
+def update_users(bot, team):
+    for user in _get_users(bot, team):
         update_user(bot, user)
 
 

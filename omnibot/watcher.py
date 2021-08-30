@@ -71,7 +71,7 @@ def watch_users():
                     )
                     team = Team.get_team_by_name(team_name)
                     bot = Bot.get_bot_by_name(team, bot_name)
-                    slack.update_users(bot)
+                    slack.update_users(bot, team)
             redis_client.set(last_run_key, datetime.now().isoformat())
     except Exception:
         logger.exception(
@@ -106,7 +106,7 @@ def watch_conversations():
                     )
                     team = Team.get_team_by_name(team_name)
                     bot = Bot.get_bot_by_name(team, bot_name)
-                    slack.update_conversations(bot)
+                    slack.update_conversations(bot, team)
             redis_client.set(last_run_key, datetime.now().isoformat())
     except Exception:
         logger.exception(
