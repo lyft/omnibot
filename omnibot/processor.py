@@ -35,6 +35,7 @@ def process_event(event):
         {
             'event_ts': event_info['event_ts'],
             'event_type': event_type,
+            'bot_name': bot.name,
         },
         bot.logging_context,
     )
@@ -42,7 +43,7 @@ def process_event(event):
     if event_type == 'message' or event_type == 'app_mention':
         try:
             with statsd.timer('process_event'):
-                logger.debug(
+                logger.info(
                     'Processing message: {}'.format(
                         json.dumps(event, indent=2)
                     ),
@@ -61,11 +62,11 @@ def process_event(event):
                 extra=event_trace
             )
     else:
-        logger.debug(
+        logger.exception(
             'Event is not a message type.',
             extra=event_trace
         )
-        logger.debug(event)
+        logger.info(event)
 
 
 def _process_message_handlers(message):
@@ -87,6 +88,7 @@ def _process_message_handlers(message):
                 for callback in handler['callbacks']:
                     _handle_message_callback(message, callback)
                     handler_called = True
+                    logger.info("Calling message handler with command", extra={'callback': callback})
         if handler['match_type'] == 'regex':
             match = bool(re.search(handler['match'], message.parsed_text))
             regex_should_not_match = handler.get('regex_type') == 'absence'
@@ -239,7 +241,7 @@ def _handle_help(message):
                 }
             )
         else:
-            # TODO: respond with error message here
+            logger.error('Error handling help')
             pass
     else:
         statsd.incr('event.ignored')
