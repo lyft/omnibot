@@ -711,7 +711,11 @@ def _perform_action(bot, data):
     )
     logger.debug(ret)
     if not ret['ok']:
-        if ret.get('error') in ['missing_scope', 'not_allowed_token_type']:
+        if ret.get('error') in [
+            'missing_scope',
+            'not_allowed_token_type',
+            'channel_not_found',
+        ]:
             logger.warning(
                 'action failed in post_slack, attempting as user.',
                 extra=merge_logging_context(
