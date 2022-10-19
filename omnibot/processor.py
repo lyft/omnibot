@@ -453,6 +453,8 @@ def _handle_interactive_component_callback(component, callback, response_type):
         extra={**component.event_trace, 'callback': callback},
     )
     response = _handle_callback(component, callback)
+    if response_type == 'raw':
+        return response
     for component_response in response.get('responses', []):
         logger.debug(
             'Handling response for callback (pre-parse): {}'.format(

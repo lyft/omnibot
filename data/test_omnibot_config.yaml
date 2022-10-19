@@ -106,6 +106,16 @@ handlers:
           - "echobot"
       callbacks:
         - module: "omnibot.handlers.interactive_component_handlers:echo_dialog_submission_handler"
+    - callback_id: "modal-with-inputs"
+      response_type: "in_channel"
+      bots:
+        "test-team-name":
+          - "TEST_OMNIBOT_NAME"
+        "testteam":
+          - "echobot"
+      callbacks:
+        - module: "tests.data:test_handler"
+          synchronous: true
   slash_command_handlers:
     - command: "/echo"
       response_type: "in_channel"

@@ -25,11 +25,13 @@ from omnibot.processor import parse_kwargs
 from omnibot.services import sqs
 from omnibot.services import stats
 from omnibot.services import slack
+from omnibot.services.slack.interactive_component import InteractiveComponent
 from omnibot.services.slack.team import Team
 from omnibot.services.slack.team import TeamInitializationError
 from omnibot.services.slack.bot import Bot
 from omnibot.services.slack.bot import BotInitializationError
 from omnibot.utils import get_callback_id, merge_logging_context
+from omnibot.processor import _handle_interactive_component_callback
 
 logger = logging.getLogger(__name__)
 
@@ -322,7 +324,10 @@ def slack_interactive_component():
                ' associated with it.')
         logger.error(
             msg,
-            extra=bot.logging_context,
+            extra=merge_logging_context(
+                {'callback_id': get_callback_id(component)},
+                bot.logging_context,
+            )
         )
         return jsonify({'response_type': 'ephemeral', 'text': msg}), 200
     # To avoid needing to look the bot up from its token when the dequeue this
@@ -333,6 +338,19 @@ def slack_interactive_component():
         # If there's no callbacks defined for this interactive component, we
         # can skip enqueuing it, since the workers will just discard it.
         if handler_found.get('callbacks'):
+            callbacks = handler_found.get('callbacks')
+            for c in callbacks:
+                if c.get('synchronous'):
+                    interactive_component = InteractiveComponent(bot, component, {})
+                    resp = _handle_interactive_component_callback(interactive_component, c, 'raw')
+                    logger.info(
+                        'Synchronous callback response',
+                        extra=merge_logging_context(
+                            {'response': resp},
+                            bot.logging_context,
+                        )
+                    )
+                    return resp, 200
             queue_event(bot, component, 'interactive_component')
     except Exception:
         msg = 'Could not queue interactive component.'
