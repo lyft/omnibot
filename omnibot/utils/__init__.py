@@ -10,6 +10,9 @@ def get_callback_id(component):
         actions = component.get('actions', [])
         action = next(iter(actions))
         return action.get('block_id')
+    elif component.get('type') == 'view_submission':
+        view = component.get('view', {})
+        return view.get('callback_id')
     else:
         return component.get('callback_id')
 

@@ -323,10 +323,7 @@ def slack_interactive_component():
         logger.error(
             msg,
             extra=merge_logging_context(
-                {
-                    'compenent': component,
-                    'callback_id': get_callback_id(component)
-                },
+                {'callback_id': get_callback_id(component)},
                 bot.logging_context,
             )
         )
