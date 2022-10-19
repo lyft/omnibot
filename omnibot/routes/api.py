@@ -262,6 +262,7 @@ def slack_interactive_component():
             'message_action',
             'dialog_submission',
             'block_actions',
+            'view_submission',
         ]
     ):
         msg = ('Unsupported type={} in interactive'
