@@ -322,7 +322,10 @@ def slack_interactive_component():
                ' associated with it.')
         logger.error(
             msg,
-            extra=bot.logging_context,
+            extra=merge_logging_context(
+                {'callback_id': get_callback_id(component)},
+                bot.logging_context,
+            )
         )
         return jsonify({'response_type': 'ephemeral', 'text': msg}), 200
     # To avoid needing to look the bot up from its token when the dequeue this
