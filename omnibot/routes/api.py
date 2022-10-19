@@ -318,12 +318,15 @@ def slack_interactive_component():
             handler_found = handler
             break
     if not handler_found:
-        msg = ('This interactive component does not have any omnibot handler'
-               ' associated with it.')
+        msg = (f'This interactive component {get_callback_id(component)}'
+               ' does not have any omnibot handler associated with it.')
         logger.error(
             msg,
             extra=merge_logging_context(
-                {'callback_id': get_callback_id(component)},
+                {
+                    'compenent': component,
+                    'callback_id': get_callback_id(component)
+                },
                 bot.logging_context,
             )
         )
