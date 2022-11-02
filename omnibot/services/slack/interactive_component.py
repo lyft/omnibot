@@ -32,8 +32,9 @@ class InteractiveComponent(object):
         self._payload['action_ts'] = component.get('action_ts')
         self._payload['message_ts'] = component.get('message_ts')
         self._payload['trigger_id'] = component.get('trigger_id')
-        self._payload['response_url'] = component['response_url']
+        self._payload['response_url'] = component.get('response_url')
         self._payload['original_message'] = component.get('original_message')
+        self._payload['view'] = component.get('view')
         self._payload['state'] = component.get('state')
         self._payload['user'] = component.get('user')
         if self.user:

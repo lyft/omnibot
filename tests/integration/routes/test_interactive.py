@@ -170,3 +170,21 @@ def test_invalid_callback_id(
         )
         queue.assert_not_called()
         slack_api_call.assert_not_called()
+
+
+def test_view_submission_synchronous(
+    client: Client, queue: MagicMock, slack_api_call: MagicMock, mocker
+):
+    mocker.patch("omnibot.services.slack.get_user", return_value={"id": "TEST_USER_ID"})
+    with get_mock_data("interactive/view_submission_synchronous_test.json") as json_data:
+        event: Dict[str, Any] = json.loads(json_data.read())
+        resp: Response = client.post(
+            _ENDPOINT,
+            data=event,
+            content_type="application/x-www-form-urlencoded",
+        )
+        component = json.loads(event["payload"])
+        component["omnibot_bot_id"] = "TEST_OMNIBOT_ID"
+        queue.assert_not_called()
+        assert resp.status_code == 200
+        assert resp.data == b"{\"foo\": \"bar\"}"

@@ -9,3 +9,7 @@ TEST_CONFIG = path.join(DATA_DIR, "test_omnibot_config.yaml")
 
 def get_mock_data(filepath: str):
     return open(path.join(MOCK_DIR, filepath))
+
+
+def test_handler(container):
+    return "{\"foo\": \"bar\"}"
