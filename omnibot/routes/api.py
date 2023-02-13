@@ -12,12 +12,7 @@ import json
 import time
 from functools import wraps
 
-from flask import (
-    Blueprint,
-    jsonify,
-    request,
-    abort
-)
+from flask import Blueprint, jsonify, request, abort
 
 from omnibot import authnz
 from omnibot import logging
@@ -35,401 +30,396 @@ from omnibot.processor import _handle_interactive_component_callback
 
 logger = logging.getLogger(__name__)
 
-blueprint = Blueprint('api', __name__)
+blueprint = Blueprint("api", __name__)
 
 
 def verify_bot(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        bot_name = request.view_args.get('bot_name')
-        team_name = request.view_args.get('team_name')
+        bot_name = request.view_args.get("bot_name")
+        team_name = request.view_args.get("team_name")
         try:
             team = Team.get_team_by_name(team_name)
         except TeamInitializationError:
             logger.warning(
-                'Failed to validate bot',
+                "Failed to validate bot",
                 extra={
-                    'bot': bot_name,
-                    'team': team_name,
-                }
+                    "bot": bot_name,
+                    "team": team_name,
+                },
             )
             return abort(404)
         try:
             Bot.get_bot_by_name(team, bot_name)
         except BotInitializationError:
             logger.warning(
-                'Failed to validate bot',
+                "Failed to validate bot",
                 extra={
-                    'bot': bot_name,
-                    'team': team_name,
-                }
+                    "bot": bot_name,
+                    "team": team_name,
+                },
             )
             return abort(404)
         return f(*args, **kwargs)
+
     return decorated
 
 
-@blueprint.route('/healthcheck')
+@blueprint.route("/healthcheck")
 def healthcheck():
     # The healthcheck returns status code 200
-    return 'OK'
+    return "OK"
 
 
-@blueprint.route('/api/v1/slack/event', methods=['POST'])
+@blueprint.route("/api/v1/slack/event", methods=["POST"])
 @authnz.enforce_checks
 def slack_event():
     """
     Handle event subscription API webhooks from slack.
     """
     event = request.json
-    logger.debug('Event received in API slack_event: {}'.format(event))
+    logger.debug("Event received in API slack_event: {}".format(event))
     # Every event should have a validation token
-    if 'token' not in event:
-        msg = 'No verification token in event.'
+    if "token" not in event:
+        msg = "No verification token in event."
         logger.error(msg)
-        return jsonify({'status': 'failure', 'error': msg}), 403
+        return jsonify({"status": "failure", "error": msg}), 403
     # url_verification events don't contain info about team_id or api_app_id,
     # annoyingly, so we need to special case this to validate the token
     # against all configured apps.
-    if event.get('type') == 'url_verification':
+    if event.get("type") == "url_verification":
         try:
-            Bot.get_bot_by_verification_token(event['token'])
+            Bot.get_bot_by_verification_token(event["token"])
         except BotInitializationError:
-            msg = 'url_verification failed.'
+            msg = "url_verification failed."
             logger.error(msg)
-            return jsonify({'status': 'failure', 'error': msg}), 403
-        return jsonify({'challenge': event['challenge']})
-    api_app_id = event.get('api_app_id')
+            return jsonify({"status": "failure", "error": msg}), 403
+        return jsonify({"challenge": event["challenge"]})
+    api_app_id = event.get("api_app_id")
     if api_app_id is None:
-        msg = 'No api_app_id in event.'
+        msg = "No api_app_id in event."
         logger.error(msg)
-        return jsonify({'status': 'failure', 'error': msg}), 403
-    team_id = event.get('team_id')
+        return jsonify({"status": "failure", "error": msg}), 403
+    team_id = event.get("team_id")
     if team_id is None:
-        msg = 'No team_id in event.'
+        msg = "No team_id in event."
         logger.error(
             msg,
-            extra={'bot_id': api_app_id},
+            extra={"bot_id": api_app_id},
         )
-        return jsonify({'status': 'failure', 'error': msg}), 403
+        return jsonify({"status": "failure", "error": msg}), 403
     try:
         team = Team.get_team_by_id(team_id)
     except TeamInitializationError:
-        msg = 'Unsupported team'
-        logger.warning(msg, extra={'team_id': team_id, 'bot_id': api_app_id})
-        return jsonify({'status': 'failure', 'error': msg}), 403
+        msg = "Unsupported team"
+        logger.warning(msg, extra={"team_id": team_id, "bot_id": api_app_id})
+        return jsonify({"status": "failure", "error": msg}), 403
     try:
         bot = Bot.get_bot_by_bot_id(team, api_app_id)
     except BotInitializationError:
-        msg = 'Unsupported bot'
-        logger.info(msg, extra={'team_id': team_id, 'bot_id': api_app_id})
-        return jsonify({'status': 'ignored', 'warning': msg}), 200
-    if event['token'] != bot.verification_token:
-        msg = 'Incorrect verification token in event for bot'
+        msg = "Unsupported bot"
+        logger.info(msg, extra={"team_id": team_id, "bot_id": api_app_id})
+        return jsonify({"status": "ignored", "warning": msg}), 200
+    if event["token"] != bot.verification_token:
+        msg = "Incorrect verification token in event for bot"
         logger.error(
             msg,
             extra=bot.logging_context,
         )
-        return jsonify({'status': 'failure', 'error': msg}), 403
-    if 'event' not in event:
-        msg = 'Request does not have an event. Processing will not proceed!'
+        return jsonify({"status": "failure", "error": msg}), 403
+    if "event" not in event:
+        msg = "Request does not have an event. Processing will not proceed!"
         logger.error(
             msg,
             extra=bot.logging_context,
         )
-        return jsonify({'status': 'failure', 'error': msg}), 403
+        return jsonify({"status": "failure", "error": msg}), 403
     try:
         instrument_event(bot, event)
     except Exception:
         logger.exception(
-            'Could not instrument request',
+            "Could not instrument request",
             extra=bot.logging_context,
         )
     try:
-        queue_event(bot, event, 'event')
+        queue_event(bot, event, "event")
     except Exception:
         logger.exception(
-            'Could not queue request.',
+            "Could not queue request.",
             extra=bot.logging_context,
         )
-        return jsonify({'status': 'failure'}), 500
-    return jsonify({'status': 'success'}), 200
+        return jsonify({"status": "failure"}), 500
+    return jsonify({"status": "success"}), 200
 
 
-@blueprint.route('/api/v1/slack/slash_command', methods=['POST'])
+@blueprint.route("/api/v1/slack/slash_command", methods=["POST"])
 @authnz.enforce_checks
 def slack_slash_command():
     # Slack sends slash commands as application/x-www-form-urlencoded
     command = request.form.to_dict()
-    logger.debug(
-        'command received in API slack_slash_command: {}'.format(command)
-    )
+    logger.debug("command received in API slack_slash_command: {}".format(command))
     # Every event should have a validation token
-    if 'token' not in command:
-        msg = 'No verification token in slash command.'
+    if "token" not in command:
+        msg = "No verification token in slash command."
         logger.error(msg)
-        return jsonify({'status': 'failure', 'error': msg}), 403
-    if 'team_id' not in command:
-        msg = 'No team_id in slash command.'
+        return jsonify({"status": "failure", "error": msg}), 403
+    if "team_id" not in command:
+        msg = "No team_id in slash command."
         logger.error(msg)
-        return jsonify({'status': 'failure', 'error': msg}), 403
+        return jsonify({"status": "failure", "error": msg}), 403
     try:
-        team = Team.get_team_by_id(command['team_id'])
+        team = Team.get_team_by_id(command["team_id"])
     except TeamInitializationError:
-        msg = 'Unsupported team'
+        msg = "Unsupported team"
         logger.warning(
             msg,
-            extra={'team_id': command['team_id']},
+            extra={"team_id": command["team_id"]},
         )
-        return jsonify({'status': 'failure', 'error': msg}), 403
+        return jsonify({"status": "failure", "error": msg}), 403
     # Slash commands annoyingly don't send an app id, so we need to verify
     try:
-        bot = Bot.get_bot_by_verification_token(command['token'])
+        bot = Bot.get_bot_by_verification_token(command["token"])
     except BotInitializationError:
-        msg = (
-            'Token sent with slash command does not match any configured app.'
-        )
+        msg = "Token sent with slash command does not match any configured app."
         logger.error(
             msg,
             extra=team.logging_context,
         )
-        return jsonify({'status': 'failure', 'error': msg}), 403
+        return jsonify({"status": "failure", "error": msg}), 403
     if team.team_id != bot.team.team_id:
         # This should never happen, but let's be paranoid.
-        msg = (
-            'Token sent with slash command does not match team in event.'
-        )
+        msg = "Token sent with slash command does not match team in event."
         logger.error(
             msg,
             extra=merge_logging_context(
-                {'expected_team_id': team.team_id},
+                {"expected_team_id": team.team_id},
                 bot.logging_context,
-            )
+            ),
         )
-        return jsonify({'status': 'failure', 'error': msg}), 403
+        return jsonify({"status": "failure", "error": msg}), 403
     handler_found = None
     for slash_handler in bot.slash_command_handlers:
-        if command['command'] == slash_handler.get('command'):
+        if command["command"] == slash_handler.get("command"):
             handler_found = slash_handler
             break
     if not handler_found:
-        msg = ('This slash command does not have any omnibot handler'
-               ' associated with it.')
+        msg = (
+            "This slash command does not have any omnibot handler"
+            " associated with it."
+        )
         logger.error(
             msg,
             extra=bot.logging_context,
         )
-        return jsonify({'response_type': 'ephemeral', 'text': msg}), 200
+        return jsonify({"response_type": "ephemeral", "text": msg}), 200
     # To avoid needing to look the bot up from its token when the dequeue this
     # command,:let's extend the payload with the bot id
-    command['omnibot_bot_id'] = bot.bot_id
+    command["omnibot_bot_id"] = bot.bot_id
     # We can't instrument slash commands, because they don't have ts info.
     # TODO: investigate if we can parse the trigger ID; it's possible part
     # of that is a timestamp
     try:
         # If there's no callbacks defined for this slash command, we
         # can skip enqueuing it, since the workers will just discard it.
-        if handler_found.get('callbacks'):
-            queue_event(bot, command, 'slash_command')
+        if handler_found.get("callbacks"):
+            queue_event(bot, command, "slash_command")
     except Exception:
-        msg = 'Could not queue slash command.'
+        msg = "Could not queue slash command."
         logger.exception(
             msg,
-            extra={'team': team.team_id, 'app': bot.bot_id, 'bot': bot.name},
+            extra={"team": team.team_id, "app": bot.bot_id, "bot": bot.name},
         )
-        return jsonify({'status': 'failure', 'error': msg}), 500
-    if handler_found.get('dialog'):
-        _perform_action(bot, {
-            'action': 'dialog.open',
-            'kwargs': {
-                'dialog': handler_found['dialog'],
-                'trigger_id': command['trigger_id']
-            }
-        })
+        return jsonify({"status": "failure", "error": msg}), 500
+    if handler_found.get("dialog"):
+        _perform_action(
+            bot,
+            {
+                "action": "dialog.open",
+                "kwargs": {
+                    "dialog": handler_found["dialog"],
+                    "trigger_id": command["trigger_id"],
+                },
+            },
+        )
     return _get_write_message_response(handler_found), 200
 
 
-@blueprint.route('/api/v1/slack/interactive', methods=['POST'])
+@blueprint.route("/api/v1/slack/interactive", methods=["POST"])
 @authnz.enforce_checks
 def slack_interactive_component():
     # Slack sends interactive components as application/x-www-form-urlencoded,
     # json encoded inside of the payload field. What a whacky API.
-    component = json.loads(request.form.to_dict().get('payload', {}))
-    logger.debug(
-        'component received in API slack_slash_command: {}'.format(component)
-    )
-    if (
-        component.get('type') not in [
-            'interactive_message',
-            'message_action',
-            'dialog_submission',
-            'block_actions',
-            'view_submission',
-        ]
-    ):
-        msg = ('Unsupported type={} in interactive'
-               ' component.'.format(component.get('type')))
+    component = json.loads(request.form.to_dict().get("payload", {}))
+    logger.debug("component received in API slack_slash_command: {}".format(component))
+    if component.get("type") not in [
+        "interactive_message",
+        "message_action",
+        "dialog_submission",
+        "block_actions",
+        "view_submission",
+    ]:
+        msg = "Unsupported type={} in interactive" " component.".format(
+            component.get("type")
+        )
         logger.warning(msg)
-        return jsonify({'status': 'failure', 'error': msg}), 400
+        return jsonify({"status": "failure", "error": msg}), 400
     # Every event should have a validation token
-    if 'token' not in component:
-        msg = 'No verification token in interactive component.'
+    if "token" not in component:
+        msg = "No verification token in interactive component."
         logger.warning(msg)
-        return jsonify({'status': 'failure', 'error': msg}), 403
-    if not component.get('team', {}).get('id'):
-        msg = 'No team id in interactive component.'
+        return jsonify({"status": "failure", "error": msg}), 403
+    if not component.get("team", {}).get("id"):
+        msg = "No team id in interactive component."
         logger.warning(msg)
-        return jsonify({'status': 'failure', 'error': msg}), 403
+        return jsonify({"status": "failure", "error": msg}), 403
     try:
-        team = Team.get_team_by_id(component['team']['id'])
+        team = Team.get_team_by_id(component["team"]["id"])
     except TeamInitializationError:
-        msg = 'Unsupported team'
+        msg = "Unsupported team"
         logger.warning(
             msg,
-            extra={'team_id': component['team']['id']},
+            extra={"team_id": component["team"]["id"]},
         )
-        return jsonify({'status': 'failure', 'error': msg}), 403
+        return jsonify({"status": "failure", "error": msg}), 403
     # interactive components annoyingly don't send an app id, so we need
     # to verify
     try:
-        bot = Bot.get_bot_by_verification_token(component['token'])
+        bot = Bot.get_bot_by_verification_token(component["token"])
     except BotInitializationError:
-        msg = ('Token sent with interactive component does not match any'
-               ' configured app.')
+        msg = (
+            "Token sent with interactive component does not match any"
+            " configured app."
+        )
         logger.error(
             msg,
             extra=team.logging_context,
         )
-        return jsonify({'status': 'failure', 'error': msg}), 403
+        return jsonify({"status": "failure", "error": msg}), 403
     if team.team_id != bot.team.team_id:
         # This should never happen, but let's be paranoid.
-        msg = (
-            'Token sent with slash command does not match team in event.'
-        )
+        msg = "Token sent with slash command does not match team in event."
         logger.error(
             msg,
             extra=merge_logging_context(
-                {'expected_team_id': team.team_id},
+                {"expected_team_id": team.team_id},
                 bot.logging_context,
             ),
         )
-        return jsonify({'status': 'failure', 'error': msg}), 403
+        return jsonify({"status": "failure", "error": msg}), 403
     handler_found = None
     for handler in bot.interactive_component_handlers:
-        if get_callback_id(component) == handler.get('callback_id'):
+        if get_callback_id(component) == handler.get("callback_id"):
             handler_found = handler
             break
     if not handler_found:
-        msg = ('This interactive component does not have any omnibot handler'
-               ' associated with it.')
+        msg = (
+            "This interactive component does not have any omnibot handler"
+            " associated with it."
+        )
         logger.error(
             msg,
             extra=merge_logging_context(
-                {'callback_id': get_callback_id(component)},
+                {"callback_id": get_callback_id(component)},
                 bot.logging_context,
-            )
+            ),
         )
-        return jsonify({'response_type': 'ephemeral', 'text': msg}), 200
+        return jsonify({"response_type": "ephemeral", "text": msg}), 200
     # To avoid needing to look the bot up from its token when the dequeue this
     # command,:let's extend the payload with the bot id
-    component['omnibot_bot_id'] = bot.bot_id
+    component["omnibot_bot_id"] = bot.bot_id
     # TODO: Use action_ts to instrument event
     try:
         # If there's no callbacks defined for this interactive component, we
         # can skip enqueuing it, since the workers will just discard it.
-        if handler_found.get('callbacks'):
-            callbacks = handler_found.get('callbacks')
+        if handler_found.get("callbacks"):
+            callbacks = handler_found.get("callbacks")
             for c in callbacks:
-                if c.get('synchronous'):
+                if c.get("synchronous"):
                     interactive_component = InteractiveComponent(bot, component, {})
-                    resp = _handle_interactive_component_callback(interactive_component, c, 'raw')
+                    resp = _handle_interactive_component_callback(
+                        interactive_component, c, "raw"
+                    )
                     logger.info(
-                        'Synchronous callback response',
+                        "Synchronous callback response",
                         extra=merge_logging_context(
-                            {'response': resp},
+                            {"response": resp},
                             bot.logging_context,
-                        )
+                        ),
                     )
                     return resp, 200
-            queue_event(bot, component, 'interactive_component')
+            queue_event(bot, component, "interactive_component")
     except Exception:
-        msg = 'Could not queue interactive component.'
+        msg = "Could not queue interactive component."
         logger.exception(
             msg,
             extra=bot.logging_context,
         )
-        return jsonify({'status': 'failure', 'error': msg}), 500
+        return jsonify({"status": "failure", "error": msg}), 500
     # Open a dialog, if we have a trigger ID, and a dialog is defined for this
     # handler. Not all interactive components have a trigger ID.
-    if component.get('trigger_id') and handler_found.get('dialog'):
-        _perform_action(bot, {
-            'action': 'dialog.open',
-            'kwargs': {
-                'dialog': handler_found['dialog'],
-                'trigger_id': component['trigger_id']
-            }
-        })
-    if component['type'] in ['dialog_submission']:
-        return '', 200
-    elif handler_found.get('no_message_response'):
-        return '', 200
+    if component.get("trigger_id") and handler_found.get("dialog"):
+        _perform_action(
+            bot,
+            {
+                "action": "dialog.open",
+                "kwargs": {
+                    "dialog": handler_found["dialog"],
+                    "trigger_id": component["trigger_id"],
+                },
+            },
+        )
+    if component["type"] in ["dialog_submission"]:
+        return "", 200
+    elif handler_found.get("no_message_response"):
+        return "", 200
     else:
         return _get_write_message_response(handler_found), 200
 
 
 def _get_write_message_response(handler):
-    canned_response = handler.get('canned_response')
-    response_type = handler.get('response_type', 'ephemeral')
+    canned_response = handler.get("canned_response")
+    response_type = handler.get("response_type", "ephemeral")
     response = {}
     if canned_response:
-        response['text'] = canned_response
-        response['response_type'] = response_type
+        response["text"] = canned_response
+        response["response_type"] = response_type
     else:
         # If we aren't sending back text, we can only send back a response
         # type if it's in_channel, or the slash command will respond with an
         # error every time.
-        if response_type == 'in_channel':
-            response['response_type'] = response_type
+        if response_type == "in_channel":
+            response["response_type"] = response_type
     # We can only send back a json payload if we have items in it, or slack
     # sends errors in the slash command.
     if response:
         return jsonify(response)
     else:
-        return ''
+        return ""
 
 
 def instrument_event(bot, event):
     statsd = stats.get_statsd_client()
-    retry = request.headers.get(
-        'X-Slack-Retry-Num',
-        default=0,
-        type=int
-    )
-    retry_reason = request.headers.get(
-        'X-Slack-Retry-Reason',
-        default='',
-        type=str
-    )
-    event_info = event['event']
-    event_sent_time_ms = int(float(event_info['event_ts']) * 1000)
+    retry = request.headers.get("X-Slack-Retry-Num", default=0, type=int)
+    retry_reason = request.headers.get("X-Slack-Retry-Reason", default="", type=str)
+    event_info = event["event"]
+    event_sent_time_ms = int(float(event_info["event_ts"]) * 1000)
     now = int(time.time() * 1000)
     latency = now - event_sent_time_ms
     if retry > 0:
-        statsd.timing('pre_sqs_delivery_retry_latency', latency)
+        statsd.timing("pre_sqs_delivery_retry_latency", latency)
     else:
-        statsd.timing('pre_sqs_delivery_latency', latency)
+        statsd.timing("pre_sqs_delivery_latency", latency)
     if latency > 20000:
         logger.warning(
-            'Event is greater than 20s delayed in'
-            ' delivery ({} ms)'.format(latency),
+            "Event is greater than 20s delayed in" " delivery ({} ms)".format(latency),
             extra=merge_logging_context(
                 {
-                    'event_ts': event_info['event_ts'],
-                    'event_type': event_info['type'],
-                    'retry': retry
+                    "event_ts": event_info["event_ts"],
+                    "event_type": event_info["type"],
+                    "retry": retry,
                 },
                 bot.logging_context,
-            )
+            ),
         )
     if retry_reason:
         logger.warning(
@@ -443,34 +433,26 @@ def queue_event(bot, event, event_type):
     sqs_client = sqs.get_client()
     sqs_client.send_message(
         QueueUrl=sqs.get_queue_url(),
-        MessageBody=json.dumps({
-            'event': event
-        }),
+        MessageBody=json.dumps({"event": event}),
         MessageAttributes={
             # Add a version, so we know how to parse this in the receiver when
             # we make message schema changes.
-            'version': {
-                'DataType': 'Number',
+            "version": {
+                "DataType": "Number",
                 # Seems SQS uses StringValue for Number type... We'll cast
                 # this on the receiver end.
-                'StringValue': '2'
+                "StringValue": "2",
             },
             # Specify the type of SQS message, so we can handle more than just
             # the event subscription API.
-            'type': {
-                'DataType': 'String',
-                'StringValue': event_type
-            }
-        }
+            "type": {"DataType": "String", "StringValue": event_type},
+        },
     )
-    statsd.incr('sqs.sent')
-    statsd.incr('sqs.{}.sent'.format(bot.name))
+    statsd.incr("sqs.sent")
+    statsd.incr("sqs.{}.sent".format(bot.name))
 
 
-@blueprint.route(
-    '/api/v1/slack/get_team/<team_name>',
-    methods=['GET']
-)
+@blueprint.route("/api/v1/slack/get_team/<team_name>", methods=["GET"])
 @authnz.enforce_checks
 def get_team_id_by_name(team_name):
     """
@@ -504,19 +486,16 @@ def get_team_id_by_name(team_name):
     :statuscode 200: success
     :statuscode 404: team is not configured
     """
-    logger.debug('Getting team id', extra={'team': team_name})
+    logger.debug("Getting team id", extra={"team": team_name})
     try:
         team = Team.get_team_by_name(team_name)
-        return jsonify({'team_id': team.team_id})
+        return jsonify({"team_id": team.team_id})
     except TeamInitializationError:
-        return jsonify(
-            {'error': 'provided team_name is not configured.'}
-        ), 404
+        return jsonify({"error": "provided team_name is not configured."}), 404
 
 
 @blueprint.route(
-    '/api/v1/slack/get_user/<team_name>/<bot_name>/<email>',
-    methods=['GET']
+    "/api/v1/slack/get_user/<team_name>/<bot_name>/<email>", methods=["GET"]
 )
 @authnz.enforce_checks
 @verify_bot
@@ -560,40 +539,44 @@ def get_user_v2(team_name, bot_name, email):
                      specified bot.
     """
     logger.debug(
-        'Getting user team={} bot={} email={}.',
+        "Getting user team={} bot={} email={}.",
         extra={
-            'team': team_name,
-            'bot': bot_name,
-            'email': email,
-        }
+            "team": team_name,
+            "bot": bot_name,
+            "email": email,
+        },
     )
     try:
         team = Team.get_team_by_name(team_name)
     except TeamInitializationError:
-        return jsonify({'error': 'provided team name was not found.'}), 404
+        return jsonify({"error": "provided team name was not found."}), 404
     try:
         bot = Bot.get_bot_by_name(team, bot_name)
     except BotInitializationError:
-        return jsonify({'error': 'provided bot name was not found.'}), 404
+        return jsonify({"error": "provided bot name was not found."}), 404
     user = slack.get_user_by_email(bot, email)
     if not user:
-        return jsonify(
-            {'error': 'user not found'},
-        ), 404
+        return (
+            jsonify(
+                {"error": "user not found"},
+            ),
+            404,
+        )
     name = slack.get_name_from_user(user)
-    return jsonify({
-        'user': {
-            'email': email,
-            'name': name,
-            'team_id': team.team_id,
-            'user_id': user['id']
+    return jsonify(
+        {
+            "user": {
+                "email": email,
+                "name": name,
+                "team_id": team.team_id,
+                "user_id": user["id"],
+            }
         }
-    })
+    )
 
 
 @blueprint.route(
-    '/api/v1/slack/get_channel/<team_name>/<bot_name>/<channel_name>',
-    methods=['GET']
+    "/api/v1/slack/get_channel/<team_name>/<bot_name>/<channel_name>", methods=["GET"]
 )
 @authnz.enforce_checks
 @verify_bot
@@ -679,114 +662,96 @@ def get_channel_by_name(team_name, bot_name, channel_name):
                      in the specified team using the specified bot.
     """
     logger.debug(
-        'Getting channel for team={} bot={} channel={}.',
+        "Getting channel for team={} bot={} channel={}.",
         extra={
-            'team': team_name,
-            'bot': bot_name,
-            'channel': channel_name,
+            "team": team_name,
+            "bot": bot_name,
+            "channel": channel_name,
         },
     )
     try:
         team = Team.get_team_by_name(team_name)
     except TeamInitializationError:
-        return jsonify({'error': 'provided team name was not found.'}), 404
+        return jsonify({"error": "provided team name was not found."}), 404
     try:
         bot = Bot.get_bot_by_name(team, bot_name)
     except BotInitializationError:
-        return jsonify({'error': 'provided bot name was not found.'}), 404
+        return jsonify({"error": "provided bot name was not found."}), 404
     channel = slack.get_channel_by_name(bot, channel_name)
     if channel is None:
         logger.debug(
-            'Failed to get channel',
+            "Failed to get channel",
             extra=merge_logging_context(
-                {'channel': channel_name},
+                {"channel": channel_name},
                 bot.logging_context,
             ),
         )
-        return jsonify({'error': 'provided channel_name was not found.'}), 404
+        return jsonify({"error": "provided channel_name was not found."}), 404
     return jsonify(channel)
 
 
 def _perform_action(bot, data):
-    for arg in ['action', 'kwargs']:
+    for arg in ["action", "kwargs"]:
         if arg not in data:
-            return {
-                'ok': False,
-                'error': '{} not provided in payload'.format(arg)
-            }
-    action = data['action']
-    kwargs = data['kwargs']
+            return {"ok": False, "error": "{} not provided in payload".format(arg)}
+    action = data["action"]
+    kwargs = data["kwargs"]
     logger.debug(
-        'Performing action',
+        "Performing action",
         extra=merge_logging_context(
-            {'action': action},
+            {"action": action},
             bot.logging_context,
         ),
     )
     parse_kwargs(kwargs, bot)
-    ret = slack.client(bot).api_call(
-        action,
-        **kwargs
-    )
+    ret = slack.client(bot).api_call(action, **kwargs)
     logger.debug(ret)
-    if not ret['ok']:
-        if ret.get('error') in {
-            'missing_scope',
-            'not_allowed_token_type',
-            'channel_not_found',
-            'not_in_channel',
+    if not ret["ok"]:
+        if ret.get("error") in {
+            "missing_scope",
+            "not_allowed_token_type",
+            "channel_not_found",
+            "not_in_channel",
         }:
             logger.warning(
-                'action failed in post_slack, attempting as user.',
+                "action failed in post_slack, attempting as user.",
                 extra=merge_logging_context(
-                    {'action': action},
+                    {"action": action},
                     bot.logging_context,
                 ),
             )
             try:
-                ret = slack.client(bot, client_type='user').api_call(
-                    action,
-                    **kwargs
-                )
+                ret = slack.client(bot, client_type="user").api_call(action, **kwargs)
             except json.decoder.JSONDecodeError:
                 logger.exception(
-                    'JSON decode failure when parsing kwargs={}'.format(
-                        kwargs
-                    ),
+                    "JSON decode failure when parsing kwargs={}".format(kwargs),
                     extra=merge_logging_context(
-                        {'action': action},
+                        {"action": action},
                         bot.logging_context,
                     ),
                 )
-                return {'ok': False}
+                return {"ok": False}
             logger.debug(ret)
-            if not ret['ok']:
+            if not ret["ok"]:
                 logger.error(
-                    'action failed in post_slack: ret={}'.format(
-                        ret
-                    ),
+                    "action failed in post_slack: ret={}".format(ret),
                     extra=merge_logging_context(
-                        {'action': action, 'kwargs': kwargs},
+                        {"action": action, "kwargs": kwargs},
                         bot.logging_context,
                     ),
                 )
         else:
             logger.error(
-                'action failed in post_slack: ret={}'.format(
-                    ret
-                ),
+                "action failed in post_slack: ret={}".format(ret),
                 extra=merge_logging_context(
-                    {'action': action, 'kwargs': kwargs},
+                    {"action": action, "kwargs": kwargs},
                     bot.logging_context,
                 ),
             )
     return ret
 
 
-@blueprint.route(
-    '/api/v2/slack/action/<team_name>/<bot_name>',
-    methods=['POST']
-)
+@blueprint.route("/api/v2/slack/action/<team_name>/<bot_name>", methods=["POST"])
 @authnz.enforce_checks
 @verify_bot
 def slack_action_v2(team_name, bot_name):
@@ -863,22 +828,19 @@ def slack_action_v2(team_name, bot_name):
     try:
         team = Team.get_team_by_name(team_name)
     except TeamInitializationError:
-        return jsonify({'error': 'provided team name was not found.'}), 404
+        return jsonify({"error": "provided team name was not found."}), 404
     try:
         bot = Bot.get_bot_by_name(team, bot_name)
     except BotInitializationError:
-        return jsonify({'error': 'provided bot name was not found.'}), 404
+        return jsonify({"error": "provided bot name was not found."}), 404
     ret = _perform_action(bot, data)
-    if ret['ok']:
+    if ret["ok"]:
         return jsonify(ret), 200
     else:
         return jsonify(ret), 400
 
 
-@blueprint.route(
-    '/api/v1/slack/get_ims/<team_name>/<bot_name>',
-    methods=['GET']
-)
+@blueprint.route("/api/v1/slack/get_ims/<team_name>/<bot_name>", methods=["GET"])
 @authnz.enforce_checks
 @verify_bot
 def get_bot_ims(team_name, bot_name):
@@ -924,23 +886,21 @@ def get_bot_ims(team_name, bot_name):
     try:
         team = Team.get_team_by_name(team_name)
     except TeamInitializationError:
-        return jsonify({'error': 'provided team name was not found.'}), 404
+        return jsonify({"error": "provided team name was not found."}), 404
     try:
         bot = Bot.get_bot_by_name(team, bot_name)
     except BotInitializationError:
-        return jsonify({'error': 'provided bot name was not found.'}), 404
+        return jsonify({"error": "provided bot name was not found."}), 404
     raw_ims = slack.get_ims(bot)
     ims = []
     for im in raw_ims:
         # each im is a tuple where im[0] is the channel id and im[1] is the im object
         ims.append(json.loads(im[1]))
-    return jsonify(
-        {'ims': ims}
-    )
+    return jsonify({"ims": ims})
 
 
 @blueprint.route(
-    '/api/v1/slack/send_im/<team_name>/<bot_name>/<email>', methods=['POST']
+    "/api/v1/slack/send_im/<team_name>/<bot_name>/<email>", methods=["POST"]
 )
 @authnz.enforce_checks
 @verify_bot
@@ -999,34 +959,58 @@ def send_bot_im(team_name, bot_name, email):
         team = Team.get_team_by_name(team_name)
         bot = Bot.get_bot_by_name(team, bot_name)
     except TeamInitializationError:
-        return jsonify({'error': 'provided team name was not found.',
-                        'team_name': team_name,
-                        'bot_name': bot_name,
-                        'email': email
-                        }), 404
+        return (
+            jsonify(
+                {
+                    "error": "provided team name was not found.",
+                    "team_name": team_name,
+                    "bot_name": bot_name,
+                    "email": email,
+                }
+            ),
+            404,
+        )
     except BotInitializationError:
-        return jsonify({'error': 'provided bot name was not found.',
-                        'team_name': team_name,
-                        'bot_name': bot_name,
-                        'email': email
-                        }), 404
+        return (
+            jsonify(
+                {
+                    "error": "provided bot name was not found.",
+                    "team_name": team_name,
+                    "bot_name": bot_name,
+                    "email": email,
+                }
+            ),
+            404,
+        )
     user = slack.get_user_by_email(bot, email)
     if not user:
-        return jsonify({'error': 'unable to find slack user for given email.',
-                        'team_name': team_name,
-                        'bot_name': bot_name,
-                        'email': email
-                        }), 404
-    im_id = slack.get_im_channel_id(bot, user['id'])
+        return (
+            jsonify(
+                {
+                    "error": "unable to find slack user for given email.",
+                    "team_name": team_name,
+                    "bot_name": bot_name,
+                    "email": email,
+                }
+            ),
+            404,
+        )
+    im_id = slack.get_im_channel_id(bot, user["id"])
     if im_id is None:
-        return jsonify({'error': 'unable to find IM channel.',
-                        'team_name': team_name,
-                        'bot_name': bot_name,
-                        'email': email
-                        }), 404
-    data['kwargs']['channel'] = im_id
+        return (
+            jsonify(
+                {
+                    "error": "unable to find IM channel.",
+                    "team_name": team_name,
+                    "bot_name": bot_name,
+                    "email": email,
+                }
+            ),
+            404,
+        )
+    data["kwargs"]["channel"] = im_id
     ret = _perform_action(bot, data)
-    if ret['ok']:
+    if ret["ok"]:
         return jsonify(ret), 200
     else:
         return jsonify(ret), 400

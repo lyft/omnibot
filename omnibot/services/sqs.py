@@ -12,14 +12,13 @@ BOTOCORE_CONFIG = botocore.config.Config(
 def get_client():
     if settings.SQS_URL:
         return omnibot.services.get_boto_client(
-            'sqs',
+            "sqs",
             endpoint_url=settings.SQS_URL,
-            config={'name': 'keymanager', 'config': BOTOCORE_CONFIG}
+            config={"name": "keymanager", "config": BOTOCORE_CONFIG},
         )
     else:
         return omnibot.services.get_boto_client(
-            'sqs',
-            config={'name': 'keymanager', 'config': BOTOCORE_CONFIG}
+            "sqs", config={"name": "keymanager", "config": BOTOCORE_CONFIG}
         )
 
 
@@ -28,8 +27,6 @@ def get_queue_url():
 
     if QUEUE_URL is None:
         client = get_client()
-        QUEUE_URL = client.get_queue_url(
-            QueueName=settings.SQS_QUEUE_NAME
-        )['QueueUrl']
+        QUEUE_URL = client.get_queue_url(QueueName=settings.SQS_QUEUE_NAME)["QueueUrl"]
 
     return QUEUE_URL

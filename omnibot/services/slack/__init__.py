@@ -19,7 +19,7 @@ GEVENT_SLEEP_TIME = 5
 _client = {}
 
 
-def client(bot, client_type='bot'):
+def client(bot, client_type="bot"):
     """
     Global Slack client.
     """
@@ -30,20 +30,20 @@ def client(bot, client_type='bot'):
     if bot.name not in _client[team_name]:
         _client[team_name][bot.name] = {}
         if bot.oauth_bot_token:
-            _client[team_name][bot.name]['bot'] = slackclient.SlackClient(
+            _client[team_name][bot.name]["bot"] = slackclient.SlackClient(
                 bot.oauth_bot_token
             )
         if bot.oauth_user_token:
-            _client[team_name][bot.name]['user'] = slackclient.SlackClient(
+            _client[team_name][bot.name]["user"] = slackclient.SlackClient(
                 bot.oauth_user_token
             )
-    if client_type == 'bot':
+    if client_type == "bot":
         try:
-            return _client[team_name][bot.name]['bot']
+            return _client[team_name][bot.name]["bot"]
         except KeyError:
             pass
-    elif client_type == 'user':
-        return _client[team_name][bot.name]['user']
+    elif client_type == "user":
+        return _client[team_name][bot.name]["user"]
 
 
 def _get_failure_context(result):
@@ -51,7 +51,7 @@ def _get_failure_context(result):
     Get the logging context from a failed slack call.
     """
     ret = {}
-    for attr in ['error', 'needed', 'provided']:
+    for attr in ["error", "needed", "provided"]:
         if attr in result:
             ret[attr] = result[attr]
     return ret
@@ -63,41 +63,38 @@ def _get_conversations(bot, team):
     """
     conversations = []
     retry = 0
-    next_cursor = ''
+    next_cursor = ""
     while True:
         conversations_data = client(bot).api_call(
-            'conversations.list',
+            "conversations.list",
             exclude_archived=True,
             exclude_members=True,
             limit=1000,
             cursor=next_cursor,
-            team_id=team.team_id
+            team_id=team.team_id,
         )
-        if conversations_data['ok']:
-            conversations.extend(conversations_data['channels'])
+        if conversations_data["ok"]:
+            conversations.extend(conversations_data["channels"])
         else:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
                 logger.error(
-                    'Exceeded max retries when calling conversations.list.',
+                    "Exceeded max retries when calling conversations.list.",
                     extra=bot.logging_context,
                 )
                 break
             logger.warning(
-                'Call to channels.list failed, attempting retry',
+                "Call to channels.list failed, attempting retry",
                 extra=merge_logging_context(
-                    {'retry': retry},
+                    {"retry": retry},
                     _get_failure_context(conversations_data),
                     bot.logging_context,
                 ),
             )
             gevent.sleep(GEVENT_SLEEP_TIME)
             continue
-        next_cursor = conversations_data.get(
-            'response_metadata',
-            {}
-        ).get('next_cursor')
+        next_cursor = conversations_data.get("response_metadata", {}).get("next_cursor")
         if not next_cursor:
             break
         gevent.sleep(GEVENT_SLEEP_TIME)
@@ -106,20 +103,20 @@ def _get_conversations(bot, team):
 
 def update_conversations(bot, team):
     for conversation in _get_conversations(bot, team):
-        if conversation.get('is_channel', False):
+        if conversation.get("is_channel", False):
             update_channel(bot, conversation)
-        elif conversation.get('is_group', False):
+        elif conversation.get("is_group", False):
             update_group(bot, conversation)
-        elif conversation.get('is_im', False):
+        elif conversation.get("is_im", False):
             update_im(bot, conversation)
-        elif conversation.get('is_mpim', False):
+        elif conversation.get("is_mpim", False):
             update_mpim(bot, conversation)
         else:
             logger.info(
-                'Not updating unsupported conversation.',
+                "Not updating unsupported conversation.",
                 extra=merge_logging_context(
                     bot.logging_context,
-                    {'channel': conversation['id']},
+                    {"channel": conversation["id"]},
                 ),
             )
 
@@ -127,92 +124,79 @@ def update_conversations(bot, team):
 def update_channel(bot, channel):
     redis_client = omniredis.get_redis_client()
     redis_client.hset(
-        'channels:{}'.format(bot.team.name),
-        channel['id'],
-        json.dumps(channel)
+        "channels:{}".format(bot.team.name), channel["id"], json.dumps(channel)
     )
     redis_client.hset(
-        'channelsmap:{}'.format(bot.team.name),
-        channel['name'],
-        channel['id'],
+        "channelsmap:{}".format(bot.team.name),
+        channel["name"],
+        channel["id"],
     )
 
 
 def get_channels(bot):
     redis_client = omniredis.get_redis_client()
-    return redis_client.hscan_iter('channels:{}'.format(bot.team.name))
+    return redis_client.hscan_iter("channels:{}".format(bot.team.name))
 
 
 def update_group(bot, group):
     redis_client = omniredis.get_redis_client()
+    redis_client.hset("groups:{}".format(bot.team.name), group["id"], json.dumps(group))
     redis_client.hset(
-        'groups:{}'.format(bot.team.name),
-        group['id'],
-        json.dumps(group)
-    )
-    redis_client.hset(
-        'groupsmap:{}'.format(bot.team.name),
-        group['name'],
-        group['id'],
+        "groupsmap:{}".format(bot.team.name),
+        group["name"],
+        group["id"],
     )
 
 
 def get_groups(bot):
     redis_client = omniredis.get_redis_client()
-    return redis_client.hscan_iter('groups:{}'.format(bot.team.name))
+    return redis_client.hscan_iter("groups:{}".format(bot.team.name))
 
 
 def update_im(bot, im):
     redis_client = omniredis.get_redis_client()
+    redis_client.hset("ims:{}".format(bot.team.name), im["id"], json.dumps(im))
     redis_client.hset(
-        'ims:{}'.format(bot.team.name),
-        im['id'],
-        json.dumps(im)
-    )
-    redis_client.hset(
-        'imsmap:{}'.format(bot.team.name),
-        im['user'],
-        im['id'],
+        "imsmap:{}".format(bot.team.name),
+        im["user"],
+        im["id"],
     )
 
 
 def get_ims(bot):
     redis_client = omniredis.get_redis_client()
-    return redis_client.hscan_iter('ims:{}'.format(bot.team.name))
+    return redis_client.hscan_iter("ims:{}".format(bot.team.name))
 
 
 def get_im_channel_id(bot, user_id):
     redis_client = omniredis.get_redis_client()
-    imsmap_id = redis_client.hget('imsmap:{}'.format(bot.team.name), user_id)
+    imsmap_id = redis_client.hget("imsmap:{}".format(bot.team.name), user_id)
     if imsmap_id:
-        raw_im = redis_client.hget('ims:{}'.format(bot.team.name), imsmap_id)
+        raw_im = redis_client.hget("ims:{}".format(bot.team.name), imsmap_id)
         if raw_im:
             im = json.loads(raw_im)
-            if not im.get('is_user_deleted', False):
-                return im['id']
+            if not im.get("is_user_deleted", False):
+                return im["id"]
 
     retry = 0
     while True:
         users = user_id
-        conversation_data = client(bot).api_call(
-            'conversations.open',
-            users=users
-        )
-        if conversation_data['ok']:
-            return conversation_data['channel']['id']
+        conversation_data = client(bot).api_call("conversations.open", users=users)
+        if conversation_data["ok"]:
+            return conversation_data["channel"]["id"]
         else:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= MAX_RETRIES:
                 logger.error(
-                    'Exceeded max retries when calling conversations.open.',
+                    "Exceeded max retries when calling conversations.open.",
                     extra=bot.logging_context,
                 )
                 break
             logger.warning(
-                'Call to conversations.open failed, attempting retry',
+                "Call to conversations.open failed, attempting retry",
                 extra=merge_logging_context(
-                    {'retry': retry},
+                    {"retry": retry},
                     _get_failure_context(conversation_data),
                     bot.logging_context,
                 ),
@@ -224,33 +208,29 @@ def get_im_channel_id(bot, user_id):
 
 def update_mpim(bot, mpim):
     redis_client = omniredis.get_redis_client()
+    redis_client.hset("mpims:{}".format(bot.team.name), mpim["id"], json.dumps(mpim))
     redis_client.hset(
-        'mpims:{}'.format(bot.team.name),
-        mpim['id'],
-        json.dumps(mpim)
-    )
-    redis_client.hset(
-        'mpimsmap:{}'.format(bot.team.name),
-        mpim['name'],
-        mpim['id'],
+        "mpimsmap:{}".format(bot.team.name),
+        mpim["name"],
+        mpim["id"],
     )
 
 
 def get_mpims(bot):
     redis_client = omniredis.get_redis_client()
-    return redis_client.hscan_iter('mpims:{}'.format(bot.team.name))
+    return redis_client.hscan_iter("mpims:{}".format(bot.team.name))
 
 
 def _get_emoji(bot):
     # TODO: split this retry logic into a generic retry function
     for retry in range(MAX_RETRIES):
-        resp = client(bot).api_call('emoji.list')
-        if resp['ok']:
+        resp = client(bot).api_call("emoji.list")
+        if resp["ok"]:
             break
         logger.warning(
-            'Call to emoji.list failed, attempting retry',
+            "Call to emoji.list failed, attempting retry",
             extra=merge_logging_context(
-                {'retry': retry},
+                {"retry": retry},
                 _get_failure_context(resp),
                 bot.logging_context,
             ),
@@ -258,16 +238,16 @@ def _get_emoji(bot):
         gevent.sleep(GEVENT_SLEEP_TIME)
     else:
         logger.error(
-            'Exceeded max retries when calling emoji.list.',
+            "Exceeded max retries when calling emoji.list.",
             extra=bot.logging_context,
         )
         return {}
 
     emoji = {}
-    for k, v in resp['emoji'].items():
-        while v.startswith('alias:'):
-            _, _, alias = v.partition(':')
-            v = resp['emoji'].get(alias, '')
+    for k, v in resp["emoji"].items():
+        while v.startswith("alias:"):
+            _, _, alias = v.partition(":")
+            v = resp["emoji"].get(alias, "")
         if v:
             emoji[k] = v
     return emoji
@@ -276,29 +256,26 @@ def _get_emoji(bot):
 def update_emoji(bot):
     redis_client = omniredis.get_redis_client()
     for k, v in _get_emoji(bot).items():
-        redis_client.hset('emoji:{}'.format(bot.team.name), k, v)
+        redis_client.hset("emoji:{}".format(bot.team.name), k, v)
 
 
 def get_emoji(bot, name):
     redis_client = omniredis.get_redis_client()
-    return redis_client.hget('emoji:{}'.format(bot.team.name), name)
+    return redis_client.hget("emoji:{}".format(bot.team.name), name)
 
 
 def _get_channel_from_cache(bot, channel):
     redis_client = omniredis.get_redis_client()
-    channel_data = redis_client.hget(
-        'channels:{}'.format(bot.team.name),
-        channel
-    )
+    channel_data = redis_client.hget("channels:{}".format(bot.team.name), channel)
     if channel_data:
         return json.loads(channel_data)
-    group_data = redis_client.hget('groups:{}'.format(bot.team.name), channel)
+    group_data = redis_client.hget("groups:{}".format(bot.team.name), channel)
     if group_data:
         return json.loads(group_data)
-    im_data = redis_client.hget('ims:{}'.format(bot.team.name), channel)
+    im_data = redis_client.hget("ims:{}".format(bot.team.name), channel)
     if im_data:
         return json.loads(im_data)
-    mpim_data = redis_client.hget('mpims:{}'.format(bot.team.name), channel)
+    mpim_data = redis_client.hget("mpims:{}".format(bot.team.name), channel)
     if mpim_data:
         return json.loads(mpim_data)
     return None
@@ -309,35 +286,32 @@ def get_channel(bot, channel):
     Get a channel, from its channel id
     """
     logger.debug(
-        'Fetching channel',
+        "Fetching channel",
         extra=merge_logging_context(
-            {'channel': channel},
+            {"channel": channel},
             bot.logging_context,
-        )
+        ),
     )
     cached_channel = _get_channel_from_cache(bot, channel)
     if cached_channel:
         return cached_channel
     logger.debug(
-        'Channel not in cache.',
+        "Channel not in cache.",
         extra=merge_logging_context(
-            {'channel': channel},
+            {"channel": channel},
             bot.logging_context,
-        )
+        ),
     )
-    channel_data = client(bot).api_call(
-        'conversations.info',
-        channel=channel
-    )
-    if channel_data['ok']:
-        update_channel(bot, channel_data['channel'])
-        return channel_data['channel']
+    channel_data = client(bot).api_call("conversations.info", channel=channel)
+    if channel_data["ok"]:
+        update_channel(bot, channel_data["channel"])
+        return channel_data["channel"]
     return {}
 
 
 def _get_channel_name_from_cache(key, bot_name, value):
     redis_client = omniredis.get_redis_client()
-    ret = redis_client.hget('{}:{}'.format(key, bot_name), value)
+    ret = redis_client.hget("{}:{}".format(key, bot_name), value)
     if ret is None:
         return None
     else:
@@ -349,68 +323,58 @@ def get_channel_by_name(bot, channel):
     Get a channel, from its channel name. This function will only fetch from
     cache. If the channel isn't in cache, it will return None.
     """
-    if channel.startswith('#'):
+    if channel.startswith("#"):
         channel = channel[1:]
     redis_client = omniredis.get_redis_client()
-    channel_id = redis_client.hget(
-        'channelsmap:{}'.format(bot.team.name),
-        channel
-    )
+    channel_id = redis_client.hget("channelsmap:{}".format(bot.team.name), channel)
     if channel_id:
-        return _get_channel_name_from_cache(
-            'channels',
-            bot.team.name,
-            channel_id
-        )
-    group_id = redis_client.hget('groupsmap:{}'.format(bot.team.name), channel)
+        return _get_channel_name_from_cache("channels", bot.team.name, channel_id)
+    group_id = redis_client.hget("groupsmap:{}".format(bot.team.name), channel)
     if group_id:
-        return _get_channel_name_from_cache('groups', bot.team.name, group_id)
-    im_id = redis_client.hget('imsmap:{}'.format(bot.team.name), channel)
+        return _get_channel_name_from_cache("groups", bot.team.name, group_id)
+    im_id = redis_client.hget("imsmap:{}".format(bot.team.name), channel)
     if im_id:
-        return _get_channel_name_from_cache('ims', bot.team.name, im_id)
-    mpim_id = redis_client.hget('mpimsmap:{}'.format(bot.team.name), channel)
+        return _get_channel_name_from_cache("ims", bot.team.name, im_id)
+    mpim_id = redis_client.hget("mpimsmap:{}".format(bot.team.name), channel)
     if mpim_id:
-        return _get_channel_name_from_cache('mpims', bot.team.name, mpim_id)
+        return _get_channel_name_from_cache("mpims", bot.team.name, mpim_id)
     return None
 
 
 def _get_users(bot, team, max_retries=MAX_RETRIES, sleep=GEVENT_SLEEP_TIME):
     users = []
     retry = 0
-    next_cursor = ''
+    next_cursor = ""
     while True:
         users_data = client(bot).api_call(
-            'users.list',
+            "users.list",
             presence=False,
             limit=1000,
             cursor=next_cursor,
-            team_id=team.team_id
+            team_id=team.team_id,
         )
-        if users_data['ok']:
-            users.extend(users_data['members'])
+        if users_data["ok"]:
+            users.extend(users_data["members"])
         else:
             # TODO: split this retry logic into a generic retry function
             retry = retry + 1
             if retry >= max_retries:
                 logger.error(
-                    'Exceeded max retries when calling users.list.',
+                    "Exceeded max retries when calling users.list.",
                     extra=bot.logging_context,
                 )
                 break
             logger.warning(
-                'Call to users.list failed, attempting retry',
+                "Call to users.list failed, attempting retry",
                 extra=merge_logging_context(
-                    {'retry': retry},
+                    {"retry": retry},
                     _get_failure_context(users_data),
                     bot.logging_context,
                 ),
             )
             gevent.sleep(sleep * retry)
             continue
-        next_cursor = users_data.get(
-            'response_metadata',
-            {}
-        ).get('next_cursor')
+        next_cursor = users_data.get("response_metadata", {}).get("next_cursor")
         if not next_cursor:
             break
         gevent.sleep(sleep)
@@ -423,36 +387,34 @@ def update_users(bot, team):
 
 
 def update_user(bot, user):
-    if user['is_bot']:
+    if user["is_bot"]:
         return
-    if user.get('deleted', False):
+    if user.get("deleted", False):
         return
-    profile = user.get('profile')
+    profile = user.get("profile")
     if not profile:
         return
-    email = profile.get('email')
+    email = profile.get("email")
     if not email:
         return
     name = get_name_from_user(user)
     redis_client = omniredis.get_redis_client()
+    redis_client.hset("users:{}".format(bot.team.name), user["id"], json.dumps(user))
     redis_client.hset(
-        'users:{}'.format(bot.team.name), user['id'], json.dumps(user)
-    )
-    redis_client.hset(
-        'usersmap:name:{}'.format(bot.team.name),
+        "usersmap:name:{}".format(bot.team.name),
         name,
-        user['id'],
+        user["id"],
     )
     redis_client.hset(
-        'usersmap:email:{}'.format(bot.team.name),
+        "usersmap:email:{}".format(bot.team.name),
         email,
-        user['id'],
+        user["id"],
     )
 
 
 def get_users(bot):
     redis_client = omniredis.get_redis_client()
-    return redis_client.hscan_iter('users:{}'.format(bot.team.name))
+    return redis_client.hscan_iter("users:{}".format(bot.team.name))
 
 
 def get_user(bot, user_id):
@@ -460,21 +422,18 @@ def get_user(bot, user_id):
     Get a user, from its user id
     """
     redis_client = omniredis.get_redis_client()
-    user = redis_client.hget('users:{}'.format(bot.team.name), user_id)
+    user = redis_client.hget("users:{}".format(bot.team.name), user_id)
     if user:
         return json.loads(user)
-    user = client(bot).api_call(
-        'users.info',
-        user=user_id
-    )
-    if user['ok']:
-        update_user(bot, user['user'])
-        return user['user']
+    user = client(bot).api_call("users.info", user=user_id)
+    if user["ok"]:
+        update_user(bot, user["user"])
+        return user["user"]
     else:
         logger.warning(
-            'Failed to find user',
+            "Failed to find user",
             extra=merge_logging_context(
-                {'user': user_id},
+                {"user": user_id},
                 bot.logging_context,
             ),
         )
@@ -482,27 +441,21 @@ def get_user(bot, user_id):
 
 
 def get_name_from_user(user):
-    profile = user.get('profile', {})
-    name = profile.get('display_name')
+    profile = user.get("profile", {})
+    name = profile.get("display_name")
     if name:
         return name
     else:
-        return user.get('name')
+        return user.get("name")
 
 
 def get_user_by_name(bot, username):
-    if username.startswith('@'):
+    if username.startswith("@"):
         username = username[1:]
     redis_client = omniredis.get_redis_client()
-    user_id = redis_client.hget(
-        'usersmap:name:{}'.format(bot.team.name),
-        username
-    )
+    user_id = redis_client.hget("usersmap:name:{}".format(bot.team.name), username)
     if user_id:
-        user_data = redis_client.hget(
-            'users:{}'.format(bot.team.name),
-            user_id
-        )
+        user_data = redis_client.hget("users:{}".format(bot.team.name), user_id)
         if user_data:
             return json.loads(user_data)
     return {}
@@ -510,15 +463,9 @@ def get_user_by_name(bot, username):
 
 def get_user_by_email(bot, email):
     redis_client = omniredis.get_redis_client()
-    user_id = redis_client.hget(
-        'usersmap:email:{}'.format(bot.team.name),
-        email
-    )
+    user_id = redis_client.hget("usersmap:email:{}".format(bot.team.name), email)
     if user_id:
-        user_data = redis_client.hget(
-            'users:{}'.format(bot.team.name),
-            user_id
-        )
+        user_data = redis_client.hget("users:{}".format(bot.team.name), user_id)
         if user_data:
             return json.loads(user_data)
     return {}

@@ -22,7 +22,7 @@ class Team(object):
     def get_team_by_name(cls, name):
         team_id = settings.SLACK_TEAMS.get(name)
         if not team_id:
-            raise TeamInitializationError('Invalid team')
+            raise TeamInitializationError("Invalid team")
         return cls(name, team_id)
 
     @classmethod
@@ -33,7 +33,7 @@ class Team(object):
                 name = team_name
                 break
         if not name:
-            raise TeamInitializationError('Invalid team')
+            raise TeamInitializationError("Invalid team")
         return cls(name, team_id)
 
     @property
@@ -47,8 +47,8 @@ class Team(object):
     @property
     def logging_context(self):
         return {
-            'team': self.name,
-            'team_id': self.team_id,
+            "team": self.name,
+            "team_id": self.team_id,
         }
 
 

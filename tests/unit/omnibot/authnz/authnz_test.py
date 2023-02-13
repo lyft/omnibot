@@ -10,16 +10,14 @@ def test_enforce_checks(mocker):
     def some_test_function():
         return True
 
-    allowed_paths_check = mocker.patch(
-        'omnibot.authnz.allowed_paths'
-    )
+    allowed_paths_check = mocker.patch("omnibot.authnz.allowed_paths")
     allowed_paths_check.return_value = True
     envoy_internal_check = mocker.patch(
-        'omnibot.authnz.envoy_checks.envoy_internal_check'
+        "omnibot.authnz.envoy_checks.envoy_internal_check"
     )
     envoy_internal_check.return_value = True
     envoy_permissions_check = mocker.patch(
-        'omnibot.authnz.envoy_checks.envoy_permissions_check'
+        "omnibot.authnz.envoy_checks.envoy_permissions_check"
     )
     envoy_permissions_check.return_value = True
 
@@ -49,27 +47,23 @@ def test_enforce_checks(mocker):
 
 def test_allowed_paths(mocker):
     paths = [
-        '/api/v1/slack/event',
-        '/api/v1/slack/get_team/testteam',
-        '/api/v2/slack/action/ateam/abot'
+        "/api/v1/slack/event",
+        "/api/v1/slack/get_team/testteam",
+        "/api/v2/slack/action/ateam/abot",
     ]
     # Test a basic post route
-    with app.test_request_context(
-            path='/api/v1/slack/event',
-            method='POST'):
+    with app.test_request_context(path="/api/v1/slack/event", method="POST"):
         result = authnz.allowed_paths(paths)
         assert result is True
 
     # Test a route that uses regex
-    with app.test_request_context(
-            path='/api/v1/slack/get_team/testteam',
-            method='GET'):
+    with app.test_request_context(path="/api/v1/slack/get_team/testteam", method="GET"):
         result = authnz.allowed_paths(paths)
         assert result is True
 
     # Test a route that's not allowed
     with app.test_request_context(
-            path='/api/v2/slack/action/notateam/notabot',
-            method='GET'):
+        path="/api/v2/slack/action/notateam/notabot", method="GET"
+    ):
         result = authnz.allowed_paths(paths)
         assert result is False

@@ -14,10 +14,7 @@ import importlib
 import re
 from functools import wraps
 
-from flask import (
-    abort,
-    request
-)
+from flask import abort, request
 
 from omnibot import logging
 from omnibot import settings
@@ -42,24 +39,26 @@ def enforce_checks(f):
     Checks will be executed in the order defined by the list. All checks must
     pass for a request to be accepted.
     """
+
     @wraps(f)
     def decorated(*args, **kwargs):
-        checks = settings.AUTHORIZATION.get('checks', [])
+        checks = settings.AUTHORIZATION.get("checks", [])
         if not checks:
             logger.warning(
-                'No checks set in the authorization section of the configuration;'
-                ' denying access to API calls for sanity sake'
+                "No checks set in the authorization section of the configuration;"
+                " denying access to API calls for sanity sake"
             )
             return abort(403)
         for check in checks:
-            module_name, function_name = check['module'].split(':')
+            module_name, function_name = check["module"].split(":")
             module = importlib.import_module(module_name)
             function = getattr(module, function_name)
-            func_kwargs = check.get('kwargs', {})
+            func_kwargs = check.get("kwargs", {})
             response = function(**func_kwargs)
             if not response:
                 return abort(403)
         return f(*args, **kwargs)
+
     return decorated
 
 

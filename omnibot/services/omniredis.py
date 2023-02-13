@@ -10,5 +10,5 @@ def get_redis_client(decode_responses=True):
         host=settings.REDIS_HOST,
         port=settings.REDIS_PORT,
         charset="utf-8",
-        decode_responses=decode_responses
+        decode_responses=decode_responses,
     )
