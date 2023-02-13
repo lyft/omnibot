@@ -23,7 +23,7 @@ def _match_subject(subject_to_match, subject):
     return False
 
 
-def envoy_internal_check(header='x-envoy-internal'):
+def envoy_internal_check(header="x-envoy-internal"):
     """
     Perform a check to ensure that the ``x-envoy-internal`` is set to 'true'.
     By default this check will apply to all routes, if enabled. It's possible
@@ -45,44 +45,44 @@ def envoy_internal_check(header='x-envoy-internal'):
     """
     # Flask provides all headers as strings. The only acceptable string here
     # is 'true'
-    envoy_internal = request.headers.get(header) == 'true'
+    envoy_internal = request.headers.get(header) == "true"
     # Easy case. The header says the request is internal.
     if envoy_internal:
         return True
     # If the request isn't internal, let's see if we have a permission that
     # matches, which has internal_only set to False
-    permissions = settings.AUTHORIZATION.get('permissions', {})
+    permissions = settings.AUTHORIZATION.get("permissions", {})
     for policy_name, policy in permissions.items():
-        method_match = request.method in policy['methods']
-        path_match = _match_path(request.path, policy['paths'])
-        internal_only = policy.get('internal_only', True)
+        method_match = request.method in policy["methods"]
+        path_match = _match_path(request.path, policy["paths"])
+        internal_only = policy.get("internal_only", True)
         if (method_match and path_match) and not internal_only:
             return True
     logger.warning(
-        'Received an external request to internal endpoint',
+        "Received an external request to internal endpoint",
         extra={
-            'endpoint': request.path,
-            'method': request.method,
-            'header_value': envoy_internal,
+            "endpoint": request.path,
+            "method": request.method,
+            "header_value": envoy_internal,
         },
     )
     return False
 
 
 def _check_permission(permission):
-    permissions = settings.AUTHORIZATION.get('permissions', {})
+    permissions = settings.AUTHORIZATION.get("permissions", {})
     policy = permissions.get(permission, {})
     # TODO: envoy RBAC spec allows for matching methods and paths as
     # individual checks. So for instance, a permission may allow for all GETs
     # without a particular path, or may allow all methods on particular paths.
-    method_match = request.method in policy.get('methods', [])
-    path_match = _match_path(request.path, policy.get('paths', []))
+    method_match = request.method in policy.get("methods", [])
+    path_match = _match_path(request.path, policy.get("paths", []))
     if method_match and path_match:
         return True
     return False
 
 
-def envoy_permissions_check(header='x-envoy-downstream-service-cluster'):
+def envoy_permissions_check(header="x-envoy-downstream-service-cluster"):
     """
     Perform a check against the defined permissions and bindings in the
     authorization configuration to ensure the service defined in the
@@ -122,17 +122,17 @@ def envoy_permissions_check(header='x-envoy-downstream-service-cluster'):
     envoy_identity = request.headers.get(header)
     if envoy_identity is None:
         return False
-    bindings = settings.AUTHORIZATION.get('bindings', {})
+    bindings = settings.AUTHORIZATION.get("bindings", {})
     for subject, permissions in bindings.items():
         if _match_subject(envoy_identity, subject):
             for permission in permissions:
                 if _check_permission(permission):
                     return True
     logger.warning(
-        'Received an unauthorized request',
+        "Received an unauthorized request",
         extra={
-            'from': envoy_identity,
-            'endpoint': request.path,
+            "from": envoy_identity,
+            "endpoint": request.path,
         },
     )
     return False
