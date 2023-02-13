@@ -1,10 +1,10 @@
 # Make the tests directory a python module
 # so that all unit tests are reported as part of the tests package.
-
 import os
 
-# Inject mandatory environment variables
 from tests.data import TEST_CONFIG
+
+# Inject mandatory environment variables
 
 env_settings = [
     ("CREDENTIALS_SLACK_VERIFICATION_TOKEN_A12345678", "1234"),

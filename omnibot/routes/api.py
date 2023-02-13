@@ -7,26 +7,29 @@ configuration; see documentation on checks:
 
 * :func:`omnibot.authnz:enforce_checks`
 """
-from __future__ import absolute_import
 import json
 import time
 from functools import wraps
 
-from flask import Blueprint, jsonify, request, abort
+from flask import abort
+from flask import Blueprint
+from flask import jsonify
+from flask import request
 
 from omnibot import authnz
 from omnibot import logging
+from omnibot.processor import _handle_interactive_component_callback
 from omnibot.processor import parse_kwargs
+from omnibot.services import slack
 from omnibot.services import sqs
 from omnibot.services import stats
-from omnibot.services import slack
+from omnibot.services.slack.bot import Bot
+from omnibot.services.slack.bot import BotInitializationError
 from omnibot.services.slack.interactive_component import InteractiveComponent
 from omnibot.services.slack.team import Team
 from omnibot.services.slack.team import TeamInitializationError
-from omnibot.services.slack.bot import Bot
-from omnibot.services.slack.bot import BotInitializationError
-from omnibot.utils import get_callback_id, merge_logging_context
-from omnibot.processor import _handle_interactive_component_callback
+from omnibot.utils import get_callback_id
+from omnibot.utils import merge_logging_context
 
 logger = logging.getLogger(__name__)
 

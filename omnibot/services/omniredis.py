@@ -1,5 +1,6 @@
-import redis
 import functools
+
+import redis
 
 from omnibot import settings
 

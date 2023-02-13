@@ -1,5 +1,6 @@
 import json
-from typing import Any, Dict  # noqa: F401
+from typing import Any
+from typing import Dict
 from unittest.mock import MagicMock
 
 from flask import Response  # noqa: F401

@@ -1,13 +1,12 @@
 """
 Message callbacks for internal omnibot functionality.
 """
-
 import json
 import random
 
 from omnibot import logging
-from omnibot.services.slack.team import Team
 from omnibot.services.slack.bot import Bot
+from omnibot.services.slack.team import Team
 
 logger = logging.getLogger(__name__)
 

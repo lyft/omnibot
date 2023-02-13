@@ -2,9 +2,10 @@ import copy
 
 import pytest
 
-from omnibot.services.slack.team import Team
 from omnibot.services.slack.bot import Bot
-from omnibot.services.slack.message import Message, MessageUnsupportedError
+from omnibot.services.slack.message import Message
+from omnibot.services.slack.message import MessageUnsupportedError
+from omnibot.services.slack.team import Team
 
 
 def test_message(mocker):

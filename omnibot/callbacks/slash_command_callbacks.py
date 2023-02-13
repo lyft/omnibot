@@ -1,7 +1,6 @@
 """
 Slash command callbacks for internal omnibot functionality.
 """
-
 import json
 
 from omnibot import logging
