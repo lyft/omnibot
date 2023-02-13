@@ -1,5 +1,5 @@
 -r ../requirements3.txt
-GitPython==2.0.8
+GitPython==3.1.30
 Jinja2==2.11.3
 MarkupSafe==1.1.1
 Pygments==2.7.4
