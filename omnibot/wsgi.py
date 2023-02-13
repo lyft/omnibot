@@ -1,8 +1,5 @@
-from __future__ import absolute_import
-
-from omnibot.app import app
 from omnibot import settings
-
+from omnibot.app import app
 from omnibot.routes import api
 
 app.register_blueprint(api.blueprint)

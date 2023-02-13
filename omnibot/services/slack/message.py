@@ -1,6 +1,6 @@
 from omnibot import logging
-from omnibot.services import stats
 from omnibot.services import slack
+from omnibot.services import stats
 from omnibot.services.slack import parser
 
 logger = logging.getLogger(__name__)

@@ -1,9 +1,9 @@
-from __future__ import absolute_import
-
 import yaml
 
 from omnibot import logging
-from omnibot.utils.settings import bool_env, int_env, str_env
+from omnibot.utils.settings import bool_env
+from omnibot.utils.settings import int_env
+from omnibot.utils.settings import str_env
 
 logger = logging.getLogger(__name__)
 

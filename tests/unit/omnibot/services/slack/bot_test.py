@@ -1,7 +1,8 @@
 import pytest
 
+from omnibot.services.slack.bot import Bot
+from omnibot.services.slack.bot import BotInitializationError
 from omnibot.services.slack.team import Team
-from omnibot.services.slack.bot import Bot, BotInitializationError
 
 
 def test_team():
