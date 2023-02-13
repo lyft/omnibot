@@ -14,10 +14,8 @@ import importlib
 import re
 from functools import wraps
 
-from flask import (
-    abort,
-    request
-)
+from flask import abort
+from flask import request
 
 from omnibot import logging
 from omnibot import settings

@@ -13,20 +13,21 @@
 #
 # This conf is based on conf from https://github.com/envoyproxy/envoy/blob/master/docs/conf.py
 
-from datetime import datetime
 import os
-from sphinx.directives.code import CodeBlock
-import sphinx_rtd_theme
 import sys
+from datetime import datetime
+
+import sphinx_rtd_theme
+from sphinx.directives.code import CodeBlock
 
 sys.path.insert(0, os.path.abspath('../..'))
 
 
 # https://stackoverflow.com/questions/44761197/how-to-use-substitution-definitions-with-code-blocks
 class SubstitutionCodeBlock(CodeBlock):
-  """
-  Similar to CodeBlock but replaces placeholders with variables. See "substitutions" below.
-  """
+    """
+    Similar to CodeBlock but replaces placeholders with variables. See "substitutions" below.
+    """
 
   def run(self):
     """

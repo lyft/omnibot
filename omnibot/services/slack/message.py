@@ -1,6 +1,6 @@
 from omnibot import logging
-from omnibot.services import stats
 from omnibot.services import slack
+from omnibot.services import stats
 from omnibot.services.slack import parser
 
 logger = logging.getLogger(__name__)
@@ -187,7 +187,7 @@ class Message(object):
                 extra=self.event_trace
             )
         self._payload['mentioned'] = False
-        for user_id, user_name in self.users.items():
+        for user_name in self.users.values():
             if self.bot.name == user_name:
                 self._payload['mentioned'] = True
         try:

@@ -1,5 +1,6 @@
 import json
-from typing import Dict, Any  # noqa: F401
+from typing import Any  # noqa: F401
+from typing import Dict
 from unittest.mock import MagicMock
 
 from flask import Response  # noqa: F401
@@ -102,6 +103,6 @@ def test_missing_handler(client: Client, queue: MagicMock):
         assert resp.json["response_type"] == "ephemeral"
         assert (
             resp.json["text"]
-            == "This slash command does not have any omnibot handler associated with it."  # noqa: E501
+            == "This slash command does not have any omnibot handler associated with it."
         )
         queue.assert_not_called()

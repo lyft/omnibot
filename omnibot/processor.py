@@ -1,23 +1,25 @@
 """
 Core processing logic.
 """
-import re
-import json
 import importlib
+import json
+import re
 
 import requests
 
 from omnibot import logging
 from omnibot import settings
 from omnibot.services import slack
-from omnibot.services.slack.message import Message, MessageUnsupportedError
-from omnibot.services.slack.slash_command import SlashCommand
-from omnibot.services.slack.interactive_component import InteractiveComponent
 from omnibot.services import stats
 from omnibot.services.slack import parser
-from omnibot.services.slack.team import Team
 from omnibot.services.slack.bot import Bot
-from omnibot.utils import get_callback_id, merge_logging_context
+from omnibot.services.slack.interactive_component import InteractiveComponent
+from omnibot.services.slack.message import Message
+from omnibot.services.slack.message import MessageUnsupportedError
+from omnibot.services.slack.slash_command import SlashCommand
+from omnibot.services.slack.team import Team
+from omnibot.utils import get_callback_id
+from omnibot.utils import merge_logging_context
 
 logger = logging.getLogger(__name__)
 

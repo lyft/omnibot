@@ -1,8 +1,8 @@
 import pytest
 from werkzeug.exceptions import HTTPException
 
-from omnibot.app import app
 from omnibot import authnz
+from omnibot.app import app
 
 
 def test_enforce_checks(mocker):

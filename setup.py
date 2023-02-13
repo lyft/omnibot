@@ -1,4 +1,5 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages
+from setuptools import setup
 
 with open('requirements.in') as f:
     REQUIREMENTS = f.read().splitlines()

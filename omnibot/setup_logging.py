@@ -1,6 +1,5 @@
-import os.path
-import logging
 import logging.config
+import os.path
 
 import yaml
 

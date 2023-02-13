@@ -11,9 +11,9 @@ def extract_users(text, bot):
     with statsd.timer('parser.extract_users'):
         # Example: <@U024BE7LH> or <@U024BE7LH|bob-marley> or <@W024BE7LH|bob-marley>
         user_arr = {}
-        users = re.findall('<@[UW]\w+(?:\|[\w-]+)?>', text)
+        users = re.findall('<@[UW]\w+(?:\|[\w-]+)?>', text)  # noqa:W605
         for user in users:
-            match = re.match('<@([UW]\w+)(\|[\w-]+)?>', user)
+            match = re.match('<@([UW]\w+)(\|[\w-]+)?>', user)  # noqa:W605
             user_name = None
             if match.group(2) is not None:
                 # user name is embedded; use the second match and strip |
@@ -42,9 +42,9 @@ def extract_channels(text, bot):
     with statsd.timer('parser.extract_channels'):
         # Example: <#C024BE7LR> or <#C024BE7LR|general-room>
         channel_arr = {}
-        channels = re.findall('<#C\w+(?:\|[\w-]+)?>', text)
+        channels = re.findall('<#C\w+(?:\|[\w-]+)?>', text)  # noqa:W605
         for channel in channels:
-            match = re.match('<#(C\w+)(\|[\w-]+)?>', channel)
+            match = re.match('<#(C\w+)(\|[\w-]+)?>', channel)  # noqa:W605
             channel_name = None
             if match.group(2) is not None:
                 # channel name is embedded; use the second match and strip |
@@ -88,10 +88,10 @@ def extract_specials(text):
     statsd = stats.get_statsd_client()
     with statsd.timer('parser.extract_specials'):
         # Example: <!here|@here>
-        specials = re.findall('<!\w+(?:\|@[\w-]+)?>', text)
+        specials = re.findall('<!\w+(?:\|@[\w-]+)?>', text)  # noqa:W605
         special_arr = {}
         for special in specials:
-            match = re.match('<!(\w+)(?:\|@[\w-]+)?>', special)
+            match = re.match('<!(\w+)(?:\|@[\w-]+)?>', special)  # noqa:W605
             special_label = None
             if match.group(1) is not None:
                 special_label = '@{}'.format(match.group(1))
@@ -113,10 +113,10 @@ def extract_emojis(text):
     statsd = stats.get_statsd_client()
     with statsd.timer('parser.extract_emojis'):
         # Example: :test_me: or :test-me:
-        emojis = re.findall(':[a-z0-9_\+\-]+:', text)
+        emojis = re.findall(':[a-z0-9_\+\-]+:', text)  # noqa:W605
         emoji_arr = {}
         for emoji in emojis:
-            match = re.match(':([a-z0-9_\+\-]+):', emoji)
+            match = re.match(':([a-z0-9_\+\-]+):', emoji)  # noqa:W605
             emoji_name = None
             if match.group(1) is not None:
                 emoji_name = match.group(1)
@@ -130,7 +130,7 @@ def extract_emails(text):
         # Example: <mailto:example@example.com|example@example.com>
         emails = re.findall(
             # [^>]* is non-greedy .*
-            '<mailto:([^>]*)(?:\|[^>]*)?>',
+            '<mailto:([^>]*)(?:\|[^>]*)?>',  # noqa:W605
             text
         )
         email_arr = {}
@@ -156,7 +156,7 @@ def extract_urls(text):
     with statsd.timer('parser.extract_urls'):
         # Example: <http://test.com> or <http://test.com|test.com>
         # [^>]* is non-greedy .*
-        urls = re.findall('<(http[s]?://[^>]*)(?:\|[^>]*)?>', text)
+        urls = re.findall('<(http[s]?://[^>]*)(?:\|[^>]*)?>', text)  # noqa:W605
         url_arr = {}
         for url in urls:
             unparsed_url = '<{0}>'.format(url)
@@ -220,7 +220,7 @@ def unextract_channels(text, bot):
     statsd = stats.get_statsd_client()
     with statsd.timer('parser.unextract_channels'):
         # Example: #my-channel
-        _channel_labels = re.findall('(^#[\w\-_]+| #[\w\-_]+)', text)
+        _channel_labels = re.findall('(^#[\w\-_]+| #[\w\-_]+)', text)  # noqa:W605
         for label in _channel_labels:
             channel = slack.get_channel_by_name(bot, label.strip())
             if not channel:
@@ -239,7 +239,7 @@ def unextract_users(text, bot):
     statsd = stats.get_statsd_client()
     with statsd.timer('parser.unextract_users'):
         # Example: @my-user
-        _user_labels = re.findall('(^@[\w\-_]+| @[\w\-_]+)', text)
+        _user_labels = re.findall('(^@[\w\-_]+| @[\w\-_]+)', text)  # noqa:W605
         user_labels = []
         for label in _user_labels:
             user_labels.append(label.strip())

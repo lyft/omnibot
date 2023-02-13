@@ -1,4 +1,5 @@
-from omnibot.services.slack.parser import extract_users, extract_mentions
+from omnibot.services.slack.parser import extract_mentions
+from omnibot.services.slack.parser import extract_users
 
 
 def test_extract_user():

@@ -1,6 +1,6 @@
-from omnibot.services.slack.team import Team
 from omnibot.services.slack.bot import Bot
 from omnibot.services.slack.interactive_component import InteractiveComponent
+from omnibot.services.slack.team import Team
 
 
 def test_interactive_component(mocker):
