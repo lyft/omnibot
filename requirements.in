@@ -59,7 +59,7 @@ boto3==1.4.5
 # Slack API clients for Web API and RTM API
 # License: MIT
 # Upstream url: https://github.com/slackapi/python-slackclient
-slackclient==1.0.7
+slackclient==3.19.5
 
 # Testing library
 # License: MIT
