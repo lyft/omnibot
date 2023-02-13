@@ -22,5 +22,4 @@ repos:
         -   flake8-builtins==2.0.1
         -   flake8-comprehensions==3.10.1
         -   flake8-tidy-imports==4.8.0
-        -   lyft-flake8-plugins==1.9.4
         
