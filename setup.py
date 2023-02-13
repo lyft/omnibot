@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
-with open('requirements.in') as f:
+with open("requirements.in") as f:
     REQUIREMENTS = f.read().splitlines()
 
-with open('VERSION') as f:
+with open("VERSION") as f:
     VERSION = f.read()
 
 setup(

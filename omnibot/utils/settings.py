@@ -27,7 +27,7 @@ def bool_env(var_name, default=False):
     test_val = getenv(var_name, default)
     # Explicitly check for 'False', 'false', and '0' since all non-empty
     # string are normally coerced to True.
-    if test_val in ('False', 'false', '0'):
+    if test_val in ("False", "false", "0"):
         return False
     return bool(test_val)
 
@@ -50,7 +50,7 @@ def int_env(var_name, default=0):
     return int(getenv(var_name, default))
 
 
-def str_env(var_name, default=''):
+def str_env(var_name, default=""):
     """
     Get an environment variable as a string.
     This has the same arguments as bool_env.
