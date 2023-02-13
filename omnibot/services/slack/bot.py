@@ -19,16 +19,16 @@ class Bot(object):
 
     def _configure_handlers(self):
         handlers = settings.HANDLERS
-        for handler in handlers.get('interactive_component_handlers', []):
-            bots = handler.get('bots', {}).get(self.team.name, {})
+        for handler in handlers.get("interactive_component_handlers", []):
+            bots = handler.get("bots", {}).get(self.team.name, {})
             if self.name in bots:
                 self._interactive_component_handlers.append(handler)
-        for handler in handlers.get('slash_command_handlers', []):
-            bots = handler.get('bots', {}).get(self.team.name, {})
+        for handler in handlers.get("slash_command_handlers", []):
+            bots = handler.get("bots", {}).get(self.team.name, {})
             if self.name in bots:
                 self._slash_command_handlers.append(handler)
-        for handler in handlers.get('message_handlers', []):
-            bots = handler.get('bots', {}).get(self.team.name, {})
+        for handler in handlers.get("message_handlers", []):
+            bots = handler.get("bots", {}).get(self.team.name, {})
             if self.name in bots:
                 self._message_handlers.append(handler)
 
@@ -37,7 +37,7 @@ class Bot(object):
         bots = settings.SLACK_BOT_TOKENS.get(team.name, {})
         _bot_data = bots.get(name, {})
         if not _bot_data:
-            raise BotInitializationError('Invalid bot')
+            raise BotInitializationError("Invalid bot")
         return cls(team, name, _bot_data)
 
     @classmethod
@@ -46,12 +46,12 @@ class Bot(object):
         _bot_data = {}
         bots = settings.SLACK_BOT_TOKENS.get(team.name, {})
         for bot_name, bot_data in bots.items():
-            if bot_id == bot_data.get('app_id'):
+            if bot_id == bot_data.get("app_id"):
                 name = bot_name
                 _bot_data = bot_data
                 break
         if not _bot_data:
-            raise BotInitializationError('Invalid bot')
+            raise BotInitializationError("Invalid bot")
         return cls(team, name, _bot_data)
 
     @classmethod
@@ -60,14 +60,14 @@ class Bot(object):
         _bot_data = {}
         for team_name, bots in settings.SLACK_BOT_TOKENS.items():
             for bot_name, bot_data in bots.items():
-                if verification_token == bot_data['verification_token']:
+                if verification_token == bot_data["verification_token"]:
                     name = bot_name
                     _bot_data = bot_data
                     break
             if name is not None:
                 break
         if not _bot_data:
-            raise BotInitializationError('Invalid bot')
+            raise BotInitializationError("Invalid bot")
         team = Team.get_team_by_name(team_name)
         return cls(team, name, _bot_data)
 
@@ -81,26 +81,26 @@ class Bot(object):
 
     @property
     def bot_id(self):
-        return self._bot_data.get('app_id')
+        return self._bot_data.get("app_id")
 
     @property
     def verification_token(self):
         try:
-            return self._bot_data.get('verification_token')
+            return self._bot_data.get("verification_token")
         except KeyError:
             return None
 
     @property
     def oauth_user_token(self):
         try:
-            return self._bot_data.get('oauth_user_token')
+            return self._bot_data.get("oauth_user_token")
         except KeyError:
             return None
 
     @property
     def oauth_bot_token(self):
         try:
-            return self._bot_data.get('oauth_bot_token')
+            return self._bot_data.get("oauth_bot_token")
         except KeyError:
             return None
 
@@ -120,10 +120,10 @@ class Bot(object):
     def logging_context(self):
         return merge_logging_context(
             {
-                'bot': self.name,
-                'bot_id': self.bot_id,
+                "bot": self.name,
+                "bot_id": self.bot_id,
             },
-            self.team.logging_context
+            self.team.logging_context,
         )
 
 
