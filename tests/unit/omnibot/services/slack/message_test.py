@@ -15,8 +15,7 @@ def test_message(mocker):
         'ts': '1234567.12',
         'thread_ts': None,
         'user': 'A12345678',
-        'text': '<@A12345678> echo I am <!here|here> in <#C123456AB|channel-channel>. See: <http://example.com> :simple_smile:',
-        # noqa:E501
+        'text': '<@A12345678> echo I am <!here|here> in <#C123456AB|channel-channel>. See: <http://example.com> :simple_smile:',  # noqa:E501
         'channel': 'C123456AB',
     }
     event_trace = {
