@@ -389,9 +389,9 @@ def _get_write_message_response(handler):
         response["text"] = canned_response
         response["response_type"] = response_type
     else:
-        # If we aren't sending back text, we can only send back a response
-        # type if it's in_channel, or the slash command will respond with an
-        # error every time.
+        # If we aren't sending back text, we can only send back a
+        # response type if it's in_channel, or the slash command
+        # will respond with an error every time.
         if response_type == "in_channel":
             response["response_type"] = response_type
     # We can only send back a json payload if we have items in it, or slack
