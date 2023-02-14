@@ -3,7 +3,7 @@ import pytest
 from omnibot import settings
 
 
-class SettingsOverrider(object):
+class SettingsOverrider:
     def __call__(self, **kwargs):
         """Override global settings with the keyword arguments."""
         self.orig_values = {k: settings.get(k) for k in kwargs.keys()}

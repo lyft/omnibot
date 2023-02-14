@@ -38,7 +38,7 @@ class TestInternalClient(testing.FlaskClient):
             {
                 "x-envoy-downstream-service-cluster": "someservice",
                 "x-envoy-internal": "true",
-            }
+            },
         )
         headers = kwargs.pop("headers", Headers())
         headers.extend(envoy_test_headers)

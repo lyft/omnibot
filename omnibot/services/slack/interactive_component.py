@@ -6,7 +6,7 @@ from omnibot.utils import get_callback_id
 logger = logging.getLogger(__name__)
 
 
-class InteractiveComponent(object):
+class InteractiveComponent:
     """
     Class for representing a parsed slack InteractiveComponent.
     """
@@ -37,7 +37,8 @@ class InteractiveComponent(object):
         if self.channel:
             self._event_trace["channel_id"] = self.channel["id"]
             self._payload["parsed_channel"] = slack.get_channel(
-                self.bot, self.channel["id"]
+                self.bot,
+                self.channel["id"],
             )
         self._payload["message"] = component.get("message")
         if self.message:
@@ -48,7 +49,8 @@ class InteractiveComponent(object):
     def _parse_message(self):
         if self.message.get("user"):
             self._payload["message"]["parsed_user"] = slack.get_user(
-                self.bot, self.message["user"]
+                self.bot,
+                self.message["user"],
             )
         elif self.message.get("bot_id"):
             # TODO: call get_bot
@@ -57,10 +59,12 @@ class InteractiveComponent(object):
             self._payload["message"]["parsed_user"] = None
         try:
             self._payload["message"]["users"] = parser.extract_users(
-                self.message["text"], self.bot
+                self.message["text"],
+                self.bot,
             )
             self._payload["message"]["parsed_text"] = parser.replace_users(
-                self.message["text"], self.message["users"]
+                self.message["text"],
+                self.message["users"],
             )
         except Exception:
             logger.exception(
@@ -70,10 +74,12 @@ class InteractiveComponent(object):
             )
         try:
             self._payload["message"]["channels"] = parser.extract_channels(
-                self.message["parsed_text"], self.bot
+                self.message["parsed_text"],
+                self.bot,
             )
             self._payload["message"]["parsed_text"] = parser.replace_channels(
-                self.message["parsed_text"], self.message["channels"]
+                self.message["parsed_text"],
+                self.message["channels"],
             )
         except Exception:
             logger.exception(
@@ -83,7 +89,8 @@ class InteractiveComponent(object):
             )
         try:
             self._payload["message"]["subteams"] = parser.extract_subteams(
-                self.message["text"], self.bot
+                self.message["text"],
+                self.bot,
             )
         except Exception:
             logger.exception(
@@ -93,10 +100,11 @@ class InteractiveComponent(object):
             )
         try:
             self._payload["message"]["specials"] = parser.extract_specials(
-                self.message["text"]
+                self.message["text"],
             )
             self._payload["message"]["parsed_text"] = parser.replace_specials(
-                self.message["parsed_text"], self.message["specials"]
+                self.message["parsed_text"],
+                self.message["specials"],
             )
         except Exception:
             logger.exception(
@@ -106,7 +114,7 @@ class InteractiveComponent(object):
             )
         try:
             self._payload["message"]["emojis"] = parser.extract_emojis(
-                self.message["text"]
+                self.message["text"],
             )
         except Exception:
             logger.exception(
@@ -116,10 +124,11 @@ class InteractiveComponent(object):
             )
         try:
             self._payload["message"]["emails"] = parser.extract_emails(
-                self.message["text"]
+                self.message["text"],
             )
             self._payload["message"]["parsed_text"] = parser.replace_emails(
-                self.message["parsed_text"], self.message["emails"]
+                self.message["parsed_text"],
+                self.message["emails"],
             )
         except Exception:
             logger.exception(
@@ -130,7 +139,8 @@ class InteractiveComponent(object):
         try:
             self._payload["message"]["urls"] = parser.extract_urls(self.message["text"])
             self._payload["message"]["parsed_text"] = parser.replace_urls(
-                self.message["parsed_text"], self.message["urls"]
+                self.message["parsed_text"],
+                self.message["urls"],
             )
         except Exception:
             logger.exception(

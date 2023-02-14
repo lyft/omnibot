@@ -14,14 +14,14 @@ def echo_callback(container):
     Just respond back with whatever is sent in.
     """
     payload = container.payload
-    logger.debug("echo callback payload: {}".format(json.dumps(payload, indent=2)))
+    logger.debug(f"echo callback payload: {json.dumps(payload, indent=2)}")
     return {
         # Respond back to the slash command with the same text
         "responses": [
             {
                 "text": payload["parsed_text"],
                 "omnibot_parse": {"text": ["users", "specials", "channels"]},
-            }
+            },
         ],
         # Post into the #echo channel, letting everyone @here know what's up
         "actions": [
@@ -35,7 +35,7 @@ def echo_callback(container):
                         "text": ["users", "specials", "channels"],
                     },
                 },
-            }
+            },
         ],
     }
 
@@ -45,10 +45,10 @@ def tableflip_callback(container):
     Respond back with a tableflip
     """
     payload = container.payload
-    logger.debug("tableflip callback payload: {}".format(json.dumps(payload, indent=2)))
+    logger.debug(f"tableflip callback payload: {json.dumps(payload, indent=2)}")
     return {
         # Respond back to the slash command with the same text
-        "responses": [{"response_type": "in_channel", "text": "(╯°□°)╯︵ ┻━┻"}]
+        "responses": [{"response_type": "in_channel", "text": "(╯°□°)╯︵ ┻━┻"}],
     }
 
 
@@ -58,17 +58,17 @@ def unfliptable_callback(container):
     """
     payload = container.payload
     logger.debug(
-        "unfliptable callback payload: {}".format(json.dumps(payload, indent=2))
+        f"unfliptable callback payload: {json.dumps(payload, indent=2)}",
     )
     return {
         # Respond back to the slash command with the same text
-        "responses": [{"response_type": "in_channel", "text": "┬─┬ノ( º _ ºノ)"}]
+        "responses": [{"response_type": "in_channel", "text": "┬─┬ノ( º _ ºノ)"}],
     }
 
 
 def bigemoji_callback(container):
     payload = container.payload
-    logger.debug("bigemoji callback payload: {}".format(json.dumps(payload, indent=2)))
+    logger.debug(f"bigemoji callback payload: {json.dumps(payload, indent=2)}")
 
     s = container.payload["text"].strip()
     args = s.split()
@@ -79,8 +79,8 @@ def bigemoji_callback(container):
                 {
                     "response_type": "ephemeral",
                     "text": "usage: /bigemoji :emoji:",
-                }
-            ]
+                },
+            ],
         }
     else:
         (emoji_name,) = args
@@ -98,6 +98,6 @@ def bigemoji_callback(container):
                     "response_type": "in_channel",
                     "text": resp,
                     "omnibot_parse": {"text": ["users", "specials", "channels"]},
-                }
-            ]
+                },
+            ],
         }

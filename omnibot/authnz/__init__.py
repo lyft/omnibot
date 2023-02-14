@@ -47,7 +47,7 @@ def enforce_checks(f):
         if not checks:
             logger.warning(
                 "No checks set in the authorization section of the configuration;"
-                " denying access to API calls for sanity sake"
+                " denying access to API calls for sanity sake",
             )
             return abort(403)
         for check in checks:

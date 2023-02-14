@@ -81,7 +81,7 @@ def slack_event():
     Handle event subscription API webhooks from slack.
     """
     event = request.json
-    logger.debug("Event received in API slack_event: {}".format(event))
+    logger.debug(f"Event received in API slack_event: {event}")
     # Every event should have a validation token
     if "token" not in event:
         msg = "No verification token in event."
@@ -160,7 +160,7 @@ def slack_event():
 def slack_slash_command():
     # Slack sends slash commands as application/x-www-form-urlencoded
     command = request.form.to_dict()
-    logger.debug("command received in API slack_slash_command: {}".format(command))
+    logger.debug(f"command received in API slack_slash_command: {command}")
     # Every event should have a validation token
     if "token" not in command:
         msg = "No verification token in slash command."
@@ -253,7 +253,7 @@ def slack_interactive_component():
     # Slack sends interactive components as application/x-www-form-urlencoded,
     # json encoded inside of the payload field. What a whacky API.
     component = json.loads(request.form.to_dict().get("payload", {}))
-    logger.debug("component received in API slack_slash_command: {}".format(component))
+    logger.debug(f"component received in API slack_slash_command: {component}")
     if component.get("type") not in [
         "interactive_message",
         "message_action",
@@ -262,7 +262,7 @@ def slack_interactive_component():
         "view_submission",
     ]:
         msg = "Unsupported type={} in interactive" " component.".format(
-            component.get("type")
+            component.get("type"),
         )
         logger.warning(msg)
         return jsonify({"status": "failure", "error": msg}), 400
@@ -340,7 +340,9 @@ def slack_interactive_component():
                 if c.get("synchronous"):
                     interactive_component = InteractiveComponent(bot, component, {})
                     resp = _handle_interactive_component_callback(
-                        interactive_component, c, "raw"
+                        interactive_component,
+                        c,
+                        "raw",
                     )
                     logger.info(
                         "Synchronous callback response",
@@ -387,9 +389,9 @@ def _get_write_message_response(handler):
         response["text"] = canned_response
         response["response_type"] = response_type
     else:
-        # If we aren't sending back text, we can only send back a response
-        # type if it's in_channel, or the slash command will respond with an
-        # error every time.
+        # If we aren't sending back text, we can only send back a
+        # response type if it's in_channel, or the slash command
+        # will respond with an error every time.
         if response_type == "in_channel":
             response["response_type"] = response_type
     # We can only send back a json payload if we have items in it, or slack
@@ -426,7 +428,7 @@ def instrument_event(bot, event):
         )
     if retry_reason:
         logger.warning(
-            'Incoming message is a retry: reason="{}"'.format(retry_reason),
+            f'Incoming message is a retry: reason="{retry_reason}"',
             extra=bot.logging_context,
         )
 
@@ -452,7 +454,7 @@ def queue_event(bot, event, event_type):
         },
     )
     statsd.incr("sqs.sent")
-    statsd.incr("sqs.{}.sent".format(bot.name))
+    statsd.incr(f"sqs.{bot.name}.sent")
 
 
 @blueprint.route("/api/v1/slack/get_team/<team_name>", methods=["GET"])
@@ -498,7 +500,8 @@ def get_team_id_by_name(team_name):
 
 
 @blueprint.route(
-    "/api/v1/slack/get_user/<team_name>/<bot_name>/<email>", methods=["GET"]
+    "/api/v1/slack/get_user/<team_name>/<bot_name>/<email>",
+    methods=["GET"],
 )
 @authnz.enforce_checks
 @verify_bot
@@ -573,13 +576,14 @@ def get_user_v2(team_name, bot_name, email):
                 "name": name,
                 "team_id": team.team_id,
                 "user_id": user["id"],
-            }
-        }
+            },
+        },
     )
 
 
 @blueprint.route(
-    "/api/v1/slack/get_channel/<team_name>/<bot_name>/<channel_name>", methods=["GET"]
+    "/api/v1/slack/get_channel/<team_name>/<bot_name>/<channel_name>",
+    methods=["GET"],
 )
 @authnz.enforce_checks
 @verify_bot
@@ -696,7 +700,7 @@ def get_channel_by_name(team_name, bot_name, channel_name):
 def _perform_action(bot, data):
     for arg in ["action", "kwargs"]:
         if arg not in data:
-            return {"ok": False, "error": "{} not provided in payload".format(arg)}
+            return {"ok": False, "error": f"{arg} not provided in payload"}
     action = data["action"]
     kwargs = data["kwargs"]
     logger.debug(
@@ -727,7 +731,7 @@ def _perform_action(bot, data):
                 ret = slack.client(bot, client_type="user").api_call(action, **kwargs)
             except json.decoder.JSONDecodeError:
                 logger.exception(
-                    "JSON decode failure when parsing kwargs={}".format(kwargs),
+                    f"JSON decode failure when parsing kwargs={kwargs}",
                     extra=merge_logging_context(
                         {"action": action},
                         bot.logging_context,
@@ -737,7 +741,7 @@ def _perform_action(bot, data):
             logger.debug(ret)
             if not ret["ok"]:
                 logger.error(
-                    "action failed in post_slack: ret={}".format(ret),
+                    f"action failed in post_slack: ret={ret}",
                     extra=merge_logging_context(
                         {"action": action, "kwargs": kwargs},
                         bot.logging_context,
@@ -745,7 +749,7 @@ def _perform_action(bot, data):
                 )
         else:
             logger.error(
-                "action failed in post_slack: ret={}".format(ret),
+                f"action failed in post_slack: ret={ret}",
                 extra=merge_logging_context(
                     {"action": action, "kwargs": kwargs},
                     bot.logging_context,
@@ -903,7 +907,8 @@ def get_bot_ims(team_name, bot_name):
 
 
 @blueprint.route(
-    "/api/v1/slack/send_im/<team_name>/<bot_name>/<email>", methods=["POST"]
+    "/api/v1/slack/send_im/<team_name>/<bot_name>/<email>",
+    methods=["POST"],
 )
 @authnz.enforce_checks
 @verify_bot
@@ -969,7 +974,7 @@ def send_bot_im(team_name, bot_name, email):
                     "team_name": team_name,
                     "bot_name": bot_name,
                     "email": email,
-                }
+                },
             ),
             404,
         )
@@ -981,7 +986,7 @@ def send_bot_im(team_name, bot_name, email):
                     "team_name": team_name,
                     "bot_name": bot_name,
                     "email": email,
-                }
+                },
             ),
             404,
         )
@@ -994,7 +999,7 @@ def send_bot_im(team_name, bot_name, email):
                     "team_name": team_name,
                     "bot_name": bot_name,
                     "email": email,
-                }
+                },
             ),
             404,
         )
@@ -1007,7 +1012,7 @@ def send_bot_im(team_name, bot_name, email):
                     "team_name": team_name,
                     "bot_name": bot_name,
                     "email": email,
-                }
+                },
             ),
             404,
         )

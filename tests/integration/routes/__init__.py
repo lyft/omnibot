@@ -19,5 +19,5 @@ class BotMatcher:
 
 def get_test_bot() -> BotMatcher:
     return BotMatcher(
-        Bot.get_bot_by_bot_id(Team.get_team_by_id("TEST_TEAM_ID"), "TEST_OMNIBOT_ID")
+        Bot.get_bot_by_bot_id(Team.get_team_by_id("TEST_TEAM_ID"), "TEST_OMNIBOT_ID"),
     )

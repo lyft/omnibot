@@ -9,7 +9,9 @@ from tests.integration.routes import get_test_bot
 
 
 def test_send_bot_im(
-    internal_client: Client, mocker: MockerFixture, slack_api_call: MagicMock
+    internal_client: Client,
+    mocker: MockerFixture,
+    slack_api_call: MagicMock,
 ):
     get_im_channel_id = mocker.patch("omnibot.services.slack.get_im_channel_id")
     get_user_by_email = mocker.patch("omnibot.services.slack.get_user_by_email")
@@ -27,5 +29,6 @@ def test_send_bot_im(
     get_user_by_email.assert_called_once_with(get_test_bot(), "testuser@example.com")
     get_im_channel_id.assert_called_once_with(get_test_bot(), "TEST_USER_ID")
     slack_api_call.assert_called_once_with(
-        "test-send-bot-im", channel="TEST_CHANNEL_ID"
+        "test-send-bot-im",
+        channel="TEST_CHANNEL_ID",
     )

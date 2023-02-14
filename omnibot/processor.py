@@ -40,12 +40,12 @@ def process_event(event):
         },
         bot.logging_context,
     )
-    statsd.incr("event.process.attempt.{}".format(event_type))
+    statsd.incr(f"event.process.attempt.{event_type}")
     if event_type == "message" or event_type == "app_mention":
         try:
             with statsd.timer("process_event"):
                 logger.debug(
-                    "Processing message: {}".format(json.dumps(event, indent=2)),
+                    f"Processing message: {json.dumps(event, indent=2)}",
                     extra=event_trace,
                 )
                 try:
@@ -54,9 +54,11 @@ def process_event(event):
                 except MessageUnsupportedError:
                     pass
         except Exception:
-            statsd.incr("event.process.failed.{}".format(event_type))
+            statsd.incr(f"event.process.failed.{event_type}")
             logger.exception(
-                "Could not process message.", exc_info=True, extra=event_trace
+                "Could not process message.",
+                exc_info=True,
+                extra=event_trace,
             )
     else:
         logger.debug("Event is not a message type.", extra=event_trace)
@@ -117,19 +119,21 @@ def process_slash_command(command):
         },
         bot.logging_context,
     )
-    statsd.incr("slash_command.process.attempt.{}".format(command_name))
+    statsd.incr(f"slash_command.process.attempt.{command_name}")
     try:
         with statsd.timer("process_slash_command"):
             logger.debug(
-                "Processing slash_command: {}".format(json.dumps(command, indent=2)),
+                f"Processing slash_command: {json.dumps(command, indent=2)}",
                 extra=event_trace,
             )
             slash_command = SlashCommand(bot, command, event_trace)
             _process_slash_command_handlers(slash_command)
     except Exception:
-        statsd.incr("slash_command.process.failed.{}".format(command_name))
+        statsd.incr(f"slash_command.process.failed.{command_name}")
         logger.exception(
-            "Could not process slash command.", exc_info=True, extra=event_trace
+            "Could not process slash command.",
+            exc_info=True,
+            extra=event_trace,
         )
 
 
@@ -148,13 +152,13 @@ def process_interactive_component(component):
         bot.logging_context,
     )
     statsd.incr(
-        "interactive_component.process.attempt.{}".format(get_callback_id(component))
+        f"interactive_component.process.attempt.{get_callback_id(component)}",
     )
     try:
         with statsd.timer("process_interactive_component"):
             logger.debug(
                 "Processing interactive component: {}".format(
-                    json.dumps(component, indent=2)
+                    json.dumps(component, indent=2),
                 ),
                 extra=event_trace,
             )
@@ -162,10 +166,14 @@ def process_interactive_component(component):
             _process_interactive_component(interactive_component)
     except Exception:
         statsd.incr(
-            "interactive_component.process.failed.{}".format(get_callback_id(component))
+            "interactive_component.process.failed.{}".format(
+                get_callback_id(component),
+            ),
         )
         logger.exception(
-            "Could not process interactive component.", exc_info=True, extra=event_trace
+            "Could not process interactive component.",
+            exc_info=True,
+            extra=event_trace,
         )
 
 
@@ -176,7 +184,9 @@ def _process_slash_command_handlers(command):
             continue
         for callback in handler["callbacks"]:
             _handle_slash_command_callback(
-                command, callback, handler.get("response_type", "ephemeral")
+                command,
+                callback,
+                handler.get("response_type", "ephemeral"),
             )
             handler_called = True
     if not handler_called:
@@ -191,7 +201,9 @@ def _process_interactive_component(component):
             continue
         for callback in handler.get("callbacks", []):
             _handle_interactive_component_callback(
-                component, callback, handler.get("response_type", "ephemeral")
+                component,
+                callback,
+                handler.get("response_type", "ephemeral"),
             )
             handler_called = True
     if not handler_called:
@@ -207,7 +219,8 @@ def _handle_help(message):
             _handle_message_callback(message, settings.HELP_CALLBACK["callback"])
         elif settings.DEFAULT_TO_HELP:
             _handle_message_callback(
-                message, {"module": "omnibot.callbacks.message_callbacks:help_callback"}
+                message,
+                {"module": "omnibot.callbacks.message_callbacks:help_callback"},
             )
         else:
             # TODO: respond with error message here
@@ -232,7 +245,7 @@ def parse_kwargs(kwargs, bot, event_trace=None):
     for attr, to_parse in omnibot_parse.items():
         if attr not in kwargs:
             logger.warning(
-                "{} not found in kwargs when parsing post response.".format(attr),
+                f"{attr} not found in kwargs when parsing post response.",
                 extra=event_trace,
             )
         with statsd.timer("unexpand_metadata"):
@@ -265,7 +278,7 @@ def _handle_post_message(message, kwargs):
         ).api_call("chat.postMessage", channel=channel, **kwargs)
     except json.decoder.JSONDecodeError:
         logger.exception(
-            "JSON decode failure when parsing {}".format(kwargs),
+            f"JSON decode failure when parsing {kwargs}",
             extra=message.event_trace,
         )
         return
@@ -280,38 +293,39 @@ def _handle_action(action, container, kwargs):
         container.bot,
     ).api_call(action, **kwargs)
     logger.debug(
-        "return from action {}: {}".format(action, ret),
+        f"return from action {action}: {ret}",
         extra=container.event_trace,
     )
     if not ret["ok"]:
         if ret.get("error") == "missing_scope":
             logger.warning(
-                "action {} failed, attempting as user.".format(action),
+                f"action {action} failed, attempting as user.",
                 extra=container.event_trace,
             )
             try:
                 ret = slack.client(container.bot, client_type="user").api_call(
-                    action, **kwargs
+                    action,
+                    **kwargs,
                 )
             except json.decoder.JSONDecodeError:
                 logger.exception(
-                    "JSON decode failure when parsing {}".format(kwargs),
+                    f"JSON decode failure when parsing {kwargs}",
                     extra=container.event_trace,
                 )
                 return
             logger.debug(
-                "return from action {}: {}".format(action, ret),
+                f"return from action {action}: {ret}",
                 extra=container.event_trace,
             )
             if not ret["ok"]:
                 logger.debug(
-                    "return from failed action {}: {}".format(action, ret),
+                    f"return from failed action {action}: {ret}",
                     extra=container.event_trace,
                 )
         else:
             if not ret["ok"]:
                 logger.debug(
-                    "return from failed action {}: {}".format(action, ret),
+                    f"return from failed action {action}: {ret}",
                     extra=container.event_trace,
                 )
 
@@ -319,7 +333,8 @@ def _handle_action(action, container, kwargs):
 def _handle_message_callback(message, callback):
     logger.info(
         'Handling callback for message: match_type="{}" match="{}"'.format(
-            message.match_type, message.match
+            message.match_type,
+            message.match,
         ),
         extra={
             **message.event_trace,
@@ -328,7 +343,7 @@ def _handle_message_callback(message, callback):
             "client_kwargs": {
                 "service": callback.get("kwargs", {})
                 .get("client_kwargs", {})
-                .get("service", "")
+                .get("service", ""),
             },
         },
     )
@@ -338,7 +353,7 @@ def _handle_message_callback(message, callback):
             logger.error("Action in response is not a dict.", extra=message.event_trace)
             continue
         logger.debug(
-            "action for callback: {}".format(action),
+            f"action for callback: {action}",
             extra=message.event_trace,
         )
         if action["action"] == "chat.postMessage":
@@ -349,14 +364,14 @@ def _handle_message_callback(message, callback):
 
 def _handle_slash_command_callback(command, callback, response_type):
     logger.info(
-        'Handling callback for slash_command: command="{}"'.format(command.command),
+        f'Handling callback for slash_command: command="{command.command}"',
         extra={**command.event_trace, "callback": callback},
     )
     response = _handle_callback(command, callback)
     for command_response in response.get("responses", []):
         logger.debug(
             "Handling response for callback (pre-parse): {}".format(
-                json.dumps(command_response)
+                json.dumps(command_response),
             ),
             extra=command.event_trace,
         )
@@ -365,7 +380,7 @@ def _handle_slash_command_callback(command, callback, response_type):
         parse_kwargs(command_response, command.bot, command.event_trace)
         logger.debug(
             "Handling response for callback (post-parse): {}".format(
-                json.dumps(command_response)
+                json.dumps(command_response),
             ),
             extra=command.event_trace,
         )
@@ -381,7 +396,7 @@ def _handle_slash_command_callback(command, callback, response_type):
             logger.error("Action in response is not a dict.", extra=command.event_trace)
             continue
         logger.debug(
-            "Action in response: {}".format(action),
+            f"Action in response: {action}",
             extra=command.event_trace,
         )
         _handle_action(action["action"], command, action["kwargs"])
@@ -398,7 +413,7 @@ def _handle_interactive_component_callback(component, callback, response_type):
     for component_response in response.get("responses", []):
         logger.debug(
             "Handling response for callback (pre-parse): {}".format(
-                json.dumps(component_response)
+                json.dumps(component_response),
             ),
             extra=component.event_trace,
         )
@@ -407,7 +422,7 @@ def _handle_interactive_component_callback(component, callback, response_type):
         parse_kwargs(component_response, component.bot, component.event_trace)
         logger.debug(
             "Handling response for callback (post-parse): {}".format(
-                json.dumps(component_response)
+                json.dumps(component_response),
             ),
             extra=component.event_trace,
         )
@@ -421,11 +436,12 @@ def _handle_interactive_component_callback(component, callback, response_type):
     for action in response.get("actions", []):
         if not isinstance(action, dict):
             logger.error(
-                "Action in response is not a dict.", extra=component.event_trace
+                "Action in response is not a dict.",
+                extra=component.event_trace,
             )
             continue
         logger.debug(
-            "Action in response: {}".format(action),
+            f"Action in response: {action}",
             extra=component.event_trace,
         )
         if action["action"] == "chat.postMessage":

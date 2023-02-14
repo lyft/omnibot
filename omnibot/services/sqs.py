@@ -5,7 +5,7 @@ from omnibot import settings
 
 QUEUE_URL = None
 BOTOCORE_CONFIG = botocore.config.Config(
-    max_pool_connections=settings.SQS_MAX_POOL_CONNECTIONS
+    max_pool_connections=settings.SQS_MAX_POOL_CONNECTIONS,
 )
 
 
@@ -18,7 +18,8 @@ def get_client():
         )
     else:
         return omnibot.services.get_boto_client(
-            "sqs", config={"name": "keymanager", "config": BOTOCORE_CONFIG}
+            "sqs",
+            config={"name": "keymanager", "config": BOTOCORE_CONFIG},
         )
 
 

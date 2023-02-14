@@ -50,13 +50,13 @@ def handle_message(client, queue_url, message):
         m_type = attrs["type"]["StringValue"]
         if m_type not in ["event", "slash_command", "interactive_component"]:
             delete_message(client, queue_url, message)
-            logger.error("{} is an unsupported message type.".format(m_type))
+            logger.error(f"{m_type} is an unsupported message type.")
             return
         if "version" not in attrs:
             version = 1
         else:
             version = int(attrs["version"]["StringValue"])
-        logger.debug("Received SQS message of type {}".format(m_type))
+        logger.debug(f"Received SQS message of type {m_type}")
         try:
             if version == 2:
                 event = json.loads(message["Body"])["event"]
@@ -68,7 +68,7 @@ def handle_message(client, queue_url, message):
                 elif m_type == "interactive_component":
                     processor.process_interactive_component(event)
             else:
-                logger.error("{} is an unsupported message version.".format(version))
+                logger.error(f"{version} is an unsupported message version.")
         except Exception:
             logger.exception("Failed to handle webhook SQS message", exc_info=True)
             return

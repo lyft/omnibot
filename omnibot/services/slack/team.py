@@ -1,7 +1,7 @@
 from omnibot import settings
 
 
-class Team(object):
+class Team:
     """
     Class for representing a slack team.
     """

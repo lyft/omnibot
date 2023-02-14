@@ -22,11 +22,11 @@ def test_get_bot_ims(internal_client: Client, mocker: MockerFixture):
         (
             "TEST_IM_ID",
             json.dumps(mock_im),
-        )
+        ),
     ]
     get_ims.return_value = mock_ims_value
     resp: Response = internal_client.get(
-        "/api/v1/slack/get_ims/test-team-name/TEST_OMNIBOT_NAME"
+        "/api/v1/slack/get_ims/test-team-name/TEST_OMNIBOT_NAME",
     )
     assert resp.status_code == 200
     assert resp.json == {"ims": [mock_im]}

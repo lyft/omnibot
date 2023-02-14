@@ -45,7 +45,7 @@ def _is_allowed_to_run(redis_client, key):
     current_datetime = datetime.now()
 
     return current_datetime > last_run_datetime + timedelta(
-        seconds=settings.LIST_PROVIDER_UPDATE_FREQUENCY
+        seconds=settings.LIST_PROVIDER_UPDATE_FREQUENCY,
     )
 
 
