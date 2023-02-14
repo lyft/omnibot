@@ -3,7 +3,7 @@ from omnibot.services.slack.team import Team
 from omnibot.utils import merge_logging_context
 
 
-class Bot(object):
+class Bot:
     """
     Class for representing a slack bot.
     """

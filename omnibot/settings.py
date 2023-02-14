@@ -57,19 +57,19 @@ for team, bots in _config.get("bots", {}).items():
     SLACK_BOT_TOKENS[team] = {}
     for bot_name, bot_id in bots.items():
         _v_token = str_env(
-            "CREDENTIALS_SLACK_VERIFICATION_TOKEN_{}".format(bot_id.upper()),
+            f"CREDENTIALS_SLACK_VERIFICATION_TOKEN_{bot_id.upper()}",
         )
-        _o_token = str_env("CREDENTIALS_SLACK_OAUTH_TOKEN_{}".format(bot_id.upper()))
+        _o_token = str_env(f"CREDENTIALS_SLACK_OAUTH_TOKEN_{bot_id.upper()}")
         _o_bot_token = str_env(
-            "CREDENTIALS_SLACK_OAUTH_BOT_TOKEN_{}".format(bot_id.upper()),
+            f"CREDENTIALS_SLACK_OAUTH_BOT_TOKEN_{bot_id.upper()}",
         )
         # We require a verification token, and require some type of
         # oauth token.
         if not _v_token:
-            logger.warning("{} bot missing verification token.".format(bot_name))
+            logger.warning(f"{bot_name} bot missing verification token.")
             continue
         if not _o_token and not _o_bot_token:
-            logger.warning("{} bot missing oauth tokens.".format(bot_name))
+            logger.warning(f"{bot_name} bot missing oauth tokens.")
             continue
         SLACK_BOT_TOKENS[team][bot_name] = {}
         SLACK_BOT_TOKENS[team][bot_name]["verification_token"] = _v_token

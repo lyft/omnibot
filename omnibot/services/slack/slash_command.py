@@ -5,7 +5,7 @@ from omnibot.services.slack import parser
 logger = logging.getLogger(__name__)
 
 
-class SlashCommand(object):
+class SlashCommand:
     """
     Class for representing a parsed slack SlashCommand.
     """

@@ -6,7 +6,7 @@ from omnibot.services.slack import parser
 logger = logging.getLogger(__name__)
 
 
-class Message(object):
+class Message:
     """
     Class for representing a parsed slack message.
     """
