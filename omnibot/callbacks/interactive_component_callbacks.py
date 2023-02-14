@@ -20,6 +20,6 @@ def echo_dialog_submission_callback(container):
             {
                 "text": payload["submission"]["echo_element"],
                 "omnibot_parse": {"text": ["users", "specials", "channels"]},
-            }
-        ]
+            },
+        ],
     }

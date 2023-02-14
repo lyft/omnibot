@@ -9,7 +9,9 @@ from tests.integration.routes import get_test_bot
 
 
 def test_slack_action(
-    internal_client: Client, mocker: MockerFixture, slack_api_call: MagicMock
+    internal_client: Client,
+    mocker: MockerFixture,
+    slack_api_call: MagicMock,
 ):
     mock_channel_value = {"id": "TEST_CHANNEL_ID", "name": "test-channel"}
 
@@ -33,7 +35,7 @@ def test_slack_action(
                     "as_user": True,
                     "omnibot_parse": {"text": ["channels", "users", "specials"]},
                 },
-            }
+            },
         ),
         content_type="application/json",
     )

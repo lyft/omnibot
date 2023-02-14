@@ -44,7 +44,7 @@ AUTHORIZATION = _config.get("authorization", {})
 PRIMARY_SLACK_BOT = _config.get("primary_bot", {})
 if not PRIMARY_SLACK_BOT:
     logger.warning(
-        "primary_bot not set in configuration; watcher will not be able to refresh caches"
+        "primary_bot not set in configuration; watcher will not be able to refresh caches",
     )
 SLACK_TEAMS = _config.get("teams", {})
 if not SLACK_TEAMS:
@@ -57,11 +57,11 @@ for team, bots in _config.get("bots", {}).items():
     SLACK_BOT_TOKENS[team] = {}
     for bot_name, bot_id in bots.items():
         _v_token = str_env(
-            "CREDENTIALS_SLACK_VERIFICATION_TOKEN_{}".format(bot_id.upper())
+            "CREDENTIALS_SLACK_VERIFICATION_TOKEN_{}".format(bot_id.upper()),
         )
         _o_token = str_env("CREDENTIALS_SLACK_OAUTH_TOKEN_{}".format(bot_id.upper()))
         _o_bot_token = str_env(
-            "CREDENTIALS_SLACK_OAUTH_BOT_TOKEN_{}".format(bot_id.upper())
+            "CREDENTIALS_SLACK_OAUTH_BOT_TOKEN_{}".format(bot_id.upper()),
         )
         # We require a verification token, and require some type of
         # oauth token.

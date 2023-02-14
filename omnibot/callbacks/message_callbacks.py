@@ -31,7 +31,7 @@ def help_callback(container):
                     "title": handler["match"],
                     "value": handler.get("description", ""),
                     "short": False,
-                }
+                },
             )
         if handler["match_type"] == "regex":
             regex_fields.append(
@@ -39,15 +39,15 @@ def help_callback(container):
                     "title": handler["match"],
                     "value": handler.get("description", ""),
                     "short": False,
-                }
+                },
             )
     if command_fields:
         ret_action["kwargs"]["attachments"].append(
-            {"title": "Commands:", "fields": command_fields}
+            {"title": "Commands:", "fields": command_fields},
         )
     if regex_fields:
         ret_action["kwargs"]["attachments"].append(
-            {"title": "Regex matches:", "fields": regex_fields}
+            {"title": "Regex matches:", "fields": regex_fields},
         )
     return ret
 
@@ -79,7 +79,7 @@ def specials_callback(container, channels):
             except KeyError:
                 logger.error(
                     "Misconfigured message string for {}".format(
-                        payload["channel"]["name_normalized"]
+                        payload["channel"]["name_normalized"],
                     ),
                     extra=container.event_trace,
                 )
@@ -96,7 +96,7 @@ def specials_callback(container, channels):
                             "timestamp": payload["ts"],
                             "channel": payload["channel_id"],
                         },
-                    }
+                    },
                 )
 
             return {"actions": actions}
@@ -107,7 +107,7 @@ def channel_channel_callback(container):
     payload = container.payload
     logger.debug("Channel channel callback text: {}".format(payload["text"]))
     logger.debug(
-        "Channel channel callback payload: {}".format(json.dumps(payload, indent=2))
+        "Channel channel callback payload: {}".format(json.dumps(payload, indent=2)),
     )
 
     if payload["channel"].get("name_normalized") != "channel-channel":
@@ -155,8 +155,8 @@ def congratulations_bot_callback(container, channels, emojis, messages):
     logger.debug("Congratulations bot's callback text: {}".format(payload["text"]))
     logger.debug(
         "Congratulations bot's callback payload: {}".format(
-            json.dumps(payload, indent=2)
-        )
+            json.dumps(payload, indent=2),
+        ),
     )
 
     if payload["channel"]["name"] not in channels:
@@ -204,7 +204,7 @@ def channel_response_callback(container, channels):
     except KeyError:
         logger.error(
             "Missing find in channel_response_callback for {}".format(
-                payload["channel"]["name_normalized"]
+                payload["channel"]["name_normalized"],
             ),
             extra=container.event_trace,
         )
@@ -227,7 +227,7 @@ def channel_response_callback(container, channels):
     except KeyError:
         logger.error(
             "Missing message in channel_response_callback for {}".format(
-                payload["channel"]["name_normalized"]
+                payload["channel"]["name_normalized"],
             ),
             extra=container.event_trace,
         )
@@ -245,15 +245,15 @@ def example_topic_callback(container):
     payload = container.payload
     logger.debug("Example topic callback text: {}".format(payload["text"]))
     logger.debug(
-        "Example topic callback payload: {}".format(json.dumps(payload, indent=2))
+        "Example topic callback payload: {}".format(json.dumps(payload, indent=2)),
     )
     return {
         "actions": [
             {
                 "action": "channels.setTopic",
                 "kwargs": {"topic": payload["args"], "channel": payload["channel_id"]},
-            }
-        ]
+            },
+        ],
     }
 
 
@@ -264,7 +264,7 @@ def example_attachment_callback(container):
     payload = container.payload
     logger.debug("Example attachment callback text: {}".format(payload["text"]))
     logger.debug(
-        "Example attachment callback payload: {}".format(json.dumps(payload, indent=2))
+        "Example attachment callback payload: {}".format(json.dumps(payload, indent=2)),
     )
     return {
         "actions": [
@@ -277,11 +277,11 @@ def example_attachment_callback(container):
                             "fallback": "Example attachment!",
                             "color": "#36a64f",
                             "fields": [{"title": "Hello", "value": "World"}],
-                        }
+                        },
                     ],
                 },
-            }
-        ]
+            },
+        ],
     }
 
 
@@ -291,6 +291,6 @@ def test_callback(container, text=""):
     """
     return {
         "actions": [
-            {"action": "chat.postMessage", "kwargs": {"text": "{}".format(text)}}
-        ]
+            {"action": "chat.postMessage", "kwargs": {"text": "{}".format(text)}},
+        ],
     }

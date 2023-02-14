@@ -41,25 +41,25 @@ def test_interactive_component(mocker):
     replace_users_mock = mocker.patch("omnibot.services.slack.parser.replace_users")
     replace_users_mock.return_value = "@echobot echo I am <!here|here> in <#C123456AB|channel-channel>. See: <http://example.com> :simple_smile:"  # noqa:E501
     extract_channels_mock = mocker.patch(
-        "omnibot.services.slack.parser.extract_channels"
+        "omnibot.services.slack.parser.extract_channels",
     )
     channels_ret = {"<#C123456AB|channel-channel>": "channel-channel"}
     extract_channels_mock.return_value = channels_ret
     replace_channels_mock = mocker.patch(
-        "omnibot.services.slack.parser.replace_channels"
+        "omnibot.services.slack.parser.replace_channels",
     )
     replace_channels_mock.return_value = "@echobot echo I am <!here|here> in #channel-channel. See: <http://example.com> :simple_smile:"  # noqa:E501
     extract_subteams_mock = mocker.patch(
-        "omnibot.services.slack.parser.extract_subteams"
+        "omnibot.services.slack.parser.extract_subteams",
     )
     extract_subteams_mock.return_value = {}
     extract_specials_mock = mocker.patch(
-        "omnibot.services.slack.parser.extract_specials"
+        "omnibot.services.slack.parser.extract_specials",
     )
     special_ret = {"<!here|here>": "@here"}
     extract_specials_mock.return_value = special_ret
     replace_specials_mock = mocker.patch(
-        "omnibot.services.slack.parser.replace_specials"
+        "omnibot.services.slack.parser.replace_specials",
     )
     replace_specials_mock.return_value = "@echobot echo I am @here in #channel-channel. See: <http://example.com> :simple_smile:"  # noqa:E501
     extract_emojis_mock = mocker.patch("omnibot.services.slack.parser.extract_emojis")
@@ -75,7 +75,7 @@ def test_interactive_component(mocker):
     replace_urls_mock = mocker.patch("omnibot.services.slack.parser.replace_urls")
     replace_urls_mock.return_value = "@echobot echo I am @here in #channel-channel. See: http://example.com :simple_smile:"  # noqa:E501
     extract_mentions_mock = mocker.patch(
-        "omnibot.services.slack.parser.extract_mentions"
+        "omnibot.services.slack.parser.extract_mentions",
     )
     extract_mentions_mock.return_value = True
     extract_command_mock = mocker.patch("omnibot.services.slack.parser.extract_command")
@@ -119,7 +119,7 @@ def test_interactive_block_component(mocker):
         "type": "block_actions",
         "response_url": "https://hooks.slack.com/app/T999999/375455994771/iMW9hNKFI739hGOw9FCXMlf4",  # noqa:E501
         "actions": [
-            {"block_id": "echobot_action_test", "action_ts": "1561559117.130541"}
+            {"block_id": "echobot_action_test", "action_ts": "1561559117.130541"},
         ],
     }
     event_trace = {

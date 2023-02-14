@@ -12,7 +12,7 @@ def test_get_user_v2_user_found(internal_client: Client, mocker: MockerFixture):
         "id": "test_user_id",
     }
     resp: Response = internal_client.get(
-        "/api/v1/slack/get_user/test-team-name/TEST_OMNIBOT_NAME/testuser@test.com"
+        "/api/v1/slack/get_user/test-team-name/TEST_OMNIBOT_NAME/testuser@test.com",
     )
     assert resp.status_code == 200
     user_resp = resp.json["user"]
@@ -27,7 +27,7 @@ def test_get_user_v2_user_not_found(internal_client: Client, mocker: MockerFixtu
     get_user_by_email = mocker.patch("omnibot.services.slack.get_user_by_email")
     get_user_by_email.return_value = None
     resp: Response = internal_client.get(
-        "/api/v1/slack/get_user/test-team-name/TEST_OMNIBOT_NAME/notauser@test.com"
+        "/api/v1/slack/get_user/test-team-name/TEST_OMNIBOT_NAME/notauser@test.com",
     )
     assert resp.status_code == 404
     assert resp.json["error"] == "user not found"

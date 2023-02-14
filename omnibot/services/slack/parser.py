@@ -223,6 +223,7 @@ def unextract_users(text, bot):
             if not user:
                 continue
             text = text.replace(
-                label, "<@{0}|{1}>".format(user["id"], slack.get_name_from_user(user))
+                label,
+                "<@{0}|{1}>".format(user["id"], slack.get_name_from_user(user)),
             )
         return text

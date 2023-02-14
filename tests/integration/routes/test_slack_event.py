@@ -15,7 +15,9 @@ _ENDPOINT = "/api/v1/slack/event"
 def test_url_verification(client: Client, instrument: MagicMock, queue: MagicMock):
     with get_mock_data("event/url_verification.json") as json_data:
         resp: Response = client.post(
-            _ENDPOINT, data=json_data, content_type="application/json"
+            _ENDPOINT,
+            data=json_data,
+            content_type="application/json",
         )
         assert resp.status_code == 200
         assert (
@@ -27,12 +29,16 @@ def test_url_verification(client: Client, instrument: MagicMock, queue: MagicMoc
 
 
 def test_event_callback_omnibot_help(
-    client: Client, instrument: MagicMock, queue: MagicMock
+    client: Client,
+    instrument: MagicMock,
+    queue: MagicMock,
 ):
     with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
         event: Dict[str, Any] = json.loads(json_data.read())
         resp: Response = client.post(
-            _ENDPOINT, data=json.dumps(event), content_type="application/json"
+            _ENDPOINT,
+            data=json.dumps(event),
+            content_type="application/json",
         )
         assert resp.status_code == 200
         assert resp.json["status"] == "success"
@@ -41,12 +47,16 @@ def test_event_callback_omnibot_help(
 
 
 def test_event_callback_test_message(
-    client: Client, instrument: MagicMock, queue: MagicMock
+    client: Client,
+    instrument: MagicMock,
+    queue: MagicMock,
 ):
     with get_mock_data("event/event_callback_test_message.json") as json_data:
         event: Dict[str, Any] = json.loads(json_data.read())
         resp: Response = client.post(
-            _ENDPOINT, data=json.dumps(event), content_type="application/json"
+            _ENDPOINT,
+            data=json.dumps(event),
+            content_type="application/json",
         )
         assert resp.status_code == 200
         assert resp.json["status"] == "success"
@@ -55,13 +65,17 @@ def test_event_callback_test_message(
 
 
 def test_misisng_verification_token(
-    client: Client, instrument: MagicMock, queue: MagicMock
+    client: Client,
+    instrument: MagicMock,
+    queue: MagicMock,
 ):
     with get_mock_data("event/url_verification.json") as json_data:
         modified_data: Dict[str, Any] = json.loads(json_data.read())
         modified_data.pop("token", None)
         resp: Response = client.post(
-            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+            _ENDPOINT,
+            data=json.dumps(modified_data),
+            content_type="application/json",
         )
         assert resp.status_code == 403
         assert resp.json["status"] == "failure"
@@ -71,13 +85,17 @@ def test_misisng_verification_token(
 
 
 def test_invalid_verification_token(
-    client: Client, instrument: MagicMock, queue: MagicMock
+    client: Client,
+    instrument: MagicMock,
+    queue: MagicMock,
 ):
     with get_mock_data("event/url_verification.json") as json_data:
         modified_data: Dict[str, Any] = json.loads(json_data.read())
         modified_data["token"] = "something random"
         resp: Response = client.post(
-            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+            _ENDPOINT,
+            data=json.dumps(modified_data),
+            content_type="application/json",
         )
         assert resp.status_code == 403
         assert resp.json["status"] == "failure"
@@ -91,7 +109,9 @@ def test_missing_app_id(client: Client, instrument: MagicMock, queue: MagicMock)
         modified_data: Dict[str, Any] = json.loads(json_data.read())
         modified_data.pop("api_app_id", None)
         resp: Response = client.post(
-            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+            _ENDPOINT,
+            data=json.dumps(modified_data),
+            content_type="application/json",
         )
         assert resp.status_code == 403
         assert resp.json["status"] == "failure"
@@ -105,7 +125,9 @@ def test_missing_team_id(client: Client, instrument: MagicMock, queue: MagicMock
         modified_data: Dict[str, Any] = json.loads(json_data.read())
         modified_data.pop("team_id", None)
         resp: Response = client.post(
-            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+            _ENDPOINT,
+            data=json.dumps(modified_data),
+            content_type="application/json",
         )
         assert resp.status_code == 403
         assert resp.json["status"] == "failure"
@@ -119,7 +141,9 @@ def test_invalid_team(client: Client, instrument: MagicMock, queue: MagicMock):
         modified_data: Dict[str, Any] = json.loads(json_data.read())
         modified_data["team_id"] = "something random"
         resp: Response = client.post(
-            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+            _ENDPOINT,
+            data=json.dumps(modified_data),
+            content_type="application/json",
         )
         assert resp.status_code == 403
         assert resp.json["status"] == "failure"
@@ -133,7 +157,9 @@ def test_invalid_bot(client: Client, instrument: MagicMock, queue: MagicMock):
         modified_data: Dict[str, Any] = json.loads(json_data.read())
         modified_data["api_app_id"] = "something random"
         resp: Response = client.post(
-            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+            _ENDPOINT,
+            data=json.dumps(modified_data),
+            content_type="application/json",
         )
         assert resp.status_code == 200
         assert resp.json["status"] == "ignored"
@@ -143,13 +169,17 @@ def test_invalid_bot(client: Client, instrument: MagicMock, queue: MagicMock):
 
 
 def test_invalid_verification_token_for_valid_bot(
-    client: Client, instrument: MagicMock, queue: MagicMock
+    client: Client,
+    instrument: MagicMock,
+    queue: MagicMock,
 ):
     with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
         modified_data: Dict[str, Any] = json.loads(json_data.read())
         modified_data["token"] = "something random"
         resp: Response = client.post(
-            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+            _ENDPOINT,
+            data=json.dumps(modified_data),
+            content_type="application/json",
         )
         assert resp.status_code == 403
         assert resp.json["status"] == "failure"
@@ -159,13 +189,17 @@ def test_invalid_verification_token_for_valid_bot(
 
 
 def test_event_missing_event_block(
-    client: Client, instrument: MagicMock, queue: MagicMock
+    client: Client,
+    instrument: MagicMock,
+    queue: MagicMock,
 ):
     with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
         modified_data: Dict[str, Any] = json.loads(json_data.read())
         modified_data.pop("event", None)
         resp: Response = client.post(
-            _ENDPOINT, data=json.dumps(modified_data), content_type="application/json"
+            _ENDPOINT,
+            data=json.dumps(modified_data),
+            content_type="application/json",
         )
         assert resp.status_code == 403
         assert resp.json["status"] == "failure"

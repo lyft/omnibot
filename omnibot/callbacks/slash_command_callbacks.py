@@ -21,7 +21,7 @@ def echo_callback(container):
             {
                 "text": payload["parsed_text"],
                 "omnibot_parse": {"text": ["users", "specials", "channels"]},
-            }
+            },
         ],
         # Post into the #echo channel, letting everyone @here know what's up
         "actions": [
@@ -35,7 +35,7 @@ def echo_callback(container):
                         "text": ["users", "specials", "channels"],
                     },
                 },
-            }
+            },
         ],
     }
 
@@ -48,7 +48,7 @@ def tableflip_callback(container):
     logger.debug("tableflip callback payload: {}".format(json.dumps(payload, indent=2)))
     return {
         # Respond back to the slash command with the same text
-        "responses": [{"response_type": "in_channel", "text": "(╯°□°)╯︵ ┻━┻"}]
+        "responses": [{"response_type": "in_channel", "text": "(╯°□°)╯︵ ┻━┻"}],
     }
 
 
@@ -58,11 +58,11 @@ def unfliptable_callback(container):
     """
     payload = container.payload
     logger.debug(
-        "unfliptable callback payload: {}".format(json.dumps(payload, indent=2))
+        "unfliptable callback payload: {}".format(json.dumps(payload, indent=2)),
     )
     return {
         # Respond back to the slash command with the same text
-        "responses": [{"response_type": "in_channel", "text": "┬─┬ノ( º _ ºノ)"}]
+        "responses": [{"response_type": "in_channel", "text": "┬─┬ノ( º _ ºノ)"}],
     }
 
 
@@ -79,8 +79,8 @@ def bigemoji_callback(container):
                 {
                     "response_type": "ephemeral",
                     "text": "usage: /bigemoji :emoji:",
-                }
-            ]
+                },
+            ],
         }
     else:
         (emoji_name,) = args
@@ -98,6 +98,6 @@ def bigemoji_callback(container):
                     "response_type": "in_channel",
                     "text": resp,
                     "omnibot_parse": {"text": ["users", "specials", "channels"]},
-                }
-            ]
+                },
+            ],
         }

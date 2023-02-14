@@ -13,7 +13,9 @@ _ENDPOINT = "/api/v1/slack/interactive"
 
 
 def test_dialog_submission_echo_test(
-    client: Client, queue: MagicMock, slack_api_call: MagicMock
+    client: Client,
+    queue: MagicMock,
+    slack_api_call: MagicMock,
 ):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
         event: Dict[str, Any] = json.loads(json_data.read())
@@ -27,13 +29,17 @@ def test_dialog_submission_echo_test(
         component = json.loads(event["payload"])
         component["omnibot_bot_id"] = "TEST_OMNIBOT_ID"
         queue.assert_called_once_with(
-            get_test_bot(), component, "interactive_component"
+            get_test_bot(),
+            component,
+            "interactive_component",
         )
         slack_api_call.assert_not_called()
 
 
 def test_message_action_on_test_message(
-    client: Client, queue: MagicMock, slack_api_call: MagicMock
+    client: Client,
+    queue: MagicMock,
+    slack_api_call: MagicMock,
 ):
     with get_mock_data("interactive/message_action_on_test_message.json") as json_data:
         resp: Response = client.post(
@@ -51,7 +57,7 @@ def test_message_action_on_test_message(
                 "submit_label": "submit",
                 "callback_id": "echo_dialog_1",
                 "elements": [
-                    {"type": "text", "label": "Echo this text", "name": "echo_element"}
+                    {"type": "text", "label": "Echo this text", "name": "echo_element"},
                 ],
             },
             trigger_id="TEST_TRIGGER_ID",
@@ -59,7 +65,9 @@ def test_message_action_on_test_message(
 
 
 def test_invalid_component_type(
-    client: Client, queue: MagicMock, slack_api_call: MagicMock
+    client: Client,
+    queue: MagicMock,
+    slack_api_call: MagicMock,
 ):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
         payload: Dict[str, Any] = json.loads(json_data.read())
@@ -152,7 +160,9 @@ def test_invalid_token(client: Client, queue: MagicMock, slack_api_call: MagicMo
 
 
 def test_invalid_callback_id(
-    client: Client, queue: MagicMock, slack_api_call: MagicMock
+    client: Client,
+    queue: MagicMock,
+    slack_api_call: MagicMock,
 ):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
         payload: Dict[str, Any] = json.loads(json_data.read())
@@ -174,11 +184,14 @@ def test_invalid_callback_id(
 
 
 def test_view_submission_synchronous(
-    client: Client, queue: MagicMock, slack_api_call: MagicMock, mocker
+    client: Client,
+    queue: MagicMock,
+    slack_api_call: MagicMock,
+    mocker,
 ):
     mocker.patch("omnibot.services.slack.get_user", return_value={"id": "TEST_USER_ID"})
     with get_mock_data(
-        "interactive/view_submission_synchronous_test.json"
+        "interactive/view_submission_synchronous_test.json",
     ) as json_data:
         event: Dict[str, Any] = json.loads(json_data.read())
         resp: Response = client.post(

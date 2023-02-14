@@ -31,11 +31,11 @@ def client(bot, client_type="bot"):
         _client[team_name][bot.name] = {}
         if bot.oauth_bot_token:
             _client[team_name][bot.name]["bot"] = slackclient.SlackClient(
-                bot.oauth_bot_token
+                bot.oauth_bot_token,
             )
         if bot.oauth_user_token:
             _client[team_name][bot.name]["user"] = slackclient.SlackClient(
-                bot.oauth_user_token
+                bot.oauth_user_token,
             )
     if client_type == "bot":
         try:
@@ -124,7 +124,9 @@ def update_conversations(bot, team):
 def update_channel(bot, channel):
     redis_client = omniredis.get_redis_client()
     redis_client.hset(
-        "channels:{}".format(bot.team.name), channel["id"], json.dumps(channel)
+        "channels:{}".format(bot.team.name),
+        channel["id"],
+        json.dumps(channel),
     )
     redis_client.hset(
         "channelsmap:{}".format(bot.team.name),

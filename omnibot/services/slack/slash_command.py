@@ -35,7 +35,8 @@ class SlashCommand(object):
             self._payload["text"] = command["text"]
         except Exception:
             logger.error(
-                "Slash command is missing text attribute.", extra=self.event_trace
+                "Slash command is missing text attribute.",
+                extra=self.event_trace,
             )
             raise
         self._payload["parsed_text"] = self.text
@@ -44,7 +45,8 @@ class SlashCommand(object):
         self._payload["channel"] = slack.get_channel(self.bot, self.channel_id)
         if not self.channel:
             logger.error(
-                "Failed to fetch channel from channel_id.", extra=self.event_trace
+                "Failed to fetch channel from channel_id.",
+                extra=self.event_trace,
             )
 
         self._parse_payload()
@@ -53,7 +55,8 @@ class SlashCommand(object):
         try:
             self._payload["users"] = parser.extract_users(self.text, self.bot)
             self._payload["parsed_text"] = parser.replace_users(
-                self.parsed_text, self.users
+                self.parsed_text,
+                self.users,
             )
         except Exception:
             logger.exception(
@@ -64,7 +67,8 @@ class SlashCommand(object):
         try:
             self._payload["channels"] = parser.extract_channels(self.text, self.bot)
             self._payload["parsed_text"] = parser.replace_channels(
-                self.parsed_text, self.channels
+                self.parsed_text,
+                self.channels,
             )
         except Exception:
             logger.exception(
@@ -83,7 +87,8 @@ class SlashCommand(object):
         try:
             self._payload["specials"] = parser.extract_specials(self.text)
             self._payload["parsed_text"] = parser.replace_specials(
-                self.parsed_text, self.specials
+                self.parsed_text,
+                self.specials,
             )
         except Exception:
             logger.exception(
@@ -102,7 +107,8 @@ class SlashCommand(object):
         try:
             self._payload["emails"] = parser.extract_emails(self.text)
             self._payload["parsed_text"] = parser.replace_emails(
-                self.parsed_text, self.emails
+                self.parsed_text,
+                self.emails,
             )
         except Exception:
             logger.exception(
@@ -113,7 +119,8 @@ class SlashCommand(object):
         try:
             self._payload["urls"] = parser.extract_urls(self.text)
             self._payload["parsed_text"] = parser.replace_urls(
-                self.parsed_text, self.urls
+                self.parsed_text,
+                self.urls,
             )
         except Exception:
             logger.exception(

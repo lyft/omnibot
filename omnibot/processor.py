@@ -56,7 +56,9 @@ def process_event(event):
         except Exception:
             statsd.incr("event.process.failed.{}".format(event_type))
             logger.exception(
-                "Could not process message.", exc_info=True, extra=event_trace
+                "Could not process message.",
+                exc_info=True,
+                extra=event_trace,
             )
     else:
         logger.debug("Event is not a message type.", extra=event_trace)
@@ -129,7 +131,9 @@ def process_slash_command(command):
     except Exception:
         statsd.incr("slash_command.process.failed.{}".format(command_name))
         logger.exception(
-            "Could not process slash command.", exc_info=True, extra=event_trace
+            "Could not process slash command.",
+            exc_info=True,
+            extra=event_trace,
         )
 
 
@@ -148,13 +152,13 @@ def process_interactive_component(component):
         bot.logging_context,
     )
     statsd.incr(
-        "interactive_component.process.attempt.{}".format(get_callback_id(component))
+        "interactive_component.process.attempt.{}".format(get_callback_id(component)),
     )
     try:
         with statsd.timer("process_interactive_component"):
             logger.debug(
                 "Processing interactive component: {}".format(
-                    json.dumps(component, indent=2)
+                    json.dumps(component, indent=2),
                 ),
                 extra=event_trace,
             )
@@ -162,10 +166,14 @@ def process_interactive_component(component):
             _process_interactive_component(interactive_component)
     except Exception:
         statsd.incr(
-            "interactive_component.process.failed.{}".format(get_callback_id(component))
+            "interactive_component.process.failed.{}".format(
+                get_callback_id(component)
+            ),
         )
         logger.exception(
-            "Could not process interactive component.", exc_info=True, extra=event_trace
+            "Could not process interactive component.",
+            exc_info=True,
+            extra=event_trace,
         )
 
 
@@ -176,7 +184,9 @@ def _process_slash_command_handlers(command):
             continue
         for callback in handler["callbacks"]:
             _handle_slash_command_callback(
-                command, callback, handler.get("response_type", "ephemeral")
+                command,
+                callback,
+                handler.get("response_type", "ephemeral"),
             )
             handler_called = True
     if not handler_called:
@@ -191,7 +201,9 @@ def _process_interactive_component(component):
             continue
         for callback in handler.get("callbacks", []):
             _handle_interactive_component_callback(
-                component, callback, handler.get("response_type", "ephemeral")
+                component,
+                callback,
+                handler.get("response_type", "ephemeral"),
             )
             handler_called = True
     if not handler_called:
@@ -207,7 +219,8 @@ def _handle_help(message):
             _handle_message_callback(message, settings.HELP_CALLBACK["callback"])
         elif settings.DEFAULT_TO_HELP:
             _handle_message_callback(
-                message, {"module": "omnibot.callbacks.message_callbacks:help_callback"}
+                message,
+                {"module": "omnibot.callbacks.message_callbacks:help_callback"},
             )
         else:
             # TODO: respond with error message here
@@ -291,7 +304,8 @@ def _handle_action(action, container, kwargs):
             )
             try:
                 ret = slack.client(container.bot, client_type="user").api_call(
-                    action, **kwargs
+                    action,
+                    **kwargs,
                 )
             except json.decoder.JSONDecodeError:
                 logger.exception(
@@ -319,7 +333,8 @@ def _handle_action(action, container, kwargs):
 def _handle_message_callback(message, callback):
     logger.info(
         'Handling callback for message: match_type="{}" match="{}"'.format(
-            message.match_type, message.match
+            message.match_type,
+            message.match,
         ),
         extra={
             **message.event_trace,
@@ -328,7 +343,7 @@ def _handle_message_callback(message, callback):
             "client_kwargs": {
                 "service": callback.get("kwargs", {})
                 .get("client_kwargs", {})
-                .get("service", "")
+                .get("service", ""),
             },
         },
     )
@@ -356,7 +371,7 @@ def _handle_slash_command_callback(command, callback, response_type):
     for command_response in response.get("responses", []):
         logger.debug(
             "Handling response for callback (pre-parse): {}".format(
-                json.dumps(command_response)
+                json.dumps(command_response),
             ),
             extra=command.event_trace,
         )
@@ -365,7 +380,7 @@ def _handle_slash_command_callback(command, callback, response_type):
         parse_kwargs(command_response, command.bot, command.event_trace)
         logger.debug(
             "Handling response for callback (post-parse): {}".format(
-                json.dumps(command_response)
+                json.dumps(command_response),
             ),
             extra=command.event_trace,
         )
@@ -398,7 +413,7 @@ def _handle_interactive_component_callback(component, callback, response_type):
     for component_response in response.get("responses", []):
         logger.debug(
             "Handling response for callback (pre-parse): {}".format(
-                json.dumps(component_response)
+                json.dumps(component_response),
             ),
             extra=component.event_trace,
         )
@@ -407,7 +422,7 @@ def _handle_interactive_component_callback(component, callback, response_type):
         parse_kwargs(component_response, component.bot, component.event_trace)
         logger.debug(
             "Handling response for callback (post-parse): {}".format(
-                json.dumps(component_response)
+                json.dumps(component_response),
             ),
             extra=component.event_trace,
         )
@@ -421,7 +436,8 @@ def _handle_interactive_component_callback(component, callback, response_type):
     for action in response.get("actions", []):
         if not isinstance(action, dict):
             logger.error(
-                "Action in response is not a dict.", extra=component.event_trace
+                "Action in response is not a dict.",
+                extra=component.event_trace,
             )
             continue
         logger.debug(
