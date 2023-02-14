@@ -3,7 +3,6 @@ import gevent.monkey
 
 gevent.monkey.patch_all(thread=False)
 import gevent.pool  # noqa:E402
-import signal  # noqa:E402
 import json  # noqa:E402
 import time  # noqa:E402
 
@@ -13,10 +12,7 @@ from omnibot import logging  # noqa:E402
 from omnibot import settings  # noqa:E402
 from omnibot import processor  # noqa:E402
 from omnibot.services import stats  # noqa:E402
-from omnibot.services import slack  # noqa:E402
 from omnibot.services import sqs  # noqa:E402
-from omnibot.services.slack.team import Team  # noqa:E402
-from omnibot.services.slack.bot import Bot  # noqa:E402
 
 STATE = {"shutdown": False}
 

@@ -69,17 +69,17 @@ primary_bot:
   "test2ndteam": "test2ndteambot"
 bots:
   "test-team-name":
-      "TEST_OMNIBOT_NAME": "TEST_OMNIBOT_ID"
+    "TEST_OMNIBOT_NAME": "TEST_OMNIBOT_ID"
   "testteam":
-      "echobot": "A12345678"
-      "pingbot": "AABCDEF12"
-      "commandbot": "A11111111"
-      "mentionbot": "A22222222"
-      "channelchannelbot": "A12121212"
+    "echobot": "A12345678"
+    "pingbot": "AABCDEF12"
+    "commandbot": "A11111111"
+    "mentionbot": "A22222222"
+    "channelchannelbot": "A12121212"
   "test2ndteam":
-      "echobot": "A98765432"
-      "pingbot": "A12FEDCBA"
-      "channelchannelbot": "A99999999"
+    "echobot": "A98765432"
+    "pingbot": "A12FEDCBA"
+    "channelchannelbot": "A99999999"
 handlers:
   interactive_component_handlers:
     - callback_id: "echo_action_test"
@@ -156,7 +156,7 @@ handlers:
         "testteam":
           - "testteambot"
         "test2ndteam":
-          -  "test2ndteambot"
+          - "test2ndteambot"
       callbacks:
         - module: "omnibot.handlers.message_handlers:help_handler"
     - match: "topic"
@@ -184,4 +184,4 @@ handlers:
           - "channelchannelbot"
       callbacks:
         - module: "omnibot.handlers.message_handlers:channel_channel_handler"
-          kwargs: {}
+          kwargs: { }

@@ -4,7 +4,6 @@ from omnibot.routes import api
 
 app.register_blueprint(api.blueprint)
 
-
 if __name__ == "__main__":
     from omnibot import setup_logging  # noqa:F401
 

@@ -7,7 +7,6 @@ from omnibot import settings
 
 logger = logging.getLogger(__name__)
 
-
 try:
     with open(settings.LOG_CONFIG_FILE) as fd:
         logger.info("Configuring logger from file")

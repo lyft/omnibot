@@ -4,8 +4,6 @@ import gevent.monkey
 gevent.monkey.patch_all()
 import gevent.pool  # noqa:E402
 import signal  # noqa:E402
-import json  # noqa:E402
-import time  # noqa:E402
 import dateutil.parser  # noqa:E402
 from datetime import datetime, timedelta  # noqa:E402
 
