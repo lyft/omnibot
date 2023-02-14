@@ -58,7 +58,7 @@ class Bot:
     def get_bot_by_verification_token(cls, verification_token):
         name = None
         _bot_data = {}
-        for team_name, bots in settings.SLACK_BOT_TOKENS.items():
+        for bots in settings.SLACK_BOT_TOKENS.values():
             for bot_name, bot_data in bots.items():
                 if verification_token == bot_data["verification_token"]:
                     name = bot_name
@@ -68,7 +68,8 @@ class Bot:
                 break
         if not _bot_data:
             raise BotInitializationError("Invalid bot")
-        team = Team.get_team_by_name(team_name)
+        final_team_name_in_tokens = list(settings.SLACK_BOT_TOKENS.keys())[-1]
+        team = Team.get_team_by_name(final_team_name_in_tokens)
         return cls(team, name, _bot_data)
 
     @property

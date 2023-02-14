@@ -52,7 +52,7 @@ def envoy_internal_check(header="x-envoy-internal"):
     # If the request isn't internal, let's see if we have a permission that
     # matches, which has internal_only set to False
     permissions = settings.AUTHORIZATION.get("permissions", {})
-    for policy_name, policy in permissions.items():
+    for policy in permissions.values():
         method_match = request.method in policy["methods"]
         path_match = _match_path(request.path, policy["paths"])
         internal_only = policy.get("internal_only", True)
