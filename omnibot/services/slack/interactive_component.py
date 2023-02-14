@@ -6,7 +6,7 @@ from omnibot.utils import get_callback_id
 logger = logging.getLogger(__name__)
 
 
-class InteractiveComponent(object):
+class InteractiveComponent:
     """
     Class for representing a parsed slack InteractiveComponent.
     """

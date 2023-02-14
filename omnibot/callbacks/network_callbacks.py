@@ -51,7 +51,7 @@ def http_callback(container, request_kwargs=None, client_kwargs=None):
         response = client.post(url, json=container.payload, **kwargs)
     except RequestException as e:
         logger.error(
-            "Failed to make request to {} with error: {}".format(url, str(e)),
+            f"Failed to make request to {url} with error: {str(e)}",
             extra=container.event_trace,
         )
         return {}

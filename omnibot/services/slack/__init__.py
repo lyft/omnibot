@@ -124,12 +124,12 @@ def update_conversations(bot, team):
 def update_channel(bot, channel):
     redis_client = omniredis.get_redis_client()
     redis_client.hset(
-        "channels:{}".format(bot.team.name),
+        f"channels:{bot.team.name}",
         channel["id"],
         json.dumps(channel),
     )
     redis_client.hset(
-        "channelsmap:{}".format(bot.team.name),
+        f"channelsmap:{bot.team.name}",
         channel["name"],
         channel["id"],
     )
@@ -137,14 +137,14 @@ def update_channel(bot, channel):
 
 def get_channels(bot):
     redis_client = omniredis.get_redis_client()
-    return redis_client.hscan_iter("channels:{}".format(bot.team.name))
+    return redis_client.hscan_iter(f"channels:{bot.team.name}")
 
 
 def update_group(bot, group):
     redis_client = omniredis.get_redis_client()
-    redis_client.hset("groups:{}".format(bot.team.name), group["id"], json.dumps(group))
+    redis_client.hset(f"groups:{bot.team.name}", group["id"], json.dumps(group))
     redis_client.hset(
-        "groupsmap:{}".format(bot.team.name),
+        f"groupsmap:{bot.team.name}",
         group["name"],
         group["id"],
     )
@@ -152,14 +152,14 @@ def update_group(bot, group):
 
 def get_groups(bot):
     redis_client = omniredis.get_redis_client()
-    return redis_client.hscan_iter("groups:{}".format(bot.team.name))
+    return redis_client.hscan_iter(f"groups:{bot.team.name}")
 
 
 def update_im(bot, im):
     redis_client = omniredis.get_redis_client()
-    redis_client.hset("ims:{}".format(bot.team.name), im["id"], json.dumps(im))
+    redis_client.hset(f"ims:{bot.team.name}", im["id"], json.dumps(im))
     redis_client.hset(
-        "imsmap:{}".format(bot.team.name),
+        f"imsmap:{bot.team.name}",
         im["user"],
         im["id"],
     )
@@ -167,14 +167,14 @@ def update_im(bot, im):
 
 def get_ims(bot):
     redis_client = omniredis.get_redis_client()
-    return redis_client.hscan_iter("ims:{}".format(bot.team.name))
+    return redis_client.hscan_iter(f"ims:{bot.team.name}")
 
 
 def get_im_channel_id(bot, user_id):
     redis_client = omniredis.get_redis_client()
-    imsmap_id = redis_client.hget("imsmap:{}".format(bot.team.name), user_id)
+    imsmap_id = redis_client.hget(f"imsmap:{bot.team.name}", user_id)
     if imsmap_id:
-        raw_im = redis_client.hget("ims:{}".format(bot.team.name), imsmap_id)
+        raw_im = redis_client.hget(f"ims:{bot.team.name}", imsmap_id)
         if raw_im:
             im = json.loads(raw_im)
             if not im.get("is_user_deleted", False):
@@ -210,9 +210,9 @@ def get_im_channel_id(bot, user_id):
 
 def update_mpim(bot, mpim):
     redis_client = omniredis.get_redis_client()
-    redis_client.hset("mpims:{}".format(bot.team.name), mpim["id"], json.dumps(mpim))
+    redis_client.hset(f"mpims:{bot.team.name}", mpim["id"], json.dumps(mpim))
     redis_client.hset(
-        "mpimsmap:{}".format(bot.team.name),
+        f"mpimsmap:{bot.team.name}",
         mpim["name"],
         mpim["id"],
     )
@@ -220,7 +220,7 @@ def update_mpim(bot, mpim):
 
 def get_mpims(bot):
     redis_client = omniredis.get_redis_client()
-    return redis_client.hscan_iter("mpims:{}".format(bot.team.name))
+    return redis_client.hscan_iter(f"mpims:{bot.team.name}")
 
 
 def _get_emoji(bot):
@@ -258,26 +258,26 @@ def _get_emoji(bot):
 def update_emoji(bot):
     redis_client = omniredis.get_redis_client()
     for k, v in _get_emoji(bot).items():
-        redis_client.hset("emoji:{}".format(bot.team.name), k, v)
+        redis_client.hset(f"emoji:{bot.team.name}", k, v)
 
 
 def get_emoji(bot, name):
     redis_client = omniredis.get_redis_client()
-    return redis_client.hget("emoji:{}".format(bot.team.name), name)
+    return redis_client.hget(f"emoji:{bot.team.name}", name)
 
 
 def _get_channel_from_cache(bot, channel):
     redis_client = omniredis.get_redis_client()
-    channel_data = redis_client.hget("channels:{}".format(bot.team.name), channel)
+    channel_data = redis_client.hget(f"channels:{bot.team.name}", channel)
     if channel_data:
         return json.loads(channel_data)
-    group_data = redis_client.hget("groups:{}".format(bot.team.name), channel)
+    group_data = redis_client.hget(f"groups:{bot.team.name}", channel)
     if group_data:
         return json.loads(group_data)
-    im_data = redis_client.hget("ims:{}".format(bot.team.name), channel)
+    im_data = redis_client.hget(f"ims:{bot.team.name}", channel)
     if im_data:
         return json.loads(im_data)
-    mpim_data = redis_client.hget("mpims:{}".format(bot.team.name), channel)
+    mpim_data = redis_client.hget(f"mpims:{bot.team.name}", channel)
     if mpim_data:
         return json.loads(mpim_data)
     return None
@@ -313,7 +313,7 @@ def get_channel(bot, channel):
 
 def _get_channel_name_from_cache(key, bot_name, value):
     redis_client = omniredis.get_redis_client()
-    ret = redis_client.hget("{}:{}".format(key, bot_name), value)
+    ret = redis_client.hget(f"{key}:{bot_name}", value)
     if ret is None:
         return None
     else:
@@ -328,16 +328,16 @@ def get_channel_by_name(bot, channel):
     if channel.startswith("#"):
         channel = channel[1:]
     redis_client = omniredis.get_redis_client()
-    channel_id = redis_client.hget("channelsmap:{}".format(bot.team.name), channel)
+    channel_id = redis_client.hget(f"channelsmap:{bot.team.name}", channel)
     if channel_id:
         return _get_channel_name_from_cache("channels", bot.team.name, channel_id)
-    group_id = redis_client.hget("groupsmap:{}".format(bot.team.name), channel)
+    group_id = redis_client.hget(f"groupsmap:{bot.team.name}", channel)
     if group_id:
         return _get_channel_name_from_cache("groups", bot.team.name, group_id)
-    im_id = redis_client.hget("imsmap:{}".format(bot.team.name), channel)
+    im_id = redis_client.hget(f"imsmap:{bot.team.name}", channel)
     if im_id:
         return _get_channel_name_from_cache("ims", bot.team.name, im_id)
-    mpim_id = redis_client.hget("mpimsmap:{}".format(bot.team.name), channel)
+    mpim_id = redis_client.hget(f"mpimsmap:{bot.team.name}", channel)
     if mpim_id:
         return _get_channel_name_from_cache("mpims", bot.team.name, mpim_id)
     return None
@@ -401,14 +401,14 @@ def update_user(bot, user):
         return
     name = get_name_from_user(user)
     redis_client = omniredis.get_redis_client()
-    redis_client.hset("users:{}".format(bot.team.name), user["id"], json.dumps(user))
+    redis_client.hset(f"users:{bot.team.name}", user["id"], json.dumps(user))
     redis_client.hset(
-        "usersmap:name:{}".format(bot.team.name),
+        f"usersmap:name:{bot.team.name}",
         name,
         user["id"],
     )
     redis_client.hset(
-        "usersmap:email:{}".format(bot.team.name),
+        f"usersmap:email:{bot.team.name}",
         email,
         user["id"],
     )
@@ -416,7 +416,7 @@ def update_user(bot, user):
 
 def get_users(bot):
     redis_client = omniredis.get_redis_client()
-    return redis_client.hscan_iter("users:{}".format(bot.team.name))
+    return redis_client.hscan_iter(f"users:{bot.team.name}")
 
 
 def get_user(bot, user_id):
@@ -424,7 +424,7 @@ def get_user(bot, user_id):
     Get a user, from its user id
     """
     redis_client = omniredis.get_redis_client()
-    user = redis_client.hget("users:{}".format(bot.team.name), user_id)
+    user = redis_client.hget(f"users:{bot.team.name}", user_id)
     if user:
         return json.loads(user)
     user = client(bot).api_call("users.info", user=user_id)
@@ -455,9 +455,9 @@ def get_user_by_name(bot, username):
     if username.startswith("@"):
         username = username[1:]
     redis_client = omniredis.get_redis_client()
-    user_id = redis_client.hget("usersmap:name:{}".format(bot.team.name), username)
+    user_id = redis_client.hget(f"usersmap:name:{bot.team.name}", username)
     if user_id:
-        user_data = redis_client.hget("users:{}".format(bot.team.name), user_id)
+        user_data = redis_client.hget(f"users:{bot.team.name}", user_id)
         if user_data:
             return json.loads(user_data)
     return {}
@@ -465,9 +465,9 @@ def get_user_by_name(bot, username):
 
 def get_user_by_email(bot, email):
     redis_client = omniredis.get_redis_client()
-    user_id = redis_client.hget("usersmap:email:{}".format(bot.team.name), email)
+    user_id = redis_client.hget(f"usersmap:email:{bot.team.name}", email)
     if user_id:
-        user_data = redis_client.hget("users:{}".format(bot.team.name), user_id)
+        user_data = redis_client.hget(f"users:{bot.team.name}", user_id)
         if user_data:
             return json.loads(user_data)
     return {}
