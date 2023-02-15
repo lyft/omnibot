@@ -48,7 +48,7 @@ toml==0.10.2              # via pytest
 typing-extensions==3.10.0.0  # via importlib-metadata
 urllib3==1.26.5           # via requests
 websocket-client==0.56.0  # via slackclient
-werkzeug==0.15.5          # via flask
+werkzeug==2.2.3          # via flask
 zipp==3.4.1               # via importlib-metadata
 zope.event==4.5.0         # via gevent
 zope.interface==5.4.0     # via gevent
