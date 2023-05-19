@@ -123,16 +123,31 @@ def update_conversations(bot, team):
 
 def update_channel(bot, channel):
     redis_client = omniredis.get_redis_client()
-    redis_client.hset(
-        f"channels:{bot.team.name}",
-        channel["id"],
-        json.dumps(channel),
-    )
-    redis_client.hset(
-        f"channelsmap:{bot.team.name}",
-        channel["name"],
-        channel["id"],
-    )
+    if channel["name"]:
+        redis_client.hset(
+            f"channels:{bot.team.name}",
+            channel["id"],
+            json.dumps(channel),
+        )
+        redis_client.hset(
+            f"channelsmap:{bot.team.name}",
+            channel["name"],
+            channel["id"],
+        )
+    else:
+	# for the "conversations.info" endpoint (https://api.slack.com/methods/conversations.info#examples),
+        # the response differs between 1:1 direct message vs public channels/private channels/multi-party dm
+        # if the "name" key doesn't exist, then use "user" for 1:1 dm
+        redis_client.hset(
+            f"ims:{bot.team.name}",
+            channel["id"],
+            json.dumps(channel),
+        )
+        redis_client.hset(
+            f"imsmap:{bot.team.name}",
+	    channel["user"],
+            channel["id"],
+        )
 
 
 def get_channels(bot):
