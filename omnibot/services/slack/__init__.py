@@ -135,7 +135,7 @@ def update_channel(bot, channel):
             channel["id"],
         )
     else:
-	# for the "conversations.info" endpoint (https://api.slack.com/methods/conversations.info#examples),
+        # for the "conversations.info" endpoint (https://api.slack.com/methods/conversations.info#examples),
         # the response differs between 1:1 direct message vs public channels/private channels/multi-party dm
         # if the "name" key doesn't exist, then use "user" for 1:1 dm
         redis_client.hset(
