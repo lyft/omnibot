@@ -608,48 +608,46 @@ def get_channel_by_name(team_name, bot_name, channel_name):
        Content-Type: application/json
 
        {
-         "channel": {
-           "id": "C4VQ6NUNN",
-           "name": "general",
-           "is_channel": true,
-           "created": 1491515285,
-           "creator": "U4WF56QGP",
-           "is_archived": false,
-           "is_general": true,
-           "unlinked": 0,
-           "name_normalized": "general",
-           "is_shared": false,
-           "is_org_shared": false,
-           "is_member": false,
-           "is_private": false,
-           "is_mpim": false,
-           "members": [
-             "U4WF56QGP",
-             "U6HQQ19EC",
-             "U6J3LTKSQ",
-             "U6J4EGP44",
-             "U6JDF1JBU",
-             "U6JEGTFDZ",
-             "U6JERPMJ7",
-             "U6JG691MJ",
-             "U6JGEQ0J0",
-             "U6SAVUK44",
-             "U750C7B37",
-             "U7DH0H802"
-           ],
-           "topic": {
-             "value": "test123",
-             "creator": "U6J3LTKSQ",
-             "last_set": 1507156612
-           },
-           "purpose": {
-             "value": "This channel is for team-wide communication.",
-             "creator": "",
-             "last_set": 0
-           },
-           "previous_names": [],
-           "num_members": 9
-         }
+        "id": "C4VQ6NUNN",
+        "name": "general",
+        "is_channel": true,
+        "created": 1491515285,
+        "creator": "U4WF56QGP",
+        "is_archived": false,
+        "is_general": true,
+        "unlinked": 0,
+        "name_normalized": "general",
+        "is_shared": false,
+        "is_org_shared": false,
+        "is_member": false,
+        "is_private": false,
+        "is_mpim": false,
+        "members": [
+            "U4WF56QGP",
+            "U6HQQ19EC",
+            "U6J3LTKSQ",
+            "U6J4EGP44",
+            "U6JDF1JBU",
+            "U6JEGTFDZ",
+            "U6JERPMJ7",
+            "U6JG691MJ",
+            "U6JGEQ0J0",
+            "U6SAVUK44",
+            "U750C7B37",
+            "U7DH0H802"
+        ],
+        "topic": {
+            "value": "test123",
+            "creator": "U6J3LTKSQ",
+            "last_set": 1507156612
+        },
+        "purpose": {
+            "value": "This channel is for team-wide communication.",
+            "creator": "",
+            "last_set": 0
+        },
+        "previous_names": [],
+        "num_members": 9
       }
 
     :param team_name: The team to search for this channel, as configured in
