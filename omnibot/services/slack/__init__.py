@@ -123,7 +123,7 @@ def update_conversations(bot, team):
 
 def update_channel(bot, channel):
     redis_client = omniredis.get_redis_client()
-    if channel["name"]:
+    if channel.get("name"):
         redis_client.hset(
             f"channels:{bot.team.name}",
             channel["id"],
@@ -145,7 +145,7 @@ def update_channel(bot, channel):
         )
         redis_client.hset(
             f"imsmap:{bot.team.name}",
-	    channel["user"],
+            channel["user"],
             channel["id"],
         )
 
