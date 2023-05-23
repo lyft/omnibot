@@ -81,7 +81,7 @@ def slack_event():
     Handle event subscription API webhooks from slack.
     """
     event = request.json
-    logger.info(f"Event received in API slack_event: {event}")
+    logger.debug(f"Event received in API slack_event: {event}")
     # Every event should have a validation token
     if "token" not in event:
         msg = "No verification token in event."
