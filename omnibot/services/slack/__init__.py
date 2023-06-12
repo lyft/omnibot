@@ -323,6 +323,15 @@ def get_channel(bot, channel):
     if channel_data["ok"]:
         update_channel(bot, channel_data["channel"])
         return channel_data["channel"]
+    else:
+        logger.warning(
+            "Call to conversations.info failed.",
+            extra=merge_logging_context(
+                {"channel": channel},
+                _get_failure_context(channel_data),
+                bot.logging_context,
+            ),
+        )
     return {}
 
 
@@ -451,6 +460,7 @@ def get_user(bot, user_id):
             "Failed to find user",
             extra=merge_logging_context(
                 {"user": user_id},
+                _get_failure_context(user),
                 bot.logging_context,
             ),
         )
