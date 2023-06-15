@@ -21,7 +21,7 @@ jobs:
       - name: Setup Ruby 2.x
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.x
+          ruby-version: 2
       - name: Install license finder
         run: gem install license_finder
       - name: Allow gevent Zope license
