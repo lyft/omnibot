@@ -4,8 +4,6 @@ import gevent.monkey
 gevent.monkey.patch_all()
 import gevent.pool  # noqa:E402
 import signal  # noqa:E402
-import json  # noqa:E402
-import time  # noqa:E402
 import dateutil.parser  # noqa:E402
 from datetime import datetime, timedelta  # noqa:E402
 
@@ -79,7 +77,7 @@ def watch_users():
     except Exception:
         logger.exception("Failed to update slack user list.", exc_info=True)
     finally:
-        return gevent.spawn_later(settings.WATCHER_SPAWN_WAIT_TIME_IN_SEC, watch_users)
+        gevent.spawn_later(settings.WATCHER_SPAWN_WAIT_TIME_IN_SEC, watch_users)
 
 
 def watch_conversations():
@@ -112,7 +110,7 @@ def watch_conversations():
             exc_info=True,
         )
     finally:
-        return gevent.spawn_later(
+        gevent.spawn_later(
             settings.WATCHER_SPAWN_WAIT_TIME_IN_SEC,
             watch_conversations,
         )
@@ -148,7 +146,7 @@ def watch_emoji():
             exc_info=True,
         )
     finally:
-        return gevent.spawn_later(
+        gevent.spawn_later(
             settings.WATCHER_SPAWN_WAIT_TIME_IN_SEC,
             watch_emoji,
         )

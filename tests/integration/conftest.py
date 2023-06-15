@@ -19,7 +19,7 @@ class TestClient(testing.FlaskClient):
     checks pass.
     """
 
-    def open(self, *args, **kwargs):
+    def open(self, *args, **kwargs): # noqa:A003
         envoy_test_headers = Headers({"x-envoy-downstream-service-cluster": "envoy"})
         headers = kwargs.pop("headers", Headers())
         headers.extend(envoy_test_headers)
@@ -33,7 +33,7 @@ class TestInternalClient(testing.FlaskClient):
     authorization checks pass.
     """
 
-    def open(self, *args, **kwargs):
+    def open(self, *args, **kwargs): # noqa:A003
         envoy_test_headers = Headers(
             {
                 "x-envoy-downstream-service-cluster": "someservice",
