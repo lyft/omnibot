@@ -176,7 +176,7 @@ def extract_command(text, bot):
     with statsd.timer("parser.extract_command"):
         at_me = f"@{bot.name}"
         if text.startswith(at_me):
-            command_text = text[len(at_me):].strip()
+            command_text = text[len(at_me) :].strip() # noqa:E203
         elif at_me in text:
             command_text = re.sub(rf".*{at_me}", "", text).strip()
         else:
