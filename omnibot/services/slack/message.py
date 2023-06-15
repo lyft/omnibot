@@ -295,7 +295,7 @@ class Message:
         self._match = match
         if match_type == "command":
             self._payload["command"] = match
-            self._payload["args"] = self.command_text[len(match) :].strip()  # noqa:E203
+            self._payload["args"] = self.command_text[len(match):].strip()  # fmt: skip
         elif match_type == "regex":
             self._payload["regex"] = match
 
