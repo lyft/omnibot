@@ -59,7 +59,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Publish to Registry
-        uses: elgohr/Publish-Docker-Github-Action@5
+        uses: elgohr/Publish-Docker-Github-Action@v5
         with:
           name: lyft/omnibot
           username: ${{ secrets.DOCKER_USERNAME }}
