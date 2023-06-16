@@ -172,7 +172,7 @@ class Message:
                 extra=self.event_trace,
             )
         self._payload["mentioned"] = False
-        for user_id, user_name in self.users.items():
+        for _, user_name in self.users.items():
             if self.bot.name == user_name:
                 self._payload["mentioned"] = True
         try:
@@ -295,7 +295,7 @@ class Message:
         self._match = match
         if match_type == "command":
             self._payload["command"] = match
-            self._payload["args"] = self.command_text[len(match) :].strip()
+            self._payload["args"] = self.command_text[len(match):].strip()  # fmt: skip
         elif match_type == "regex":
             self._payload["regex"] = match
 
