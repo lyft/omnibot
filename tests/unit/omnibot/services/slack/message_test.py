@@ -132,3 +132,8 @@ def test_message(mocker):
     event_copy["subtype"] = "some_subtype"
     with pytest.raises(MessageUnsupportedError):
         _message = Message(_bot, event_copy, event_trace)
+    
+    event_copy = copy.deepcopy(event)
+    event_copy["user"] = "USLACKBOT"
+    with pytest.raises(MessageUnsupportedError):
+        _message = Message(_bot, event_copy, event_trace)
