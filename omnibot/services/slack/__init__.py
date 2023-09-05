@@ -41,9 +41,15 @@ def client(bot, client_type="bot"):
         try:
             return _client[team_name][bot.name]["bot"]
         except KeyError:
-            pass
+            logger.warning(
+                "slack_oauth_bot_token is missing",
+                extra=bot.logging_context,
+            )
     elif client_type == "user":
-        return _client[team_name][bot.name]["user"]
+        try:
+            return _client[team_name][bot.name]["user"]
+        except KeyError:
+            logger.warning("slack_oauth_token is missing", extra=bot.logging_context)
 
 
 def _get_failure_context(result):
