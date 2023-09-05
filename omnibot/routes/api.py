@@ -725,7 +725,7 @@ def _perform_action(bot, data):
                         "action": action,
                         "error": ret.get("error"),
                     },
-                    bot.logging_context
+                    bot.logging_context,
                 ),
             )
             try:
