@@ -46,7 +46,7 @@ slackclient==1.0.7        # via -r requirements.in
 statsd==3.2.1             # via -r requirements.in
 toml==0.10.2              # via pytest
 typing-extensions==3.10.0.0  # via importlib-metadata
-urllib3==1.26.5           # via requests
+urllib3==1.26.17           # via requests
 websocket-client==0.56.0  # via slackclient
 werkzeug==0.15.5          # via flask
 zipp==3.4.1               # via importlib-metadata
