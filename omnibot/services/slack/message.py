@@ -25,8 +25,8 @@ class Message:
         self._payload["team"] = {"name": bot.team.name, "team_id": bot.team.team_id}
         self._payload["ts"] = event["ts"]
         self._payload["thread_ts"] = event.get("thread_ts")
-        self._check_unsupported()
         self._payload["user"] = event.get("user")
+        self._check_unsupported()
         if self.user:
             self._payload["parsed_user"] = slack.get_user(self.bot, self.user)
         elif self.bot_id:
@@ -61,6 +61,10 @@ class Message:
         unsupported = False
         if self.bot_id:
             logger.debug("ignoring message from bot", extra=self.event_trace)
+            unsupported = True
+        # Ignore slackbot as it doesn't get classifed as a bot user
+        elif self.user and self.user == "USLACKBOT":
+            logger.debug("ignoring message from slackbot", extra=self.event_trace)
             unsupported = True
         # Ignore threads
         elif self.thread_ts:
