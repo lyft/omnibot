@@ -721,7 +721,10 @@ def _perform_action(bot, data):
             logger.warning(
                 "action failed in post_slack, attempting as user.",
                 extra=merge_logging_context(
-                    {"action": action},
+                    {
+                        "action": action,
+                        "error": ret.get("error"),
+                    },
                     bot.logging_context,
                 ),
             )
