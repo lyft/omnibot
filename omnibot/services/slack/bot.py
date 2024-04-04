@@ -1,4 +1,5 @@
 from omnibot import settings
+from omnibot.services.slack import get_auth
 from omnibot.services.slack.team import Team
 from omnibot.utils import merge_logging_context
 
@@ -82,6 +83,15 @@ class Bot:
     @property
     def bot_id(self):
         return self._bot_data.get("app_id")
+    
+    @property
+    def user_id(self):
+        user_id = self._bot_data.get("user_id")
+        if not user_id:
+            user_id = get_auth(self).get("user_id")
+            if user_id:
+                self._bot_data["user_id"] = user_id
+        return user_id
 
     @property
     def verification_token(self):
