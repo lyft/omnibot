@@ -471,7 +471,6 @@ def get_user(bot, user_id):
             ),
         )
         return {}
-    
 
 
 def get_auth(bot):
