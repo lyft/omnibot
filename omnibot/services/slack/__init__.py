@@ -471,6 +471,30 @@ def get_user(bot, user_id):
             ),
         )
         return {}
+    
+
+
+def get_auth(bot):
+    """
+    Get the auth info for the bot.
+    """
+    redis_client = omniredis.get_redis_client()
+    auth_info = redis_client.hget(f"auth:{bot.team.name}", bot.name)
+    if auth_info:
+        return json.loads(auth_info)
+    auth_info = client(bot).api_call("auth.test")
+    if auth_info["ok"]:
+        redis_client.hset(f"auth:{bot.team.name}", bot.id, json.dumps(auth_info))
+        return auth_info
+    else:
+        logger.warning(
+            "Failed to get auth info",
+            extra=merge_logging_context(
+                _get_failure_context(auth_info),
+                bot.logging_context,
+            ),
+        )
+        return {}
 
 
 def get_name_from_user(user):
