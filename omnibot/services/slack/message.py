@@ -176,8 +176,10 @@ class Message:
                 extra=self.event_trace,
             )
         self._payload["mentioned"] = False
-        for _, user_name in self.users.items():
+        for user_id, user_name in self.users.items():
             if self.bot.name == user_name:
+                self._payload["mentioned"] = True
+            if f"<@{self.bot.user_id}>" == user_id:
                 self._payload["mentioned"] = True
         try:
             self._payload["command_text"] = parser.extract_command(

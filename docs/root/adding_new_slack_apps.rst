@@ -45,6 +45,12 @@ Adding normal slack apps
       * message.groups
       * message.im
       * message.mpim
+   #.
+      * Note 1: adding ``app_mention`` may result in your bot being called twice.
+      * Note 2: the configuration `bot.name` for your bot should match your app user_handle
+      * Note 3: if your app user_handle does not match your `bot.name` you need to
+        specify `match_mention: true` to receive callbacks
+
 
 #. Add interactive component configuration (if the bot needs interactive components), using the ``Interactive Components`` link in the sidebar:
 
