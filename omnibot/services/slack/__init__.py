@@ -483,7 +483,7 @@ def get_auth(bot):
         return json.loads(auth_info)
     auth_info = client(bot).api_call("auth.test")
     if auth_info["ok"]:
-        redis_client.hset(f"auth:{bot.team.name}", bot.id, json.dumps(auth_info))
+        redis_client.hset(f"auth:{bot.team.name}", bot.name, json.dumps(auth_info))
         return auth_info
     else:
         logger.warning(
