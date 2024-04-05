@@ -179,7 +179,7 @@ class Message:
         for user_id, user_name in self.users.items():
             if self.bot.name == user_name:
                 self._payload["mentioned"] = True
-            if self.bot.user_id == f"<@{user_id}>":
+            if f"<@{self.bot.user_id}>" == user_id:
                 self._payload["mentioned"] = True
         try:
             self._payload["command_text"] = parser.extract_command(
