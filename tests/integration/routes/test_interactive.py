@@ -1,6 +1,5 @@
 import json
 from typing import Any
-from typing import Dict
 from unittest.mock import MagicMock
 
 from flask import Response  # noqa: F401
@@ -18,7 +17,7 @@ def test_dialog_submission_echo_test(
     slack_api_call: MagicMock,
 ):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
-        event: Dict[str, Any] = json.loads(json_data.read())
+        event: dict[str, Any] = json.loads(json_data.read())
         resp: Response = client.post(
             _ENDPOINT,
             data=event,
@@ -70,8 +69,8 @@ def test_invalid_component_type(
     slack_api_call: MagicMock,
 ):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
-        payload: Dict[str, Any] = json.loads(json_data.read())
-        modified_data: Dict[str, Any] = json.loads(payload["payload"])
+        payload: dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(payload["payload"])
         modified_data["type"] = "not a valid type"
         resp: Response = client.post(
             _ENDPOINT,
@@ -90,8 +89,8 @@ def test_invalid_component_type(
 
 def test_missing_token(client: Client, queue: MagicMock, slack_api_call: MagicMock):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
-        payload: Dict[str, Any] = json.loads(json_data.read())
-        modified_data: Dict[str, Any] = json.loads(payload["payload"])
+        payload: dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(payload["payload"])
         modified_data.pop("token", None)
         resp: Response = client.post(
             _ENDPOINT,
@@ -107,8 +106,8 @@ def test_missing_token(client: Client, queue: MagicMock, slack_api_call: MagicMo
 
 def test_missing_team(client: Client, queue: MagicMock, slack_api_call: MagicMock):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
-        payload: Dict[str, Any] = json.loads(json_data.read())
-        modified_data: Dict[str, Any] = json.loads(payload["payload"])
+        payload: dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(payload["payload"])
         modified_data.pop("team", None)
         resp: Response = client.post(
             _ENDPOINT,
@@ -124,8 +123,8 @@ def test_missing_team(client: Client, queue: MagicMock, slack_api_call: MagicMoc
 
 def test_unsupported_team(client: Client, queue: MagicMock, slack_api_call: MagicMock):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
-        payload: Dict[str, Any] = json.loads(json_data.read())
-        modified_data: Dict[str, Any] = json.loads(payload["payload"])
+        payload: dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(payload["payload"])
         modified_data["team"]["id"] = "something random"
         resp: Response = client.post(
             _ENDPOINT,
@@ -141,8 +140,8 @@ def test_unsupported_team(client: Client, queue: MagicMock, slack_api_call: Magi
 
 def test_invalid_token(client: Client, queue: MagicMock, slack_api_call: MagicMock):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
-        payload: Dict[str, Any] = json.loads(json_data.read())
-        modified_data: Dict[str, Any] = json.loads(payload["payload"])
+        payload: dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(payload["payload"])
         modified_data["token"] = "something random"
         resp: Response = client.post(
             _ENDPOINT,
@@ -165,8 +164,8 @@ def test_invalid_callback_id(
     slack_api_call: MagicMock,
 ):
     with get_mock_data("interactive/dialog_submission_echo_test.json") as json_data:
-        payload: Dict[str, Any] = json.loads(json_data.read())
-        modified_data: Dict[str, Any] = json.loads(payload["payload"])
+        payload: dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(payload["payload"])
         modified_data["callback_id"] = "something random"
         resp: Response = client.post(
             _ENDPOINT,
@@ -193,7 +192,7 @@ def test_view_submission_synchronous(
     with get_mock_data(
         "interactive/view_submission_synchronous_test.json",
     ) as json_data:
-        event: Dict[str, Any] = json.loads(json_data.read())
+        event: dict[str, Any] = json.loads(json_data.read())
         resp: Response = client.post(
             _ENDPOINT,
             data=event,

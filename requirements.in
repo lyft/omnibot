@@ -1,4 +1,4 @@
-# piptools: python3.8
+# piptools: python3.10
 
 
 # WSGI HTTP Server for UNIX
@@ -39,17 +39,17 @@ statsd==3.2.1
 # Coroutine-based network library
 # License: MIT
 # Upstream url: http://www.gevent.org/
-gevent==21.1.2
+gevent==23.7.0
 
 # Lightweight in-process concurrent programming
 # License: MIT
 # Upstream url: https://github.com/python-greenlet/greenlet
-greenlet==1.1.0
+greenlet==2.0.2
 
 # YAML parser and emitter for Python
 # License: MIT
 # Upstream url: http://pyyaml.org/wiki/PyYAML
-PyYAML==5.4
+PyYAML==6.0.1
 
 # The AWS SDK for Python
 # License: Apache2
