@@ -39,12 +39,12 @@ statsd==3.2.1
 # Coroutine-based network library
 # License: MIT
 # Upstream url: http://www.gevent.org/
-gevent==23.7.0
+gevent==21.1.2
 
 # Lightweight in-process concurrent programming
 # License: MIT
 # Upstream url: https://github.com/python-greenlet/greenlet
-greenlet==2.0.2
+greenlet==1.1.0
 
 # YAML parser and emitter for Python
 # License: MIT
