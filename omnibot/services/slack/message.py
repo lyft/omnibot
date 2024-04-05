@@ -176,7 +176,7 @@ class Message:
                 extra=self.event_trace,
             )
         self._payload["mentioned"] = False
-        for _, user_name in self.users.items():
+        for user_id, user_name in self.users.items():
             if self.bot.name == user_name:
                 self._payload["mentioned"] = True
             if self.bot.user_id == f"<@{user_id}>":
