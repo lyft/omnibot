@@ -11,6 +11,7 @@ from omnibot.services.slack.team import Team
 def test_message(mocker):
     _team = Team.get_team_by_name("testteam")
     _bot = Bot.get_bot_by_name(_team, "echobot")
+    _bot._bot_data["user_id"] = "A12345678"
     event = {
         "ts": "1234567.12",
         "thread_ts": None,

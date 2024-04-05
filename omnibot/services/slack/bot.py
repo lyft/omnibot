@@ -83,7 +83,7 @@ class Bot:
     @property
     def bot_id(self):
         return self._bot_data.get("app_id")
-    
+
     @property
     def user_id(self):
         user_id = self._bot_data.get("user_id")
