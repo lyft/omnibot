@@ -46,6 +46,12 @@ Adding normal slack apps
       * message.im
       * message.mpim
 
+      * Note 1: adding ``app_mention`` may result in your bot being called twice.
+      * Note 2: the configuration `bot.name` for your bot should match your app user_handle
+      * Note 3: if your app user_handle does not match your `bot.name` you need to
+        specify `match_mention: true` to receive callbacks
+
+
 #. Add interactive component configuration (if the bot needs interactive components), using the ``Interactive Components`` link in the sidebar:
 
    #. Add the request URL. This will be the interactibe API route; so, if your omnibot hostname is ``omnibot.example.com``, the URL would be ``https://omnibot.example.com/api/v1/slack/interactive``. Slack will not verify this URL, unfortunately.
