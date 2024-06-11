@@ -44,7 +44,7 @@ def process_event(event):
     if event_type == "message" or event_type == "app_mention":
         try:
             with statsd.timer("process_event"):
-                logger.debug(
+                logger.info(
                     f"Processing message: {json.dumps(event, indent=2)}",
                     extra=event_trace,
                 )
