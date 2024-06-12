@@ -67,7 +67,7 @@ class Message:
             logger.debug("ignoring message from slackbot", extra=self.event_trace)
             unsupported = True
         # Ignore threads
-        elif self.thread_ts:
+        elif self.thread_ts and not self._payload.get("bot", {}).get("bot_id") == "A06SS17UFFW":
             logger.debug("ignoring thread message", extra=self.event_trace)
             unsupported = True
         # For now, ignore all event subtypes
