@@ -253,10 +253,7 @@ def slack_interactive_component():
     # Slack sends interactive components as application/x-www-form-urlencoded,
     # json encoded inside of the payload field. What a whacky API.
     component = json.loads(request.form.to_dict().get("payload", {}))
-    if not component:
-        logger.warning("No component received in API slack_interactive_component")
-        return jsonify({"status": "failure", "error": "No component received", "payload": request.get_data(as_text=True)}), 400
-    logger.debug(f"component received in API slack_slash_command: {component}")
+    logger.info(f"component received in API slack_slash_command: {component}", extra={"payload": request.get_data(as_text=True)})
     if component.get("type") not in [
         "interactive_message",
         "message_action",
