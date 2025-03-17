@@ -1,0 +1,73 @@
+{
+    "type": "interactive_message",
+    "actions": [
+        {
+            "name": "edit",
+            "type": "button",
+            "value": ""
+        }
+    ],
+    "callback_id": "test_events",
+    "team": null,
+    "channel": {
+        "id": "D00000000",
+        "name": "directmessage"
+    },
+    "user": {
+        "id": "U00000000",
+        "name": "testuser",
+        "team_id": "T00000000"
+    },
+    "action_ts": "1742240440.590194",
+    "message_ts": "1742240438.598999",
+    "attachment_id": "1",
+    "token": "test_token_123",
+    "is_app_unfurl": false,
+    "enterprise": {
+        "id": "E00000000",
+        "name": "Test Enterprise"
+    },
+    "is_enterprise_install": true,
+    "original_message": {
+        "user": "U00000001",
+        "type": "message",
+        "ts": "1742240438.598999",
+        "bot_id": "B00000000",
+        "app_id": "A00000000",
+        "text": "",
+        "team": "T00000000",
+        "bot_profile": {
+            "id": "B00000000",
+            "deleted": false,
+            "name": "testbot",
+            "updated": 1660247909,
+            "app_id": "A00000000",
+            "icons": {
+                "image_36": "https://example.com/bot36.png",
+                "image_48": "https://example.com/bot48.png",
+                "image_72": "https://example.com/bot72.png"
+            },
+            "team_id": "T00000000"
+        },
+        "attachments": [
+            {
+                "id": 1,
+                "fallback": "Test action button",
+                "title": "Test action button",
+                "callback_id": "test_events",
+                "actions": [
+                    {
+                        "id": "1",
+                        "name": "edit",
+                        "text": "Test Button",
+                        "type": "button",
+                        "value": "",
+                        "style": ""
+                    }
+                ]
+            }
+        ]
+    },
+    "response_url": "https://hooks.slack.com/actions/E00000000/00000000000/xxxxxxxxxxxxxxxxxxxxxxxx",
+    "trigger_id": "0000000000000.000000000000.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+}
