@@ -304,6 +304,14 @@ def slack_interactive_component():
         })
         return jsonify({"status": "failure", "error": msg}), 403
 
+    # Ensure team info is present in component for backward compatibility
+    if component.get("team") is None:
+        logger.debug("Injecting missing team info into component", extra={"team_id": team_id})
+        component["team"] = {"id": team_id}
+    elif component["team"].get("id") is None:
+        logger.debug("Injecting missing team.id into existing team object", extra={"team_id": team_id})
+        component["team"]["id"] = team_id
+
     try:
         team = Team.get_team_by_id(team_id)
     except TeamInitializationError:
