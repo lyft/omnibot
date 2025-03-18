@@ -71,6 +71,19 @@ def verify_bot(f):
 def _get_team_id(component):
     team_id = None
     is_enterprise = component.get("is_enterprise_install", False)
+    
+    logger.debug(
+        "Getting team ID from component",
+        extra={
+            "is_enterprise": is_enterprise,
+            "has_team": component.get("team") is not None,
+            "has_original_message_team": component.get("original_message", {}).get("team") is not None,
+            "has_user_team_id": component.get("user", {}).get("team_id") is not None,
+            "team_value": component.get("team"),
+            "original_message_team": component.get("original_message", {}).get("team"),
+            "user_team_id": component.get("user", {}).get("team_id")
+        }
+    )
 
     if is_enterprise:
         # For enterprise installations, prioritize:
@@ -78,16 +91,23 @@ def _get_team_id(component):
         # 2. user.team_id (enterprise user context)
         if component.get("original_message", {}).get("team"):
             team_id = component["original_message"]["team"]
+            logger.debug("Using original_message.team for enterprise install", extra={"team_id": team_id})
         elif component.get("user", {}).get("team_id"):
             team_id = component["user"]["team_id"]
+            logger.debug("Using user.team_id for enterprise install", extra={"team_id": team_id})
     else:
         # For non-enterprise installations, prioritize:
         # 1. team.id (root level team)
         # 2. original_message.team (fallback)
-        if component.get("team", {}).get("id"):
-            team_id = component["team"]["id"]
+        team_obj = component.get("team")
+        if team_obj and isinstance(team_obj, dict) and team_obj.get("id"):
+            team_id = team_obj["id"]
+            logger.debug("Using team.id for non-enterprise install", extra={"team_id": team_id})
         elif component.get("original_message", {}).get("team"):
             team_id = component["original_message"]["team"]
+            logger.debug("Using original_message.team for non-enterprise install", extra={"team_id": team_id})
+    
+    logger.debug("Final team_id result", extra={"team_id": team_id})
     return team_id
 
 
