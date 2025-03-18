@@ -68,6 +68,64 @@ def verify_bot(f):
     return decorated
 
 
+def _get_team_id(component):
+    team_id = None
+    is_enterprise = component.get("is_enterprise_install", False)
+
+    logger.debug(
+        "Getting team ID from component",
+        extra={
+            "is_enterprise": is_enterprise,
+            "has_team": component.get("team") is not None,
+            "has_original_message_team": component.get("original_message", {}).get(
+                "team",
+            )
+            is not None,
+            "has_user_team_id": component.get("user", {}).get("team_id") is not None,
+            "team_value": component.get("team"),
+            "original_message_team": component.get("original_message", {}).get("team"),
+            "user_team_id": component.get("user", {}).get("team_id"),
+        },
+    )
+
+    if is_enterprise:
+        # For enterprise installations, prioritize:
+        # 1. original_message.team (where the interaction happened)
+        # 2. user.team_id (enterprise user context)
+        if component.get("original_message", {}).get("team"):
+            team_id = component["original_message"]["team"]
+            logger.debug(
+                "Using original_message.team for enterprise install",
+                extra={"team_id": team_id},
+            )
+        elif component.get("user", {}).get("team_id"):
+            team_id = component["user"]["team_id"]
+            logger.debug(
+                "Using user.team_id for enterprise install",
+                extra={"team_id": team_id},
+            )
+    else:
+        # For non-enterprise installations, prioritize:
+        # 1. team.id (root level team)
+        # 2. original_message.team (fallback)
+        team_obj = component.get("team")
+        if team_obj and isinstance(team_obj, dict) and team_obj.get("id"):
+            team_id = team_obj["id"]
+            logger.debug(
+                "Using team.id for non-enterprise install",
+                extra={"team_id": team_id},
+            )
+        elif component.get("original_message", {}).get("team"):
+            team_id = component["original_message"]["team"]
+            logger.debug(
+                "Using original_message.team for non-enterprise install",
+                extra={"team_id": team_id},
+            )
+
+    logger.debug("Final team_id result", extra={"team_id": team_id})
+    return team_id
+
+
 @blueprint.route("/healthcheck")
 def healthcheck():
     # The healthcheck returns status code 200
@@ -253,7 +311,10 @@ def slack_interactive_component():
     # Slack sends interactive components as application/x-www-form-urlencoded,
     # json encoded inside of the payload field. What a whacky API.
     component = json.loads(request.form.to_dict().get("payload", {}))
-    logger.debug(f"component received in API slack_slash_command: {component}")
+    logger.debug(
+        f"component received in API slack_slash_command: {component}",
+        extra={"payload": request.get_data(as_text=True)},
+    )
     if component.get("type") not in [
         "interactive_message",
         "message_action",
@@ -271,17 +332,53 @@ def slack_interactive_component():
         msg = "No verification token in interactive component."
         logger.warning(msg)
         return jsonify({"status": "failure", "error": msg}), 403
-    if not component.get("team", {}).get("id"):
-        msg = "No team id in interactive component."
-        logger.warning(msg)
+
+    # Different team ID lookup strategy for enterprise vs non-enterprise installations
+    team_id = _get_team_id(component)
+
+    if not team_id:
+        msg = "No team id found in interactive component"
+        logger.warning(
+            msg,
+            extra={
+                "component": component,
+                "has_original_message": "original_message" in component,
+                "has_team": "team" in component,
+                "has_user": "user" in component,
+            },
+        )
         return jsonify({"status": "failure", "error": msg}), 403
+
+    # Ensure team info is present in component for backward compatibility
+    if component.get("team") is None:
+        logger.debug(
+            "Injecting missing team info into component",
+            extra={"team_id": team_id},
+        )
+        component["team"] = {"id": team_id}
+    elif component["team"].get("id") is None:
+        logger.debug(
+            "Injecting missing team.id into existing team object",
+            extra={"team_id": team_id},
+        )
+        component["team"]["id"] = team_id
+
     try:
-        team = Team.get_team_by_id(component["team"]["id"])
+        team = Team.get_team_by_id(team_id)
     except TeamInitializationError:
         msg = "Unsupported team"
         logger.warning(
             msg,
-            extra={"team_id": component["team"]["id"]},
+            extra={
+                "team_id": team_id,
+                "source": (
+                    "original_message.team"
+                    if component.get("original_message", {}).get("team")
+                    else "team.id"
+                    if component.get("team", {}).get("id")
+                    else "user.team_id"
+                ),
+            },
         )
         return jsonify({"status": "failure", "error": msg}), 403
     # interactive components annoyingly don't send an app id, so we need
