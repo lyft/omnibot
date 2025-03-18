@@ -1,6 +1,6 @@
 import json
-import os
 import logging
+import os
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
@@ -60,8 +60,8 @@ def mock_bot(mock_team):
     bot.interactive_component_handlers = [
         {
             "callback_id": "test_events",
-            "no_message_response": True
-        }
+            "no_message_response": True,
+        },
     ]
     return bot
 
@@ -82,14 +82,22 @@ def mock_get_bot(mock_bot):
 
 @pytest.fixture
 def mock_auth_checks():
-    with patch("omnibot.authnz.envoy_checks.envoy_internal_check") as internal_check, \
-         patch("omnibot.authnz.envoy_checks.envoy_permissions_check") as permissions_check:
+    with patch(
+        "omnibot.authnz.envoy_checks.envoy_internal_check",
+    ) as internal_check, patch(
+        "omnibot.authnz.envoy_checks.envoy_permissions_check",
+    ) as permissions_check:
         internal_check.return_value = True
         permissions_check.return_value = True
         yield
 
 
-def test_enterprise_install_original_message_team(client, mock_get_team, mock_get_bot, mock_auth_checks):
+def test_enterprise_install_original_message_team(
+    client,
+    mock_get_team,
+    mock_get_bot,
+    mock_auth_checks,
+):
     """Test team ID lookup prioritizes original_message.team for enterprise installs"""
     payload = load_test_payload()
     payload["is_enterprise_install"] = True
@@ -102,15 +110,20 @@ def test_enterprise_install_original_message_team(client, mock_get_team, mock_ge
         data={"payload": json.dumps(payload)},
         headers={
             "x-envoy-internal": "true",
-            "x-envoy-downstream-service-cluster": "test-service"
-        }
+            "x-envoy-downstream-service-cluster": "test-service",
+        },
     )
-    
+
     assert response.status_code == 200
     mock_get_team.assert_called_once_with("T00000000")
 
 
-def test_enterprise_install_user_team_id_fallback(client, mock_get_team, mock_get_bot, mock_auth_checks):
+def test_enterprise_install_user_team_id_fallback(
+    client,
+    mock_get_team,
+    mock_get_bot,
+    mock_auth_checks,
+):
     """Test team ID lookup falls back to user.team_id for enterprise installs"""
     payload = load_test_payload()
     payload["is_enterprise_install"] = True
@@ -123,15 +136,20 @@ def test_enterprise_install_user_team_id_fallback(client, mock_get_team, mock_ge
         data={"payload": json.dumps(payload)},
         headers={
             "x-envoy-internal": "true",
-            "x-envoy-downstream-service-cluster": "test-service"
-        }
+            "x-envoy-downstream-service-cluster": "test-service",
+        },
     )
-    
+
     assert response.status_code == 200
     mock_get_team.assert_called_once_with("T00000000")
 
 
-def test_non_enterprise_install_team_id(client, mock_get_team, mock_get_bot, mock_auth_checks):
+def test_non_enterprise_install_team_id(
+    client,
+    mock_get_team,
+    mock_get_bot,
+    mock_auth_checks,
+):
     """Test team ID lookup prioritizes root team.id for non-enterprise installs"""
     payload = load_test_payload()
     payload["is_enterprise_install"] = False
@@ -144,41 +162,46 @@ def test_non_enterprise_install_team_id(client, mock_get_team, mock_get_bot, moc
         data={"payload": json.dumps(payload)},
         headers={
             "x-envoy-internal": "true",
-            "x-envoy-downstream-service-cluster": "test-service"
-        }
+            "x-envoy-downstream-service-cluster": "test-service",
+        },
     )
-    
+
     assert response.status_code == 200
     mock_get_team.assert_called_once_with("T00000000")
 
 
-def test_non_enterprise_install_original_message_fallback(client, mock_get_team, mock_get_bot, mock_auth_checks):
+def test_non_enterprise_install_original_message_fallback(
+    client,
+    mock_get_team,
+    mock_get_bot,
+    mock_auth_checks,
+):
     """Test team ID lookup falls back to original_message.team for non-enterprise installs"""
     payload = load_test_payload()
     logger.debug("Original payload: %s", json.dumps(payload, indent=2))
-    
+
     payload["is_enterprise_install"] = False
     payload["team"] = None
     payload["original_message"]["team"] = "T00000000"
     payload["user"]["team_id"] = "T11111111"
-    
+
     logger.debug("Modified payload: %s", json.dumps(payload, indent=2))
-    
+
     form_data = {"payload": json.dumps(payload)}
     logger.debug("Form data being sent: %s", form_data)
-    
+
     response = client.post(
         "/api/v1/slack/interactive",
         data=form_data,
         headers={
             "x-envoy-internal": "true",
-            "x-envoy-downstream-service-cluster": "test-service"
-        }
+            "x-envoy-downstream-service-cluster": "test-service",
+        },
     )
-    
+
     logger.debug("Response status: %d", response.status_code)
     logger.debug("Response data: %s", response.get_json())
-    
+
     assert response.status_code == 200
     mock_get_team.assert_called_once_with("T00000000")
 
@@ -195,9 +218,9 @@ def test_missing_team_id(client, mock_get_team, mock_get_bot, mock_auth_checks):
         data={"payload": json.dumps(payload)},
         headers={
             "x-envoy-internal": "true",
-            "x-envoy-downstream-service-cluster": "test-service"
-        }
+            "x-envoy-downstream-service-cluster": "test-service",
+        },
     )
-    
+
     assert response.status_code == 403
     assert "No team id found in interactive component" in response.get_json()["error"]
