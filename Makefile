@@ -1,7 +1,7 @@
 # we use the pipefail option below, which is bash specific.
 SHELL := /bin/bash
 
-.PHONY: compile_deps # freeze requirements.in to requirements3.txt
+.PHONY: compile_deps # freeze requirements.in to requirements.txt
 compile_deps:
 	./pip-compile.sh
 

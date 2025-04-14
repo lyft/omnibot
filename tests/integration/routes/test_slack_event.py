@@ -1,6 +1,5 @@
 import json
 from typing import Any
-from typing import Dict
 from unittest.mock import MagicMock
 
 from flask import Response  # noqa: F401
@@ -34,7 +33,7 @@ def test_event_callback_omnibot_help(
     queue: MagicMock,
 ):
     with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
-        event: Dict[str, Any] = json.loads(json_data.read())
+        event: dict[str, Any] = json.loads(json_data.read())
         resp: Response = client.post(
             _ENDPOINT,
             data=json.dumps(event),
@@ -52,7 +51,7 @@ def test_event_callback_test_message(
     queue: MagicMock,
 ):
     with get_mock_data("event/event_callback_test_message.json") as json_data:
-        event: Dict[str, Any] = json.loads(json_data.read())
+        event: dict[str, Any] = json.loads(json_data.read())
         resp: Response = client.post(
             _ENDPOINT,
             data=json.dumps(event),
@@ -70,7 +69,7 @@ def test_misisng_verification_token(
     queue: MagicMock,
 ):
     with get_mock_data("event/url_verification.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data.pop("token", None)
         resp: Response = client.post(
             _ENDPOINT,
@@ -90,7 +89,7 @@ def test_invalid_verification_token(
     queue: MagicMock,
 ):
     with get_mock_data("event/url_verification.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data["token"] = "something random"
         resp: Response = client.post(
             _ENDPOINT,
@@ -106,7 +105,7 @@ def test_invalid_verification_token(
 
 def test_missing_app_id(client: Client, instrument: MagicMock, queue: MagicMock):
     with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data.pop("api_app_id", None)
         resp: Response = client.post(
             _ENDPOINT,
@@ -122,7 +121,7 @@ def test_missing_app_id(client: Client, instrument: MagicMock, queue: MagicMock)
 
 def test_missing_team_id(client: Client, instrument: MagicMock, queue: MagicMock):
     with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data.pop("team_id", None)
         resp: Response = client.post(
             _ENDPOINT,
@@ -138,7 +137,7 @@ def test_missing_team_id(client: Client, instrument: MagicMock, queue: MagicMock
 
 def test_invalid_team(client: Client, instrument: MagicMock, queue: MagicMock):
     with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data["team_id"] = "something random"
         resp: Response = client.post(
             _ENDPOINT,
@@ -154,7 +153,7 @@ def test_invalid_team(client: Client, instrument: MagicMock, queue: MagicMock):
 
 def test_invalid_bot(client: Client, instrument: MagicMock, queue: MagicMock):
     with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data["api_app_id"] = "something random"
         resp: Response = client.post(
             _ENDPOINT,
@@ -174,7 +173,7 @@ def test_invalid_verification_token_for_valid_bot(
     queue: MagicMock,
 ):
     with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data["token"] = "something random"
         resp: Response = client.post(
             _ENDPOINT,
@@ -194,7 +193,7 @@ def test_event_missing_event_block(
     queue: MagicMock,
 ):
     with get_mock_data("event/event_callback_omnibot_help.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data.pop("event", None)
         resp: Response = client.post(
             _ENDPOINT,

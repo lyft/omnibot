@@ -20,6 +20,6 @@ source_venv() {
 SCRIPT_DIR=$(dirname "$0")
 
 source_venv piptools_venv
-pip install -r "${SCRIPT_DIR}"/piptools_requirements3.txt
+pip install -r "${SCRIPT_DIR}"/piptools_requirements.txt
 pip install pip-tools
-pip-compile --output-file "${SCRIPT_DIR}"/requirements3.txt "${SCRIPT_DIR}"/requirements.in
+pip-compile --output-file "${SCRIPT_DIR}"/requirements.txt "${SCRIPT_DIR}"/requirements.in
