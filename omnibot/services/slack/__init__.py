@@ -341,6 +341,88 @@ def get_channel(bot, channel):
     return {}
 
 
+def get_message(
+    bot,
+    channel: str,
+    timestamp: str,
+):
+    """
+    Get a message, from its channel and timestamp
+    """
+    logger.debug(
+        "Fetching message",
+        extra=merge_logging_context(
+            {"channel": channel, "timestamp": timestamp},
+            bot.logging_context,
+        ),
+    )
+    redis_client = omniredis.get_redis_client()
+    hash_key = f"message:{bot.team.name}:{channel}"
+    message = redis_client.hget(hash_key, timestamp)
+    if message:
+        return json.loads(message)
+    data = client(bot).api_call(
+        "conversations.history",
+        channel=channel,
+        latest=timestamp,
+        limit=1,
+        inclusive=True,
+        include_all_metadata=True,
+    )
+    if data.get("ok") and data.get("messages"):
+        redis_client.hset(hash_key, timestamp, json.dumps(data["messages"][0]))
+        return data["messages"][0]
+    else:
+        logger.warning(
+            "Call to conversations.history failed.",
+            extra=merge_logging_context(
+                {"channel": channel, "timestamp": timestamp},
+                _get_failure_context(data),
+                bot.logging_context,
+            ),
+        )
+    return None
+
+
+def get_bot_info(
+    bot,
+    bot_id: str
+):
+    """
+    Get bot info, from its bot id
+    """
+    logger.debug(
+        "Fetching bot info",
+        extra=merge_logging_context(
+            {"bot_id": bot_id},
+            bot.logging_context,
+        ),
+    )
+    redis_client = omniredis.get_redis_client()
+    hash_key = f"bots.info:{bot.team.name}"
+    info = redis_client.hget(hash_key, bot_id)
+    if info:
+        return json.loads(info)
+
+    data = client(bot).api_call(
+        "bots.info",
+        bot=bot_id,
+    )
+    if data.get("ok") and data.get("bot"):
+        redis_client.hset(hash_key, bot_id, json.dumps(data["bot"]))
+        return data["bot"]
+    else:
+        logger.warning(
+            "Call to bots.info failed.",
+            extra=merge_logging_context(
+                {"bot_id": bot_id},
+                _get_failure_context(data),
+                bot.logging_context,
+            ),
+        )
+    return None
+
+
 def _get_channel_name_from_cache(key, bot_name, value):
     redis_client = omniredis.get_redis_client()
     ret = redis_client.hget(f"{key}:{bot_name}", value)

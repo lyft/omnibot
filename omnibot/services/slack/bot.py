@@ -16,6 +16,7 @@ class Bot:
         self._interactive_component_handlers = []
         self._slash_command_handlers = []
         self._message_handlers = []
+        self._reaction_handlers = []
         self._configure_handlers()
 
     def _configure_handlers(self):
@@ -32,6 +33,10 @@ class Bot:
             bots = handler.get("bots", {}).get(self.team.name, {})
             if self.name in bots:
                 self._message_handlers.append(handler)
+        for handler in handlers.get("reaction_handlers", []):
+            bots = handler.get("bots", {}).get(self.team.name, {})
+            if self.name in bots:
+                self._reaction_handlers.append(handler)
 
     @classmethod
     def get_bot_by_name(cls, team, name):
@@ -125,6 +130,10 @@ class Bot:
     @property
     def message_handlers(self):
         return self._message_handlers
+
+    @property
+    def reaction_handlers(self):
+        return self._reaction_handlers
 
     @property
     def logging_context(self):
