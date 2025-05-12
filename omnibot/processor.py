@@ -133,6 +133,9 @@ def _process_reaction_handlers(reaction: Reaction):
     for handler in bot.reaction_handlers:
         # Only match reactions against messages made by the bot
         message = get_message(bot, item_channel, item_ts)
+        if not message or "bot_id" not in message:
+            logger.warning("Failed to retrieve valid message or 'bot_id' is missing.")
+            continue
         bot_info = get_bot_info(bot, message["bot_id"])
         if bot_info and bot_info["app_id"] == bot.bot_id:
             logger.debug("reaction matched")
