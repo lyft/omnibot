@@ -507,7 +507,8 @@ def _handle_reaction_callback(reaction, callback):
     for action in response.get("actions", []):
         if not isinstance(action, dict):
             logger.error(
-                "Action in response is not a dict.", extra=reaction.event_trace
+                "Action in response is not a dict.",
+                extra=reaction.event_trace,
             )
             continue
         logger.debug(
