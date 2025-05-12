@@ -135,14 +135,14 @@ def _process_reaction_handlers(reaction: Reaction):
         message = get_message(bot, item_channel, item_ts)
         bot_info = get_bot_info(bot, message["bot_id"])
         if bot_info and bot_info["app_id"] == bot.bot_id:
-            print("reaction matched")
+            logger.debug("reaction matched")
             for callback in handler["callbacks"]:
                 _handle_reaction_callback(reaction, callback)
                 handler_called = True
     if handler_called:
         statsd.incr("event.handled")
     elif not handler_called:
-        print("no handler found")
+        logger.debug("no handler found")
         statsd.incr("event.ignored")
 
 
