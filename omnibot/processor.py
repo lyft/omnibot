@@ -11,12 +11,15 @@ from omnibot import logging
 from omnibot import settings
 from omnibot.services import slack
 from omnibot.services import stats
-from omnibot.services.slack import parser, get_message, get_bot_info
+from omnibot.services.slack import get_bot_info
+from omnibot.services.slack import get_message
+from omnibot.services.slack import parser
 from omnibot.services.slack.bot import Bot
 from omnibot.services.slack.interactive_component import InteractiveComponent
 from omnibot.services.slack.message import Message
 from omnibot.services.slack.message import MessageUnsupportedError
-from omnibot.services.slack.reaction import Reaction, ReactionUnsupportedError
+from omnibot.services.slack.reaction import Reaction
+from omnibot.services.slack.reaction import ReactionUnsupportedError
 from omnibot.services.slack.slash_command import SlashCommand
 from omnibot.services.slack.team import Team
 from omnibot.utils import get_callback_id
@@ -500,7 +503,9 @@ def _handle_reaction_callback(reaction, callback):
     response = _handle_callback(reaction, callback)
     for action in response.get("actions", []):
         if not isinstance(action, dict):
-            logger.error("Action in response is not a dict.", extra=reaction.event_trace)
+            logger.error(
+                "Action in response is not a dict.", extra=reaction.event_trace
+            )
             continue
         logger.debug(
             f"action for callback: {action}",

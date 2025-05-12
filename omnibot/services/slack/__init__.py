@@ -386,7 +386,7 @@ def get_message(
 
 def get_bot_info(
     bot,
-    bot_id: str
+    bot_id: str,
 ):
     """
     Get bot info, from its bot id

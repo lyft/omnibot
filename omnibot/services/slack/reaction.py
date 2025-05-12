@@ -68,7 +68,6 @@ class Reaction:
                 extra=self.event_trace,
             )
 
-
     def _check_unsupported(self):
         # TODO: make the ignores configurable, but have a default list
         # Ignore self
