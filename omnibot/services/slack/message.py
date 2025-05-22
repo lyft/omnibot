@@ -15,6 +15,8 @@ class Message(BaseMessage):
 
     def __init__(self, bot: Bot, event: dict, event_trace: dict):
         super().__init__(bot, event, event_trace, "message")
+        self._payload["ts"] = event["ts"]
+        self._payload["thread_ts"] = event.get("thread_ts")
         self._check_unsupported()
         try:
             self._payload["text"] = event["text"]

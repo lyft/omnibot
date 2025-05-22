@@ -7,10 +7,16 @@ logger = logging.getLogger(__name__)
 
 class BaseMessage:
     """
-        Base class for representing a parsed slack event message.
+    Base class for representing a parsed slack event message.
     """
 
-    def __init__(self, bot: Bot, event: dict, event_trace: dict, omnibot_payload_type: str):
+    def __init__(
+        self,
+        bot: Bot,
+        event: dict,
+        event_trace: dict,
+        omnibot_payload_type: str,
+    ):
         self._event_trace = event_trace
         self.event = event
         self._match = None
@@ -22,7 +28,6 @@ class BaseMessage:
         self._payload["bot"] = {"name": bot.name, "bot_id": bot.bot_id}
         # For future safety sake, we'll do the same for the team.
         self._payload["team"] = {"name": bot.team.name, "team_id": bot.team.team_id}
-        self._payload["ts"] = event["event_ts"]
         self._payload["user"] = event.get("user")
         if self.user:
             self._payload["parsed_user"] = slack.get_user(self.bot, self.user)

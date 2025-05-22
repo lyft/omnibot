@@ -15,6 +15,7 @@ class Reaction(BaseMessage):
         # `bot` is the receiving bot instance handling this reaction event,
         # not the user or bot who sent the reaction.
         super().__init__(bot, event, event_trace, "reaction")
+        self._payload["ts"] = event["event_ts"]
         self._check_unsupported()
         try:
             self._payload["reaction"] = event["reaction"]
