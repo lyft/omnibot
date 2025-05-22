@@ -14,6 +14,7 @@ from omnibot.services import stats
 from omnibot.services.slack import get_bot_info
 from omnibot.services.slack import get_message
 from omnibot.services.slack import parser
+from omnibot.services.slack.base_message import BaseMessage
 from omnibot.services.slack.bot import Bot
 from omnibot.services.slack.interactive_component import InteractiveComponent
 from omnibot.services.slack.message import Message
@@ -45,41 +46,29 @@ def process_event(event):
         bot.logging_context,
     )
     statsd.incr(f"event.process.attempt.{event_type}")
-    if event_type == "message" or event_type == "app_mention":
+    if event_type in {"message", "app_mention", "reaction_added", "reaction_removed"}:
         try:
             with statsd.timer("process_event"):
                 logger.debug(
-                    f"Processing message: {json.dumps(event, indent=2)}",
+                    f"Processing event: {json.dumps(event, indent=2)}",
                     extra=event_trace,
                 )
-                try:
-                    message = Message(bot, event_info, event_trace)
-                    _process_message_handlers(message)
-                except MessageUnsupportedError:
-                    pass
+                if event_type == "message" or event_type == "app_mention":
+                    try:
+                        message = Message(bot, event_info, event_trace)
+                        _process_message_message_handlers(message)
+                    except MessageUnsupportedError:
+                        pass
+                elif event_type == "reaction_added" or event_type == "reaction_removed":
+                    try:
+                        reaction = Reaction(bot, event_info, event_trace)
+                        _process_reaction_message_handlers(reaction)
+                    except ReactionUnsupportedError:
+                        pass
         except Exception:
             statsd.incr(f"event.process.failed.{event_type}")
             logger.exception(
-                "Could not process message.",
-                exc_info=True,
-                extra=event_trace,
-            )
-    elif event_type == "reaction_added" or event_type == "reaction_removed":
-        try:
-            with statsd.timer("process_event"):
-                logger.debug(
-                    f"Processing reaction: {json.dumps(event, indent=2)}",
-                    extra=event_trace,
-                )
-                try:
-                    reaction = Reaction(bot, event_info, event_trace)
-                    _process_reaction_handlers(reaction)
-                except ReactionUnsupportedError:
-                    pass
-        except Exception:
-            statsd.incr(f"event.process.failed.{event_type}")
-            logger.exception(
-                "Could not process reaction.",
+                "Could not process event.",
                 exc_info=True,
                 extra=event_trace,
             )
@@ -88,7 +77,7 @@ def process_event(event):
         logger.debug(event)
 
 
-def _process_message_handlers(message):
+def _process_message_message_handlers(message: Message):
     bot = message.bot
     statsd = stats.get_statsd_client()
     command_matched = False
@@ -124,29 +113,47 @@ def _process_message_handlers(message):
         _handle_help(message)
 
 
-def _process_reaction_handlers(reaction: Reaction):
+def _process_reaction_message_handlers(reaction: Reaction):
     bot = reaction.bot
     statsd = stats.get_statsd_client()
     handler_called = False
     item_channel = reaction.item_channel
     item_ts = reaction.item_ts
-    for handler in bot.reaction_handlers:
-        # Only match reactions against messages made by the bot
-        message = get_message(bot, item_channel, item_ts)
-        if not message or "bot_id" not in message:
-            logger.warning("Failed to retrieve valid message or 'bot_id' is missing.")
-            continue
-        bot_info = get_bot_info(bot, message["bot_id"])
-        if bot_info and bot_info["app_id"] == bot.bot_id:
-            logger.debug("reaction matched")
-            for callback in handler["callbacks"]:
-                _handle_reaction_callback(reaction, callback)
-                handler_called = True
+
+    if not _is_message_from_bot(bot, item_channel, item_ts):
+        statsd.incr("event.ignored")
+        return
+
+    for handler in bot.message_handlers:
+        if handler.get("match_type") == "reaction":
+            match = bool(re.search(handler["match"], reaction.reaction))
+            regex_should_not_match = handler.get("regex_type") == "absence"
+            # A matched regex should callback only if the regex is supposed to
+            # match. An unmatched regex should callback only if the regex is
+            # not supposed to match.
+            if match != regex_should_not_match:
+                reaction.set_match("regex", handler["match"])
+                for callback in handler["callbacks"]:
+                    _handle_message_callback(reaction, callback)
+                    handler_called = True
+
     if handler_called:
         statsd.incr("event.handled")
     elif not handler_called:
         logger.debug("no handler found")
         statsd.incr("event.ignored")
+
+
+def _is_message_from_bot(bot: Bot, channel: str, ts: str):
+    message = get_message(bot, channel, ts)
+    if not message or "bot_id" not in message:
+        logger.warning("Failed to retrieve valid message or 'bot_id' is missing")
+        return False
+    bot_info = get_bot_info(bot, message["bot_id"])
+    if not bot_info or bot_info["app_id"] != bot.bot_id:
+        logger.debug("Reaction is not on a message from this bot")
+        return False
+    return True
 
 
 def process_slash_command(command):
@@ -305,7 +312,7 @@ def parse_kwargs(kwargs, bot, event_trace=None):
                 kwargs[attr] = parser.unextract_users(kwargs[attr], bot)
 
 
-def _handle_post_message(message, kwargs):
+def _handle_post_message(message: BaseMessage, kwargs):
     try:
         channel = kwargs.pop("channel")
     except KeyError:
@@ -378,7 +385,7 @@ def _handle_action(action, container, kwargs):
                 )
 
 
-def _handle_message_callback(message, callback):
+def _handle_message_callback(message: BaseMessage, callback: dict):
     logger.info(
         'Handling callback for message: match_type="{}" match="{}"'.format(
             message.match_type,
@@ -496,29 +503,6 @@ def _handle_interactive_component_callback(component, callback, response_type):
             _handle_post_message(component, action["kwargs"])
         else:
             _handle_action(action["action"], component, action["kwargs"])
-
-
-def _handle_reaction_callback(reaction, callback):
-    logger.info(
-        "Handling callback for reaction",
-        extra={**reaction.event_trace, "callback": callback},
-    )
-    response = _handle_callback(reaction, callback)
-    for action in response.get("actions", []):
-        if not isinstance(action, dict):
-            logger.error(
-                "Action in response is not a dict.",
-                extra=reaction.event_trace,
-            )
-            continue
-        logger.debug(
-            f"action for callback: {action}",
-            extra=reaction.event_trace,
-        )
-        if action["action"] == "chat.postMessage":
-            _handle_post_message(reaction, action["kwargs"])
-        else:
-            _handle_action(action["action"], reaction, action["kwargs"])
 
 
 def _handle_callback(container, callback):

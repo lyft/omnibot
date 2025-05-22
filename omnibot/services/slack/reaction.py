@@ -1,38 +1,21 @@
 from omnibot import logging
-from omnibot.services import slack
 from omnibot.services import stats
+from omnibot.services.slack.base_message import BaseMessage
+from omnibot.services.slack.bot import Bot
 
 logger = logging.getLogger(__name__)
 
 
-class Reaction:
+class Reaction(BaseMessage):
     """
     Class for representing a parsed slack reaction.
     """
 
-    def __init__(self, bot, event, event_trace):
-        self._event_trace = event_trace
-        self.event = event
-        self._match = None
-        self._payload = {}
-        self._payload["omnibot_payload_type"] = "reaction"
-        self._bot = bot
-        # The bot object has data we don't want to pass to downstreams, so
-        # in the payload, we just store specific bot data.
-        self._payload["bot"] = {"name": bot.name, "bot_id": bot.bot_id}
-        # For future safety sake, we'll do the same for the team.
-        self._payload["team"] = {"name": bot.team.name, "team_id": bot.team.team_id}
-        self._payload["ts"] = event["event_ts"]
-        self._payload["user"] = event.get("user")
+    def __init__(self, bot: Bot, event: dict, event_trace: dict):
+        # `bot` is the receiving bot instance handling this reaction event,
+        # not the user or bot who sent the reaction.
+        super().__init__(bot, event, event_trace, "reaction")
         self._check_unsupported()
-        if self.user:
-            self._payload["parsed_user"] = slack.get_user(self.bot, self.user)
-        elif self.bot_id:
-            # TODO: call get_bot
-            self._payload["parsed_user"] = None
-        else:
-            self._payload["parsed_user"] = None
-        self._payload["type"] = event["type"]
         try:
             self._payload["reaction"] = event["reaction"]
         except Exception:
@@ -59,14 +42,7 @@ class Reaction:
                 extra=self.event_trace,
             )
             raise
-        self._payload["channel_id"] = event["item"]["channel"]
-        self._event_trace["channel_id"] = self.channel_id
-        self._payload["channel"] = slack.get_channel(self.bot, self.channel_id)
-        if not self.channel:
-            logger.error(
-                "Failed to fetch channel from channel_id.",
-                extra=self.event_trace,
-            )
+        self._payload["channel_id"] = self.item_channel
 
     def _check_unsupported(self):
         # TODO: make the ignores configurable, but have a default list
@@ -86,57 +62,32 @@ class Reaction:
             raise ReactionUnsupportedError()
 
     @property
-    def channel_id(self):
-        return self._payload.get("channel_id")
-
-    @property
-    def channel(self):
-        return self._payload.get("channel", {})
-
-    @property
-    def user(self):
-        return self._payload["user"]
-
-    @property
-    def ts(self):
-        return self._payload["ts"]
-
-    @property
-    def bot(self):
-        """
-        The bot associated with the app that received this reaction from the
-        event subscription api. To get info about a bot that may have sent
-        this reaction, see bot_id.
-        """
-        return self._bot
-
-    @property
-    def bot_id(self):
-        """
-        The bot_id associated with the reaction, if the reaction is from a bot.
-        If this reaction isn't from a bot, this will return None.
-        """
-        return self.event.get("bot_id")
-
-    @property
-    def payload(self):
-        return self._payload
-
-    @property
-    def event_trace(self):
-        return self._event_trace
-
-    @property
     def item_type(self):
+        """
+        The type of the item (e.g. "message", "file", etc.) that was reacted to.
+        """
         return self._payload["item_type"]
 
     @property
     def item_channel(self):
+        """
+        The channel the (e.g. "message", "file", etc.) that was reacted to was in.
+        """
         return self._payload["item_channel"]
 
     @property
     def item_ts(self):
+        """
+        The timestamp of the item (e.g. "message", "file", etc.) that was reacted to.
+        """
         return self._payload["item_ts"]
+
+    @property
+    def reaction(self):
+        """
+        The emoji name of the reaction (e.g. "+1", "-1", "smile", etc.).
+        """
+        return self._payload["reaction"]
 
 
 class ReactionUnsupportedError(Exception):

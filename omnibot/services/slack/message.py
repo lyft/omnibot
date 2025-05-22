@@ -2,38 +2,20 @@ from omnibot import logging
 from omnibot.services import slack
 from omnibot.services import stats
 from omnibot.services.slack import parser
+from omnibot.services.slack.base_message import BaseMessage
+from omnibot.services.slack.bot import Bot
 
 logger = logging.getLogger(__name__)
 
 
-class Message:
+class Message(BaseMessage):
     """
     Class for representing a parsed slack message.
     """
 
-    def __init__(self, bot, event, event_trace):
-        self._event_trace = event_trace
-        self.event = event
-        self._match = None
-        self._payload = {}
-        self._payload["omnibot_payload_type"] = "message"
-        self._bot = bot
-        # The bot object has data we don't want to pass to downstreams, so
-        # in the payload, we just store specific bot data.
-        self._payload["bot"] = {"name": bot.name, "bot_id": bot.bot_id}
-        # For future safety sake, we'll do the same for the team.
-        self._payload["team"] = {"name": bot.team.name, "team_id": bot.team.team_id}
-        self._payload["ts"] = event["ts"]
-        self._payload["thread_ts"] = event.get("thread_ts")
-        self._payload["user"] = event.get("user")
+    def __init__(self, bot: Bot, event: dict, event_trace: dict):
+        super().__init__(bot, event, event_trace, "message")
         self._check_unsupported()
-        if self.user:
-            self._payload["parsed_user"] = slack.get_user(self.bot, self.user)
-        elif self.bot_id:
-            # TODO: call get_bot
-            self._payload["parsed_user"] = None
-        else:
-            self._payload["parsed_user"] = None
         try:
             self._payload["text"] = event["text"]
         except Exception:
@@ -208,10 +190,6 @@ class Message:
         return self._payload["parsed_text"]
 
     @property
-    def command_text(self):
-        return self._payload.get("command_text")
-
-    @property
     def directed(self):
         return self._payload.get("directed", False)
 
@@ -220,45 +198,8 @@ class Message:
         return self._payload.get("mentioned", False)
 
     @property
-    def channel_id(self):
-        return self._payload.get("channel_id")
-
-    @property
-    def channel(self):
-        return self._payload.get("channel", {})
-
-    @property
-    def user(self):
-        return self._payload["user"]
-
-    @property
-    def ts(self):
-        return self._payload["ts"]
-
-    @property
     def thread_ts(self):
         return self._payload["thread_ts"]
-
-    @property
-    def team(self):
-        return self._payload["team"]
-
-    @property
-    def bot(self):
-        """
-        The bot associated with the app that received this message from the
-        event subscription api. To get info about a bot that may have sent
-        this message, see bot_id.
-        """
-        return self._bot
-
-    @property
-    def bot_id(self):
-        """
-        The bot_id associated with the message, if the message if from a bot.
-        If this message isn't from a bot, this will return None.
-        """
-        return self.event.get("bot_id")
 
     @property
     def channels(self):
@@ -279,31 +220,6 @@ class Message:
     @property
     def urls(self):
         return self._payload.get("urls", {})
-
-    @property
-    def match_type(self):
-        return self._payload.get("match_type")
-
-    @property
-    def match(self):
-        return self._match
-
-    @property
-    def payload(self):
-        return self._payload
-
-    @property
-    def event_trace(self):
-        return self._event_trace
-
-    def set_match(self, match_type, match):
-        self._payload["match_type"] = match_type
-        self._match = match
-        if match_type == "command":
-            self._payload["command"] = match
-            self._payload["args"] = self.command_text[len(match):].strip()  # fmt: skip
-        elif match_type == "regex":
-            self._payload["regex"] = match
 
 
 class MessageUnsupportedError(Exception):
