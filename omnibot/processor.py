@@ -4,6 +4,7 @@ Core processing logic.
 import importlib
 import json
 import re
+from typing import Mapping, Any
 
 import requests
 
@@ -46,35 +47,63 @@ def process_event(event):
         bot.logging_context,
     )
     statsd.incr(f"event.process.attempt.{event_type}")
-    if event_type in {"message", "app_mention", "reaction_added", "reaction_removed"}:
-        try:
-            with statsd.timer("process_event"):
-                logger.debug(
-                    f"Processing event: {json.dumps(event, indent=2)}",
-                    extra=event_trace,
-                )
-                if event_type == "message" or event_type == "app_mention":
-                    try:
-                        message = Message(bot, event_info, event_trace)
-                        _process_message_message_handlers(message)
-                    except MessageUnsupportedError:
-                        pass
-                elif event_type == "reaction_added" or event_type == "reaction_removed":
-                    try:
-                        reaction = Reaction(bot, event_info, event_trace)
-                        _process_reaction_message_handlers(reaction)
-                    except ReactionUnsupportedError:
-                        pass
-        except Exception:
-            statsd.incr(f"event.process.failed.{event_type}")
-            logger.exception(
-                "Could not process event.",
-                exc_info=True,
-                extra=event_trace,
-            )
+    if event_type == "message" or event_type == "app_mention":
+        _process_message_event(bot, event_info, event_trace, event_type)
+    elif event_type == "reaction_added" or event_type == "reaction_removed":
+        _process_reaction_event(bot, event_info, event_trace, event_type)
     else:
         logger.debug("Event is not a message or reaction type.", extra=event_trace)
         logger.debug(event)
+
+
+def _process_message_event(bot, event_info, event_trace, event_type):
+    """
+    Process message or app_mention events.
+    """
+    statsd = stats.get_statsd_client()
+    try:
+        with statsd.timer("process_event"):
+            logger.debug(
+                f"Processing event: {json.dumps(event_info, indent=2)}",
+                extra=event_trace,
+            )
+            try:
+                message = Message(bot, event_info, event_trace)
+                _process_message_message_handlers(message)
+            except MessageUnsupportedError:
+                pass
+    except Exception:
+        statsd.incr(f"event.process.failed.{event_type}")
+        logger.exception(
+            "Could not process message event.",
+            exc_info=True,
+            extra=event_trace,
+        )
+
+
+def _process_reaction_event(bot, event_info, event_trace, event_type):
+    """
+    Process reaction_added or reaction_removed events.
+    """
+    statsd = stats.get_statsd_client()
+    try:
+        with statsd.timer("process_event"):
+            logger.debug(
+                f"Processing event: {json.dumps(event_info, indent=2)}",
+                extra=event_trace,
+            )
+            try:
+                reaction = Reaction(bot, event_info, event_trace)
+                _process_reaction_message_handlers(reaction)
+            except ReactionUnsupportedError:
+                pass
+    except Exception:
+        statsd.incr(f"event.process.failed.{event_type}")
+        logger.exception(
+            "Could not process reaction event.",
+            exc_info=True,
+            extra=event_trace,
+        )
 
 
 def _process_message_message_handlers(message: Message):
@@ -145,10 +174,14 @@ def _process_reaction_message_handlers(reaction: Reaction):
 
 
 def _is_message_from_bot(bot: Bot, channel: str, ts: str):
+    """
+    Some events, like reactions, do not have all the ids we need to determine who wrote the message.
+    """
     message = get_message(bot, channel, ts)
     if not message or "bot_id" not in message:
         logger.warning("Failed to retrieve valid message or 'bot_id' is missing")
         return False
+    # There can be multiple bot_ids for the same bot
     bot_info = get_bot_info(bot, message["bot_id"])
     if not bot_info or bot_info["app_id"] != bot.bot_id:
         logger.debug("Reaction is not on a message from this bot")
@@ -385,7 +418,7 @@ def _handle_action(action, container, kwargs):
                 )
 
 
-def _handle_message_callback(message: BaseMessage, callback: dict):
+def _handle_message_callback(message: BaseMessage, callback: Mapping[str, Any]):
     logger.info(
         'Handling callback for message: match_type="{}" match="{}"'.format(
             message.match_type,
