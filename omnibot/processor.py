@@ -4,7 +4,8 @@ Core processing logic.
 import importlib
 import json
 import re
-from typing import Mapping, Any
+from typing import Any
+from typing import Mapping
 
 import requests
 
