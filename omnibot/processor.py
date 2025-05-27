@@ -161,7 +161,7 @@ def _process_reaction_message_handlers(reaction: Reaction):
             # match. An unmatched regex should callback only if the regex is
             # not supposed to match.
             if match != regex_should_not_match:
-                reaction.set_match("regex", handler["match"])
+                reaction.set_match("reaction", handler["match"])
                 for callback in handler["callbacks"]:
                     _handle_message_callback(reaction, callback)
                     handler_called = True

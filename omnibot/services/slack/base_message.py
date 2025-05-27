@@ -36,7 +36,6 @@ class BaseMessage:
             self._payload["parsed_user"] = None
         else:
             self._payload["parsed_user"] = None
-        self._payload["type"] = event["type"]
 
     @property
     def bot(self):
@@ -104,5 +103,5 @@ class BaseMessage:
         if match_type == "command":
             self._payload["command"] = match
             self._payload["args"] = self.command_text[len(match):].strip()  # fmt: skip
-        elif match_type == "regex":
+        elif match_type == "regex" or match_type == "reaction":
             self._payload["regex"] = match
