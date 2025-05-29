@@ -22,7 +22,7 @@ class BaseMessage:
         self._match = None
         self._payload = {}
         self._payload["omnibot_payload_type"] = omnibot_payload_type
-        self._payload["event_type"] = event["type"]
+        self._payload["event_type"] = event.get("type")
         self._bot = bot
         # The bot object has data we don't want to pass to downstreams, so
         # in the payload, we just store specific bot data.
