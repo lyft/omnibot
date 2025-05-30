@@ -156,7 +156,7 @@ def _process_reaction_message_handlers(reaction: Reaction):
 
     for handler in bot.message_handlers:
         if handler.get("match_type") == "reaction":
-            match = bool(re.fullmatch(handler["match"], reaction.reaction))
+            match = bool(re.fullmatch(handler["match"], reaction.emoji_name))
             regex_should_not_match = handler.get("regex_type") == "absence"
             # A matched regex should callback only if the regex is supposed to
             # match. An unmatched regex should callback only if the regex is

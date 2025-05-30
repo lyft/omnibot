@@ -22,6 +22,7 @@ class BaseMessage:
         self._match = None
         self._payload = {}
         self._payload["omnibot_payload_type"] = omnibot_payload_type
+        self._payload["event_type"] = event.get("type")
         self._bot = bot
         # The bot object has data we don't want to pass to downstreams, so
         # in the payload, we just store specific bot data.
@@ -97,11 +98,21 @@ class BaseMessage:
     def command_text(self):
         return self._payload.get("command_text")
 
+    @property
+    def args(self):
+        """
+        Used during callback for omnibot receiver route rule matching.
+        """
+        return self._payload.get("args")
+
     def set_match(self, match_type: str, match: str):
         self._payload["match_type"] = match_type
         self._match = match
         if match_type == "command":
             self._payload["command"] = match
             self._payload["args"] = self.command_text[len(match):].strip()  # fmt: skip
-        elif match_type == "regex" or match_type == "reaction":
+        elif match_type == "regex":
             self._payload["regex"] = match
+        elif match_type == "reaction":
+            self._payload["reaction"] = match
+            self._payload["args"] = self._payload.get("emoji_name")

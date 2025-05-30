@@ -18,15 +18,7 @@ class Reaction(BaseMessage):
         self._payload["ts"] = event["event_ts"]
         self._check_unsupported()
         try:
-            self._payload["reaction"] = event["reaction"]
-        except Exception:
-            logger.error(
-                "Reaction event is missing reaction attribute.",
-                extra=self.event_trace,
-            )
-            raise
-        try:
-            self._payload["reaction"] = event["reaction"]
+            self._payload["emoji_name"] = event["reaction"]
         except Exception:
             logger.error(
                 "Reaction event is missing reaction attribute.",
@@ -84,11 +76,11 @@ class Reaction(BaseMessage):
         return self._payload["item_ts"]
 
     @property
-    def reaction(self):
+    def emoji_name(self):
         """
         The emoji name of the reaction (e.g. "+1", "-1", "smile", etc.).
         """
-        return self._payload["reaction"]
+        return self._payload["emoji_name"]
 
 
 class ReactionUnsupportedError(Exception):
