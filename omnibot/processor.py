@@ -149,8 +149,14 @@ def _process_reaction_message_handlers(reaction: Reaction):
     handler_called = False
     item_channel = reaction.item_channel
     item_ts = reaction.item_ts
+    item_user = reaction.item_user
 
-    if not _is_message_from_bot(bot, item_channel, item_ts):
+    if item_user:
+        # Reaction is on a thread reply
+        if item_user != bot.user_id:
+            statsd.incr("event.ignored")
+            return
+    elif not _is_message_from_bot(bot, item_channel, item_ts):
         statsd.incr("event.ignored")
         return
 
@@ -179,8 +185,11 @@ def _is_message_from_bot(bot: Bot, channel: str, ts: str):
     Some events, like reactions, do not have all the ids we need to determine who wrote the message.
     """
     message = get_message(bot, channel, ts)
-    if not message or "bot_id" not in message:
-        logger.warning("Failed to retrieve valid message or 'bot_id' is missing")
+    if not message:
+        logger.warning("Failed to retrieve valid message")
+        return False
+    elif "bot_id" not in message:
+        logger.debug("Message is not from a bot")
         return False
     # There can be multiple bot_ids for the same bot
     bot_info = get_bot_info(bot, message["bot_id"])
