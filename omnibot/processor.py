@@ -151,7 +151,7 @@ def _process_reaction_message_handlers(reaction: Reaction):
     item_ts = reaction.item_ts
     item_user = reaction.item_user
 
-    if item_user:
+    if item_user is not None:
         # Reaction is on a thread reply
         if item_user != bot.user_id:
             statsd.incr("event.ignored")
