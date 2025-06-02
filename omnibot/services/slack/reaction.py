@@ -21,7 +21,7 @@ class Reaction(BaseMessage):
             self._payload["emoji_name"] = event["reaction"]
         except Exception:
             logger.error(
-                "Reaction event is missing reaction attribute.",
+                "Reaction event is missing reaction attribute",
                 extra=self.event_trace,
             )
             raise
@@ -31,10 +31,11 @@ class Reaction(BaseMessage):
             self._payload["item_ts"] = event["item"]["ts"]
         except Exception:
             logger.error(
-                "Reaction event is missing a item attribute.",
+                "Reaction event is missing item attribute",
                 extra=self.event_trace,
             )
             raise
+        self._payload["item_user"] = event.get("item_user")
         self._payload["channel_id"] = self.item_channel
 
     def _check_unsupported(self):
@@ -74,6 +75,14 @@ class Reaction(BaseMessage):
         The timestamp of the item (e.g. "message", "file", etc.) that was reacted to.
         """
         return self._payload["item_ts"]
+
+    @property
+    def item_user(self):
+        """
+        The user who created the item (e.g. "message", "file", etc.) that was reacted to.
+        This is not always present, such as in reaction events to slack command responses.
+        """
+        return self._payload["item_user"]
 
     @property
     def emoji_name(self):
