@@ -152,11 +152,10 @@ def _process_reaction_message_handlers(reaction: Reaction):
     item_user = reaction.item_user
 
     if item_user is not None:
-        # Reaction is on a thread reply
         if item_user != bot.user_id:
             statsd.incr("event.ignored")
             return
-    elif not _is_message_from_bot(bot, item_channel, item_ts):
+    elif not _is_message_from_bot(bot, item_channel, item_ts):  # Fallback check
         statsd.incr("event.ignored")
         return
 

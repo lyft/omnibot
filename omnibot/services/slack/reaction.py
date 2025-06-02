@@ -80,7 +80,7 @@ class Reaction(BaseMessage):
     def item_user(self):
         """
         The user who created the item (e.g. "message", "file", etc.) that was reacted to.
-        This is only present if the item is a thread reply.
+        This is not always present, such as in reaction events to slack command responses.
         """
         return self._payload["item_user"]
 
