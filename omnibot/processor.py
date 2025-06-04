@@ -51,6 +51,7 @@ def process_event(event):
     if event_type == "message" or event_type == "app_mention":
         _process_message_event(bot, event_info, event_trace, event_type)
     elif event_type == "reaction_added" or event_type == "reaction_removed":
+        logger.info("Reaction event")
         _process_reaction_event(bot, event_info, event_trace, event_type)
     else:
         logger.debug("Event is not a message or reaction type.", extra=event_trace)
@@ -97,6 +98,7 @@ def _process_reaction_event(bot, event_info, event_trace, event_type):
                 reaction = Reaction(bot, event_info, event_trace)
                 _process_reaction_message_handlers(reaction)
             except ReactionUnsupportedError:
+                logger.error("Reaction event is not supported")
                 pass
     except Exception:
         statsd.incr(f"event.process.failed.{event_type}")
@@ -153,9 +155,11 @@ def _process_reaction_message_handlers(reaction: Reaction):
 
     if item_user is not None:
         if item_user != bot.user_id:
+            logger.info(f"Reaction {item_user} does not match bot {bot.user_id}")
             statsd.incr("event.ignored")
             return
     elif not _is_message_from_bot(bot, item_channel, item_ts):  # Fallback check
+        logger.info("Reaction is not on a message from this bot")
         statsd.incr("event.ignored")
         return
 
@@ -173,9 +177,10 @@ def _process_reaction_message_handlers(reaction: Reaction):
                     handler_called = True
 
     if handler_called:
+        logger.info("reaction handler called")
         statsd.incr("event.handled")
     elif not handler_called:
-        logger.debug("no handler found")
+        logger.info("no handler found for reaction event")
         statsd.incr("event.ignored")
 
 
