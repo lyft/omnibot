@@ -47,6 +47,7 @@ def process_event(event):
         },
         bot.logging_context,
     )
+    logger.info(f"Processing event: {event_type}", extra=event_trace)
     statsd.incr(f"event.process.attempt.{event_type}")
     if event_type == "message" or event_type == "app_mention":
         _process_message_event(bot, event_info, event_trace, event_type)

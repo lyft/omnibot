@@ -140,6 +140,9 @@ def slack_event():
     """
     event = request.json
     logger.debug(f"Event received in API slack_event: {event}")
+    logger.info(
+        f"Event received in API slack_event: {event.get('event', {}).get('type')}",
+    )
     # Every event should have a validation token
     if "token" not in event:
         msg = "No verification token in event."
@@ -198,6 +201,10 @@ def slack_event():
     try:
         instrument_event(bot, event)
     except Exception:
+        logger.error(
+            "Could not instrument request",
+            extra=bot.logging_context,
+        )
         logger.exception(
             "Could not instrument request",
             extra=bot.logging_context,
@@ -205,6 +212,10 @@ def slack_event():
     try:
         queue_event(bot, event, "event")
     except Exception:
+        logger.error(
+            "Could not queue request.",
+            extra=bot.logging_context,
+        )
         logger.exception(
             "Could not queue request.",
             extra=bot.logging_context,
