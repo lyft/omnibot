@@ -3,4 +3,4 @@
 #
 
 pip==19.2
-setuptools==59.6.0
+setuptools==65.5.1
