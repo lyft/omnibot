@@ -1,6 +1,5 @@
 import json
 from typing import Any
-from typing import Dict
 from unittest.mock import MagicMock
 
 from flask import Response  # noqa: F401
@@ -14,7 +13,7 @@ _ENDPOINT = "/api/v1/slack/slash_command"
 
 def test_user_issues_echo_command(client: Client, queue: MagicMock):
     with get_mock_data("slash_command/user_issues_echo_command.json") as json_data:
-        event: Dict[str, Any] = json.loads(json_data.read())
+        event: dict[str, Any] = json.loads(json_data.read())
         resp: Response = client.post(
             _ENDPOINT,
             data=event,
@@ -29,7 +28,7 @@ def test_user_issues_echo_command(client: Client, queue: MagicMock):
 
 def test_missing_token(client: Client, queue: MagicMock):
     with get_mock_data("slash_command/user_issues_echo_command.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data.pop("token", None)
         resp: Response = client.post(
             _ENDPOINT,
@@ -44,7 +43,7 @@ def test_missing_token(client: Client, queue: MagicMock):
 
 def test_missing_team_id(client: Client, queue: MagicMock):
     with get_mock_data("slash_command/user_issues_echo_command.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data.pop("team_id", None)
         resp: Response = client.post(
             _ENDPOINT,
@@ -59,7 +58,7 @@ def test_missing_team_id(client: Client, queue: MagicMock):
 
 def test_invalid_verification_token(client: Client, queue: MagicMock):
     with get_mock_data("slash_command/user_issues_echo_command.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data["token"] = "something random"
         resp: Response = client.post(
             _ENDPOINT,
@@ -77,7 +76,7 @@ def test_invalid_verification_token(client: Client, queue: MagicMock):
 
 def test_unsupported_team(client: Client, queue: MagicMock):
     with get_mock_data("slash_command/user_issues_echo_command.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data["team_id"] = "something random"
         resp: Response = client.post(
             _ENDPOINT,
@@ -92,7 +91,7 @@ def test_unsupported_team(client: Client, queue: MagicMock):
 
 def test_missing_handler(client: Client, queue: MagicMock):
     with get_mock_data("slash_command/user_issues_echo_command.json") as json_data:
-        modified_data: Dict[str, Any] = json.loads(json_data.read())
+        modified_data: dict[str, Any] = json.loads(json_data.read())
         modified_data["command"] = "/somethingrandom"
         resp: Response = client.post(
             _ENDPOINT,
