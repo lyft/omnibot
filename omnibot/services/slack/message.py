@@ -17,6 +17,7 @@ class Message(BaseMessage):
         super().__init__(bot, event, event_trace, "message")
         self._payload["ts"] = event["ts"]
         self._payload["thread_ts"] = event.get("thread_ts")
+        self._payload["parent_user_id"] = event.get("parent_user_id")
         self._check_unsupported()
         try:
             self._payload["text"] = event["text"]
@@ -49,10 +50,6 @@ class Message(BaseMessage):
         # Ignore slackbot as it doesn't get classifed as a bot user
         elif self.user and self.user == "USLACKBOT":
             logger.debug("ignoring message from slackbot", extra=self.event_trace)
-            unsupported = True
-        # Ignore threads
-        elif self.thread_ts:
-            logger.debug("ignoring thread message", extra=self.event_trace)
             unsupported = True
         # For now, ignore all event subtypes
         elif self.subtype:
@@ -201,7 +198,18 @@ class Message(BaseMessage):
 
     @property
     def thread_ts(self):
+        """
+        The timestamp of the parent message, if this is a reply to a message.
+        :return:
+        """
         return self._payload["thread_ts"]
+
+    @property
+    def parent_user_id(self):
+        """
+        The user_id of the parent message, if this is a reply to a message.
+        """
+        return self._payload["parent_user_id"]
 
     @property
     def channels(self):

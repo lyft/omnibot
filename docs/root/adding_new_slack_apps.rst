@@ -50,6 +50,8 @@ Adding normal slack apps
       * Note 2: the configuration `bot.name` for your bot should match your app user_handle
       * Note 3: if your app user_handle does not match your `bot.name` you need to
         specify `match_mention: true` to receive callbacks
+      * Note 4: if you want your app to handle thread replies, you need to
+        specify `match_reply: true` to receive callbacks
 
 
 #. Add interactive component configuration (if the bot needs interactive components), using the ``Interactive Components`` link in the sidebar:
