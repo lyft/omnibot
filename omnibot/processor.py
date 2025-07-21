@@ -113,6 +113,9 @@ def _process_message_message_handlers(message: Message):
     command_matched = False
     handler_called = False
     for handler in bot.message_handlers:
+        # We only match replies if the handler is set to match them
+        if message.thread_ts and not handler.get("match_reply", False):
+            continue
         # We only match commands against directed messages
         if handler["match_type"] == "command":
             if not _should_handle_command(handler, message):
