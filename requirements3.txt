@@ -8,7 +8,7 @@ attrs==21.2.0             # via pytest
 blinker==1.4              # via -r requirements.in
 boto3==1.4.5              # via -r requirements.in
 botocore==1.5.95          # via boto3, s3transfer
-certifi==2022.12.7        # via requests
+certifi==2023.7.22        # via requests
 chardet==3.0.4            # via requests
 click==7.0                # via flask
 coverage==5.5             # via pytest-cov
