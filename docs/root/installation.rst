@@ -90,8 +90,8 @@ Make a virtualenv and install pip requirements
     virtualenv venv
     source venv/bin/activate
     pip install -U pip
-    pip install -r piptools_requirements3.txt
-    pip install -r requirements3.txt
+    pip install -r piptools_requirements.txt
+    pip install -r requirements.txt
     deactivate
 
 Run omnibot

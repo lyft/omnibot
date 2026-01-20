@@ -39,7 +39,7 @@ Adding new dependencies to requirements
 =======================================
 
 We freeze python dependencies from direct dependencies (from ``requirements.in``),
-to diamond dependencies (in ``requirements3.txt``). Doing so ensures a consistent installation
+to diamond dependencies (in ``requirements.txt``). Doing so ensures a consistent installation
 with well known versions in test environments, out to production environments.
 
 If you need to add a dependency, or update the version of a dependency, you should modify
@@ -56,7 +56,7 @@ Approving licenses or dependencies
 
 We run a `license scanner/approver <https://github.com/pivotal/LicenseFinder>`_ for third-party
 dependencies used by omnibot. If you add or upgrade dependencies in ``requirements.in`` or
-``requirements3.txt``, the license scanner tests may fail, outputing the failed requirement, and
+``requirements.txt``, the license scanner tests may fail, outputing the failed requirement, and
 its associated license. As long as the license is acceptable, a project owner will approve the
 license for use.
 
