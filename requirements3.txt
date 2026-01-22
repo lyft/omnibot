@@ -53,5 +53,5 @@ zipp==3.4.1               # via importlib-metadata
 zope.event==4.5.0         # via gevent
 zope.interface==5.4.0     # via gevent
 
-pip==19.2                # via -r piptools_requirements3.txt
+pip==21.1                # via -r piptools_requirements3.txt
 setuptools==59.6.0        # via -r piptools_requirements3.txt, gevent, zope.event, zope.interface
