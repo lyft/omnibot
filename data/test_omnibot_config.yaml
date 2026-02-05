@@ -1,4 +1,4 @@
-authorization:
+authorization: "TESTING
   checks:
     - module: "omnibot.authnz:allowed_paths"
       kwargs:
