@@ -133,3 +133,7 @@ def test_message(mocker):
     event_copy["user"] = "USLACKBOT"
     with pytest.raises(MessageUnsupportedError):
         _message = Message(_bot, event_copy, event_trace)
+
+    _bot._message_handlers = [{"match_slackbot": True}]
+    _message = Message(_bot, event_copy, event_trace)
+    assert _message.from_slackbot is True

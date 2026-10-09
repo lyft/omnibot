@@ -116,6 +116,8 @@ def _process_message_message_handlers(message: Message):
         # We only match replies if the handler is set to match them
         if message.thread_ts and not handler.get("match_reply", False):
             continue
+        if message.from_slackbot and not handler.get("match_slackbot", False):
+            continue
         # We only match commands against directed messages
         if handler["match_type"] == "command":
             if not _should_handle_command(handler, message):

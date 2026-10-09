@@ -47,8 +47,12 @@ class Message(BaseMessage):
         if self.bot_id:
             logger.debug("ignoring message from bot", extra=self.event_trace)
             unsupported = True
-        # Ignore slackbot as it doesn't get classifed as a bot user
-        elif self.user and self.user == "USLACKBOT":
+        # Ignore slackbot as it doesn't get classifed as a bot user, unless a
+        # handler opts in (e.g. to act on /remind messages)
+        elif self.from_slackbot and not any(
+            handler.get("match_slackbot", False)
+            for handler in self.bot.message_handlers
+        ):
             logger.debug("ignoring message from slackbot", extra=self.event_trace)
             unsupported = True
         # For now, ignore all event subtypes
@@ -175,6 +179,10 @@ class Message(BaseMessage):
                 exc_info=True,
                 extra=self.event_trace,
             )
+
+    @property
+    def from_slackbot(self):
+        return self.user == "USLACKBOT"
 
     @property
     def subtype(self):

@@ -52,6 +52,8 @@ Adding normal slack apps
         specify `match_mention: true` to receive callbacks
       * Note 4: if you want your app to handle thread replies, you need to
         specify `match_reply: true` to receive callbacks
+      * Note 5: Slackbot messages (such as ``/remind`` reminders) are ignored
+        unless you specify `match_slackbot: true`
 
 
 #. Add interactive component configuration (if the bot needs interactive components), using the ``Interactive Components`` link in the sidebar:
