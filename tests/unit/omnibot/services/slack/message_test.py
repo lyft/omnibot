@@ -133,3 +133,78 @@ def test_message(mocker):
     event_copy["user"] = "USLACKBOT"
     with pytest.raises(MessageUnsupportedError):
         _message = Message(_bot, event_copy, event_trace)
+
+
+def test_allowed_bot_message(mocker, settings_override):
+    settings_override(
+        ALLOWED_BOT_MESSAGES={
+            "testteam": {
+                "echobot": [
+                    {"bot_id": "B12345678", "channel": "C123456AB"},
+                    # Incomplete entries are ignored
+                    {"bot_id": "B99999999"},
+                ],
+            },
+        },
+    )
+    _team = Team.get_team_by_name("testteam")
+    _bot = Bot.get_bot_by_name(_team, "echobot")
+    _bot._bot_data["user_id"] = "A12345678"
+    event = {
+        "ts": "1234567.12",
+        "bot_id": "B12345678",
+        "subtype": "bot_message",
+        "text": "My claim is stuck",
+        "channel": "C123456AB",
+    }
+    event_trace = {}
+    mocker.patch("omnibot.services.slack.get_user").return_value = {}
+    mocker.patch("omnibot.services.slack.get_channel").return_value = {}
+
+    _message = Message(_bot, event, event_trace)
+    assert _message.bot_id == "B12345678"
+    assert _message.parsed_text == "My claim is stuck"
+    assert _message.channel_id == "C123456AB"
+
+    # Bot messages without a subtype are allowed too
+    event_copy = copy.deepcopy(event)
+    del event_copy["subtype"]
+    _message = Message(_bot, event_copy, event_trace)
+    assert _message.bot_id == "B12345678"
+
+    # Other subtypes from an allowed bot are still ignored
+    event_copy = copy.deepcopy(event)
+    event_copy["subtype"] = "message_changed"
+    with pytest.raises(MessageUnsupportedError):
+        Message(_bot, event_copy, event_trace)
+
+    # Allowed bot in another channel
+    event_copy = copy.deepcopy(event)
+    event_copy["channel"] = "C999999ZZ"
+    with pytest.raises(MessageUnsupportedError):
+        Message(_bot, event_copy, event_trace)
+
+    # Another bot in the allowed channel
+    event_copy = copy.deepcopy(event)
+    event_copy["bot_id"] = "B87654321"
+    with pytest.raises(MessageUnsupportedError):
+        Message(_bot, event_copy, event_trace)
+
+    # Incomplete entry doesn't allow its bot anywhere
+    event_copy = copy.deepcopy(event)
+    event_copy["bot_id"] = "B99999999"
+    with pytest.raises(MessageUnsupportedError):
+        Message(_bot, event_copy, event_trace)
+
+    # Another receiving bot doesn't inherit the allowlist
+    _other_bot = Bot.get_bot_by_name(_team, "pingbot")
+    with pytest.raises(MessageUnsupportedError):
+        Message(_other_bot, event, event_trace)
+
+    # Slackbot is still ignored
+    event_copy = copy.deepcopy(event)
+    del event_copy["bot_id"]
+    del event_copy["subtype"]
+    event_copy["user"] = "USLACKBOT"
+    with pytest.raises(MessageUnsupportedError):
+        Message(_bot, event_copy, event_trace)

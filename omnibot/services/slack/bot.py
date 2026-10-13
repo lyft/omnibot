@@ -115,6 +115,21 @@ class Bot:
             return None
 
     @property
+    def allowed_bot_messages(self):
+        """
+        The (bot_id, channel) pairs of bot messages this bot will handle.
+        Entries missing either field are ignored.
+        """
+        entries = settings.ALLOWED_BOT_MESSAGES.get(self.team.name, {}).get(
+            self.name, []
+        )
+        return {
+            (entry["bot_id"], entry["channel"])
+            for entry in entries
+            if entry.get("bot_id") and entry.get("channel")
+        }
+
+    @property
     def interactive_component_handlers(self):
         return self._interactive_component_handlers
 

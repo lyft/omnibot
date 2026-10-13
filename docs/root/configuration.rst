@@ -107,6 +107,16 @@ For parts of omnibot's functionality, it's necessary to poll slack's APIs for us
       "example-production": "omnibot"
       "example-sandbox": "omnibot"
 
+By default, omnibot ignores messages from other bots, and any message with a subtype (edits, deletes, file shares, workflow posts, etc.). To let a bot handle plain messages (no subtype, or the ``bot_message`` subtype) from a specific bot in a specific channel, add the sending bot's ``bot_id`` and the ``channel`` ID under the receiving bot's name. Both fields are required:
+
+.. code-block:: yaml
+
+    allowed_bot_messages:
+      "example-production":
+        "docbot":
+        - bot_id: "B1234ABCD"
+          channel: "C1234ABCD"
+
 Bot Credential Configuration
 ============================
 

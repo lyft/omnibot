@@ -77,6 +77,15 @@ for team, bots in _config.get("bots", {}).items():
         SLACK_BOT_TOKENS[team][bot_name]["oauth_bot_token"] = _o_bot_token
         SLACK_BOT_TOKENS[team][bot_name]["app_id"] = bot_id
 
+# Messages from other bots are ignored, except where explicitly allowed for a
+# receiving bot, by the sending bot's bot_id and the channel, e.g.:
+#   allowed_bot_messages:
+#     <team>:
+#       <receiving bot name>:
+#       - bot_id: B12345678
+#         channel: C12345678
+ALLOWED_BOT_MESSAGES = _config.get("allowed_bot_messages", {})
+
 HANDLERS = _config.get("handlers")
 HELP_CALLBACK = _config.get("help_callback")
 DEFAULT_TO_HELP = _config.get("default_to_help", True)

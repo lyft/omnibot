@@ -40,11 +40,12 @@ class Message(BaseMessage):
         self._parse_payload()
 
     def _check_unsupported(self):
-        # TODO: make the ignores configurable, but have a default list
         # Ignore self
-        # Ignore bots
+        # Ignore bots, unless explicitly allowed for this bot and channel
         unsupported = False
-        if self.bot_id:
+        if self._is_allowed_bot_message():
+            logger.debug("allowing message from allowed bot", extra=self.event_trace)
+        elif self.bot_id:
             logger.debug("ignoring message from bot", extra=self.event_trace)
             unsupported = True
         # Ignore slackbot as it doesn't get classifed as a bot user
@@ -64,6 +65,13 @@ class Message(BaseMessage):
             statsd = stats.get_statsd_client()
             statsd.incr("event.unsupported")
             raise MessageUnsupportedError()
+
+    def _is_allowed_bot_message(self):
+        # Only plain bot messages are allowed; edits, deletes, file shares and
+        # other subtypes are still ignored.
+        if not self.bot_id or self.subtype not in (None, "bot_message"):
+            return False
+        return (self.bot_id, self.event.get("channel")) in self.bot.allowed_bot_messages
 
     def _parse_payload(self):
         try:
