@@ -41,7 +41,7 @@ class Message(BaseMessage):
 
     def _check_unsupported(self):
         # Ignore self
-        # Ignore bots, unless explicitly allowed for this bot and channel
+        # Ignore bots
         unsupported = False
         if self._is_allowed_bot_message():
             logger.debug("allowing message from allowed bot", extra=self.event_trace)
@@ -67,8 +67,6 @@ class Message(BaseMessage):
             raise MessageUnsupportedError()
 
     def _is_allowed_bot_message(self):
-        # Only plain bot messages are allowed; edits, deletes, file shares and
-        # other subtypes are still ignored.
         if not self.bot_id or self.subtype not in (None, "bot_message"):
             return False
         return (self.bot_id, self.event.get("channel")) in self.bot.allowed_bot_messages

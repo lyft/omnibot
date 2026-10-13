@@ -116,13 +116,8 @@ class Bot:
 
     @property
     def allowed_bot_messages(self):
-        """
-        The (bot_id, channel) pairs of bot messages this bot will handle.
-        Entries missing either field are ignored.
-        """
-        entries = settings.ALLOWED_BOT_MESSAGES.get(self.team.name, {}).get(
-            self.name, []
-        )
+        team_entries = settings.ALLOWED_BOT_MESSAGES.get(self.team.name, {})
+        entries = team_entries.get(self.name, [])
         return {
             (entry["bot_id"], entry["channel"])
             for entry in entries
