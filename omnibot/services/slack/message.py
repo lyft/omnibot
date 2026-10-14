@@ -18,6 +18,7 @@ class Message(BaseMessage):
         self._payload["ts"] = event["ts"]
         self._payload["thread_ts"] = event.get("thread_ts")
         self._payload["parent_user_id"] = event.get("parent_user_id")
+        self._payload["sender_bot_id"] = event.get("bot_id")
         self._check_unsupported()
         try:
             self._payload["text"] = event["text"]
@@ -69,7 +70,18 @@ class Message(BaseMessage):
     def _is_allowed_bot_message(self):
         if not self.bot_id or self.subtype not in (None, "bot_message"):
             return False
-        return (self.bot_id, self.event.get("channel")) in self.bot.allowed_bot_messages
+        sender = (self.bot_id, self.event.get("channel"))
+        if sender not in self.bot.allowed_bot_messages:
+            return False
+        # Never handle the receiving bot's own messages, to avoid loops.
+        bot_info = slack.get_bot_info(self.bot, self.bot_id)
+        if not bot_info or bot_info.get("app_id") == self.bot.bot_id:
+            logger.warning(
+                "ignoring allowed bot message from self or unknown bot",
+                extra=self.event_trace,
+            )
+            return False
+        return True
 
     def _parse_payload(self):
         try:

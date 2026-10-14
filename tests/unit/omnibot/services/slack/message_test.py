@@ -100,6 +100,7 @@ def test_message(mocker):
     assert _message.thread_ts == event["thread_ts"]
     assert _message.team == {"name": _bot.team.name, "team_id": _bot.team.team_id}
     assert _message.bot_id is None
+    assert _message.payload["sender_bot_id"] is None
     assert _message.channels == channels_ret
     assert _message.users == user_ret
     assert _message.specials == special_ret
@@ -141,8 +142,7 @@ def test_allowed_bot_message(mocker, settings_override):
             "testteam": {
                 "echobot": [
                     {"bot_id": "B12345678", "channel": "C123456AB"},
-                    # Incomplete entries are ignored
-                    {"bot_id": "B99999999"},
+                    {"bot_id": "BSELF0000", "channel": "C123456AB"},
                 ],
             },
         },
@@ -160,9 +160,15 @@ def test_allowed_bot_message(mocker, settings_override):
     event_trace = {}
     mocker.patch("omnibot.services.slack.get_user").return_value = {}
     mocker.patch("omnibot.services.slack.get_channel").return_value = {}
+    mocker.patch(
+        "omnibot.services.slack.get_bot_info",
+    ).side_effect = lambda bot, bot_id: {
+        "app_id": _bot.bot_id if bot_id == "BSELF0000" else "A00000000",
+    }
 
     _message = Message(_bot, event, event_trace)
     assert _message.bot_id == "B12345678"
+    assert _message.payload["sender_bot_id"] == "B12345678"
     assert _message.parsed_text == "My claim is stuck"
     assert _message.channel_id == "C123456AB"
 
@@ -190,9 +196,9 @@ def test_allowed_bot_message(mocker, settings_override):
     with pytest.raises(MessageUnsupportedError):
         Message(_bot, event_copy, event_trace)
 
-    # Incomplete entry doesn't allow its bot anywhere
+    # The receiving bot's own messages are ignored, even if allowed
     event_copy = copy.deepcopy(event)
-    event_copy["bot_id"] = "B99999999"
+    event_copy["bot_id"] = "BSELF0000"
     with pytest.raises(MessageUnsupportedError):
         Message(_bot, event_copy, event_trace)
 

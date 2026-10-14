@@ -118,11 +118,7 @@ class Bot:
     def allowed_bot_messages(self):
         team_entries = settings.ALLOWED_BOT_MESSAGES.get(self.team.name, {})
         entries = team_entries.get(self.name, [])
-        return {
-            (entry["bot_id"], entry["channel"])
-            for entry in entries
-            if entry.get("bot_id") and entry.get("channel")
-        }
+        return {(entry["bot_id"], entry["channel"]) for entry in entries}
 
     @property
     def interactive_component_handlers(self):
