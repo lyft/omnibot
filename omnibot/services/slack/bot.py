@@ -115,6 +115,12 @@ class Bot:
             return None
 
     @property
+    def allowed_bot_messages(self):
+        team_entries = settings.ALLOWED_BOT_MESSAGES.get(self.team.name, {})
+        entries = team_entries.get(self.name, [])
+        return {(entry["bot_id"], entry["channel"]) for entry in entries}
+
+    @property
     def interactive_component_handlers(self):
         return self._interactive_component_handlers
 
