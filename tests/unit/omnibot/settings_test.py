@@ -41,3 +41,25 @@ def test_slack_bot_tokens():
 def test_handlers():
     assert "slash_command_handlers" in settings.HANDLERS
     assert "message_handlers" in settings.HANDLERS
+
+
+def test_parse_allowed_bot_messages():
+    allowed = settings.parse_allowed_bot_messages(
+        {
+            "testteam": {
+                "echobot": [
+                    {"bot_id": "B12345678", "channel": "C123456AB"},
+                    {"bot_id": "B12345678"},
+                    {"channel": "C123456AB"},
+                ],
+                "pingbot": None,
+            },
+        },
+    )
+    assert allowed == {
+        "testteam": {
+            "echobot": [{"bot_id": "B12345678", "channel": "C123456AB"}],
+            "pingbot": [],
+        },
+    }
+    assert settings.parse_allowed_bot_messages(None) == {}

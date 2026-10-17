@@ -77,6 +77,26 @@ for team, bots in _config.get("bots", {}).items():
         SLACK_BOT_TOKENS[team][bot_name]["oauth_bot_token"] = _o_bot_token
         SLACK_BOT_TOKENS[team][bot_name]["app_id"] = bot_id
 
+
+def parse_allowed_bot_messages(config):
+    allowed = {}
+    for team, bots in (config or {}).items():
+        allowed[team] = {}
+        for bot_name, entries in (bots or {}).items():
+            allowed[team][bot_name] = []
+            for entry in entries or []:
+                if not entry.get("bot_id") or not entry.get("channel"):
+                    logger.warning(
+                        f"Ignoring allowed_bot_messages entry for {team}/{bot_name} "
+                        f"missing bot_id or channel: {entry}",
+                    )
+                    continue
+                allowed[team][bot_name].append(entry)
+    return allowed
+
+
+ALLOWED_BOT_MESSAGES = parse_allowed_bot_messages(_config.get("allowed_bot_messages"))
+
 HANDLERS = _config.get("handlers")
 HELP_CALLBACK = _config.get("help_callback")
 DEFAULT_TO_HELP = _config.get("default_to_help", True)
