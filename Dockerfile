@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:jammy
 LABEL maintainer="rlane@lyft.com"
 
 COPY ./piptools_requirements3.txt /srv/omnibot/piptools_requirements3.txt
@@ -11,7 +11,7 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends python3-dev python3-pip openssl libssl-dev gcc pkg-config libffi-dev libxml2-dev libxmlsec1-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-RUN pip3 install -r piptools_requirements3.txt && \
-    pip3 install -r requirements3.txt
+RUN python3 -m pip install -r piptools_requirements3.txt && \
+    python3 -m pip install -r requirements3.txt
 
 COPY . /srv/omnibot
