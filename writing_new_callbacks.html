@@ -1,95 +1,55 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Writing new callback functions &mdash; omnibot 1.0.3-3abc74 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Writing new callback functions &mdash; omnibot 1.0.3-15e9d7 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/omnibot.css" />
+
   
     <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-
-  
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/omnibot.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Contributing" href="contributing.html" />
     <link rel="prev" title="Slack proxying" href="slack_proxying.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html" class="icon icon-home"> omnibot
           
-
-          
-            
-            <img src="_static/logo.png" class="logo" alt="Logo"/>
-          
+          <a href="index.html" class="icon icon-home">
+            omnibot
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
               <div class="version">
-                1.0.3-3abc74
+                1.0.3-15e9d7
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Usage</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#quickstart-for-testing">Quickstart for testing</a></li>
@@ -155,7 +115,7 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Development</span></p>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="development.html">Quickstart and Development</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="development.html#prerequisites">Prerequisites</a></li>
@@ -198,14 +158,14 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">API endpoint</span></p>
+<p class="caption" role="heading"><span class="caption-text">API endpoint</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api.html#api-route-documentation">API route documentation</a></li>
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Python module documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Python module documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="autogen/omnibot.html">omnibot package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="autogen/omnibot.html#subpackages">Subpackages</a><ul>
@@ -267,103 +227,65 @@
 </li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">omnibot</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
-      <li>Writing new callback functions</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Writing new callback functions</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/writing_new_callbacks.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="writing-new-callback-functions">
-<h1>Writing new callback functions<a class="headerlink" href="#writing-new-callback-functions" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="writing-new-callback-functions">
+<h1>Writing new callback functions<a class="headerlink" href="#writing-new-callback-functions" title="Permalink to this heading">¶</a></h1>
 <p>Callbacks are part of a handler configuration. When a handler is matched, the defined callback will be called with the payload container for the handler type, and with whatever arguments are defined as part of the callback. As an example, let’s take a look at an example handler configuration, with an existing callback function:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">message_handlers</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">match</span><span class="p">:</span> <span class="s">&quot;event&quot;</span>
-    <span class="nt">match_type</span><span class="p">:</span> <span class="s">&quot;command&quot;</span>
-    <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;create</span><span class="nv"> </span><span class="s">events</span><span class="nv"> </span><span class="s">using</span><span class="nv"> </span><span class="s">eventbot&quot;</span>
-    <span class="nt">bots</span><span class="p">:</span>
-      <span class="s">&quot;your-team-name-here&quot;</span><span class="p p-Indicator">:</span>
-        <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
-    <span class="nt">callbacks</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="nt">module</span><span class="p">:</span> <span class="s">&quot;omnibot.callbacks.network_callbacks:http_callback&quot;</span>
-        <span class="nt">kwargs</span><span class="p">:</span>
-          <span class="nt">request_kwargs</span><span class="p">:</span>
-            <span class="nt">url</span><span class="p">:</span> <span class="s">&quot;http://eventbot/api/v1/eventbot&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="s">"event"</span>
+<span class="w">    </span><span class="nt">match_type</span><span class="p">:</span><span class="w"> </span><span class="s">"command"</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"create</span><span class="nv"> </span><span class="s">events</span><span class="nv"> </span><span class="s">using</span><span class="nv"> </span><span class="s">eventbot"</span>
+<span class="w">    </span><span class="nt">bots</span><span class="p">:</span>
+<span class="w">      </span><span class="s">"your-team-name-here"</span><span class="p p-Indicator">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"omnibot"</span>
+<span class="w">    </span><span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module</span><span class="p">:</span><span class="w"> </span><span class="s">"omnibot.callbacks.network_callbacks:http_callback"</span>
+<span class="w">        </span><span class="nt">kwargs</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">request_kwargs</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">"http://eventbot/api/v1/eventbot"</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">http_callback</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">request_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">client_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">http_callback</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">request_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">client_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="c1"># TODO: support client kwargs</span>
     <span class="k">if</span> <span class="n">client_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">client_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">request_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="s1">&#39;http_callback called without request_kwargs&#39;</span><span class="p">,</span>
+            <span class="s1">'http_callback called without request_kwargs'</span><span class="p">,</span>
             <span class="n">extra</span><span class="o">=</span><span class="n">container</span><span class="o">.</span><span class="n">event_trace</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="p">{}</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">_get_requests_session</span><span class="p">()</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="n">request_kwargs</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">request_kwargs</span><span class="p">[</span><span class="s1">'url'</span><span class="p">]</span>
 
     <span class="c1"># request_kwargs is a reference to the global settings,</span>
-    <span class="c1"># so changing it changes the global settings, which we don&#39;t</span>
+    <span class="c1"># so changing it changes the global settings, which we don't</span>
     <span class="c1"># want to do. Instead of changing request_kwargs, we make a</span>
-    <span class="c1"># copy of it, and change the copy by removing the &#39;url&#39; field.</span>
-    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">request_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s1">&#39;url&#39;</span><span class="p">}</span>
+    <span class="c1"># copy of it, and change the copy by removing the 'url' field.</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">request_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s1">'url'</span><span class="p">}</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
@@ -373,14 +295,14 @@
         <span class="p">)</span>
     <span class="k">except</span> <span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="s1">&#39;Failed to make request to </span><span class="si">{}</span><span class="s1"> with error: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s1">'Failed to make request to </span><span class="si">{}</span><span class="s1"> with error: </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">url</span><span class="p">,</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="n">requests</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Got status code </span><span class="si">{0}</span><span class="s1"> for </span><span class="si">{1}</span><span class="s1">, with response: </span><span class="si">{2}</span><span class="s1">&#39;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">'Got status code </span><span class="si">{0}</span><span class="s1"> for </span><span class="si">{1}</span><span class="s1">, with response: </span><span class="si">{2}</span><span class="s1">'</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span>
@@ -397,84 +319,66 @@
 <p>Callback functions should always return a dictionary. The return format is dependent on the type of handler, and is defined in the <a class="reference internal" href="slack_proxying.html"><span class="doc">slack proxying documentation</span></a>.</p>
 <p>Let’s look at a more explicit example of a handler/callback combo that directly responds to an event, rather than proxying a backend service:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">slash_command_handlers</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">command</span><span class="p">:</span> <span class="s">&#39;/tableflip&#39;</span>
-    <span class="nt">response_type</span><span class="p">:</span> <span class="s">&#39;ephemeral&#39;</span>
-    <span class="nt">bots</span><span class="p">:</span>
-      <span class="s">&quot;lyft-test-sandbox&quot;</span><span class="p p-Indicator">:</span>
-        <span class="p p-Indicator">-</span> <span class="s">&quot;omnibot&quot;</span>
-    <span class="nt">callbacks</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="nt">module</span><span class="p">:</span> <span class="s">&quot;omnibot.callbacks.slash_command_callbacks:tableflip_callback&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="s">'/tableflip'</span>
+<span class="w">    </span><span class="nt">response_type</span><span class="p">:</span><span class="w"> </span><span class="s">'ephemeral'</span>
+<span class="w">    </span><span class="nt">bots</span><span class="p">:</span>
+<span class="w">      </span><span class="s">"lyft-test-sandbox"</span><span class="p p-Indicator">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"omnibot"</span>
+<span class="w">    </span><span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module</span><span class="p">:</span><span class="w"> </span><span class="s">"omnibot.callbacks.slash_command_callbacks:tableflip_callback"</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">tableflip_callback</span><span class="p">(</span><span class="n">container</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">tableflip_callback</span><span class="p">(</span><span class="n">container</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Respond back with a tableflip</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">payload</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">payload</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;tableflip callback payload: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'tableflip callback payload: </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="c1"># Respond back to the slash command with the same text</span>
-        <span class="s1">&#39;responses&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s1">'responses'</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
-                <span class="s1">&#39;response_type&#39;</span><span class="p">:</span> <span class="s1">&#39;in_channel&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;(╯°□°)╯︵ ┻━┻&#39;</span>
+                <span class="s1">'response_type'</span><span class="p">:</span> <span class="s1">'in_channel'</span><span class="p">,</span>
+                <span class="s1">'text'</span><span class="p">:</span> <span class="s1">'(╯°□°)╯︵ ┻━┻'</span>
             <span class="p">}</span>
         <span class="p">]</span>
     <span class="p">}</span>
 </pre></div>
 </div>
 <p>Notice in this example, that the handler is matching for a particular slash command, sending that into a function with no arguments, and the callback function is simply responding with the response that should occur for the slash command.</p>
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="slack_proxying.html" class="btn btn-neutral float-left" title="Slack proxying" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="slack_proxying.html" class="btn btn-neutral float-left" title="Slack proxying" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2019-2022, Omnibot Project Authors
-
-    </p>
+    <p>&#169; Copyright 2019-2026, Omnibot Project Authors.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

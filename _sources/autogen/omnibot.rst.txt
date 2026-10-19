@@ -5,6 +5,7 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
    omnibot.authnz
    omnibot.callbacks
@@ -23,6 +24,7 @@ omnibot.app module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.processor module
 ------------------------
@@ -31,6 +33,7 @@ omnibot.processor module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.settings module
 -----------------------
@@ -39,6 +42,7 @@ omnibot.settings module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.setup\_logging module
 -----------------------------
@@ -47,6 +51,7 @@ omnibot.setup\_logging module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.watcher module
 ----------------------
@@ -55,6 +60,7 @@ omnibot.watcher module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.webhook\_worker module
 ------------------------------
@@ -63,6 +69,7 @@ omnibot.webhook\_worker module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.wsgi module
 -------------------
@@ -71,7 +78,7 @@ omnibot.wsgi module
    :members:
    :undoc-members:
    :show-inheritance:
-
+   :private-members:
 
 Module contents
 ---------------
@@ -80,3 +87,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

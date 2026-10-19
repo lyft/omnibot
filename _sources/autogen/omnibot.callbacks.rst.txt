@@ -11,6 +11,7 @@ omnibot.callbacks.interactive\_component\_callbacks module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.callbacks.message\_callbacks module
 -------------------------------------------
@@ -19,6 +20,7 @@ omnibot.callbacks.message\_callbacks module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.callbacks.network\_callbacks module
 -------------------------------------------
@@ -27,6 +29,7 @@ omnibot.callbacks.network\_callbacks module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.callbacks.slash\_command\_callbacks module
 --------------------------------------------------
@@ -35,7 +38,7 @@ omnibot.callbacks.slash\_command\_callbacks module
    :members:
    :undoc-members:
    :show-inheritance:
-
+   :private-members:
 
 Module contents
 ---------------
@@ -44,3 +47,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

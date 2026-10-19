@@ -11,6 +11,7 @@ tests.integration.routes.test\_get\_channel module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 tests.integration.routes.test\_get\_ims module
 ----------------------------------------------
@@ -19,6 +20,7 @@ tests.integration.routes.test\_get\_ims module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 tests.integration.routes.test\_get\_team module
 -----------------------------------------------
@@ -27,6 +29,7 @@ tests.integration.routes.test\_get\_team module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 tests.integration.routes.test\_get\_user\_v2 module
 ---------------------------------------------------
@@ -35,6 +38,7 @@ tests.integration.routes.test\_get\_user\_v2 module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 tests.integration.routes.test\_healthcheck module
 -------------------------------------------------
@@ -43,6 +47,7 @@ tests.integration.routes.test\_healthcheck module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 tests.integration.routes.test\_interactive module
 -------------------------------------------------
@@ -51,6 +56,7 @@ tests.integration.routes.test\_interactive module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 tests.integration.routes.test\_send\_im module
 ----------------------------------------------
@@ -59,6 +65,7 @@ tests.integration.routes.test\_send\_im module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 tests.integration.routes.test\_slack\_action module
 ---------------------------------------------------
@@ -67,6 +74,7 @@ tests.integration.routes.test\_slack\_action module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 tests.integration.routes.test\_slack\_event module
 --------------------------------------------------
@@ -75,6 +83,7 @@ tests.integration.routes.test\_slack\_event module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 tests.integration.routes.test\_slash\_command module
 ----------------------------------------------------
@@ -83,7 +92,7 @@ tests.integration.routes.test\_slash\_command module
    :members:
    :undoc-members:
    :show-inheritance:
-
+   :private-members:
 
 Module contents
 ---------------
@@ -92,3 +101,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

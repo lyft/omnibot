@@ -4,6 +4,15 @@ omnibot.services.slack package
 Submodules
 ----------
 
+omnibot.services.slack.base\_message module
+-------------------------------------------
+
+.. automodule:: omnibot.services.slack.base_message
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
 omnibot.services.slack.bot module
 ---------------------------------
 
@@ -11,6 +20,7 @@ omnibot.services.slack.bot module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.services.slack.interactive\_component module
 ----------------------------------------------------
@@ -19,6 +29,7 @@ omnibot.services.slack.interactive\_component module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.services.slack.message module
 -------------------------------------
@@ -27,6 +38,7 @@ omnibot.services.slack.message module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.services.slack.parser module
 ------------------------------------
@@ -35,6 +47,16 @@ omnibot.services.slack.parser module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
+
+omnibot.services.slack.reaction module
+--------------------------------------
+
+.. automodule:: omnibot.services.slack.reaction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
 
 omnibot.services.slack.slash\_command module
 --------------------------------------------
@@ -43,6 +65,7 @@ omnibot.services.slack.slash\_command module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.services.slack.team module
 ----------------------------------
@@ -51,7 +74,7 @@ omnibot.services.slack.team module
    :members:
    :undoc-members:
    :show-inheritance:
-
+   :private-members:
 
 Module contents
 ---------------
@@ -60,3 +83,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

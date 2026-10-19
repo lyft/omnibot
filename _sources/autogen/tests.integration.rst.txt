@@ -5,6 +5,7 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
    tests.integration.routes
 
@@ -18,7 +19,7 @@ tests.integration.conftest module
    :members:
    :undoc-members:
    :show-inheritance:
-
+   :private-members:
 
 Module contents
 ---------------
@@ -27,3 +28,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

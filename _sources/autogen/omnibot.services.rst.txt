@@ -5,6 +5,7 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
    omnibot.services.slack
 
@@ -18,6 +19,7 @@ omnibot.services.omniredis module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.services.sqs module
 ---------------------------
@@ -26,6 +28,7 @@ omnibot.services.sqs module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 omnibot.services.stats module
 -----------------------------
@@ -34,7 +37,7 @@ omnibot.services.stats module
    :members:
    :undoc-members:
    :show-inheritance:
-
+   :private-members:
 
 Module contents
 ---------------
@@ -43,3 +46,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
