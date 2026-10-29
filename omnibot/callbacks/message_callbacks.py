@@ -1,7 +1,6 @@
 """
 Message callbacks for internal omnibot functionality.
 """
-import json
 import random
 
 from omnibot import logging
@@ -17,7 +16,6 @@ def help_callback(container):
     """
     payload = container.payload
     logger.debug("Help callback text: {}".format(payload["text"]))
-    logger.debug(f"Help callback payload: {json.dumps(payload, indent=2)}")
     ret_action = {"action": "chat.postMessage", "kwargs": {"attachments": []}}
     ret = {"actions": [ret_action]}
     command_fields = []
@@ -59,7 +57,6 @@ def specials_callback(container, channels):
     """
     payload = container.payload
     logger.debug("Specials callback text: {}".format(payload["text"]))
-    logger.debug(f"Specials callback payload: {json.dumps(payload, indent=2)}")
 
     fallback_text = "Please don't use {special}"
 
@@ -106,9 +103,6 @@ def specials_callback(container, channels):
 def channel_channel_callback(container):
     payload = container.payload
     logger.debug("Channel channel callback text: {}".format(payload["text"]))
-    logger.debug(
-        f"Channel channel callback payload: {json.dumps(payload, indent=2)}",
-    )
 
     if payload["channel"].get("name_normalized") != "channel-channel":
         return {}
@@ -153,11 +147,6 @@ def channel_channel_callback(container):
 def congratulations_bot_callback(container, channels, emojis, messages):
     payload = container.payload
     logger.debug("Congratulations bot's callback text: {}".format(payload["text"]))
-    logger.debug(
-        "Congratulations bot's callback payload: {}".format(
-            json.dumps(payload, indent=2),
-        ),
-    )
 
     if payload["channel"]["name"] not in channels:
         return {}
@@ -189,7 +178,6 @@ def channel_response_callback(container, channels):
     """
     payload = container.payload
     logger.debug("channel response callback text: {}".format(payload["text"]))
-    logger.debug(f"channel response payload: {json.dumps(payload, indent=2)}")
 
     if not payload["channel"].get("name_normalized"):
         return {}
@@ -244,9 +232,6 @@ def example_topic_callback(container):
     """
     payload = container.payload
     logger.debug("Example topic callback text: {}".format(payload["text"]))
-    logger.debug(
-        f"Example topic callback payload: {json.dumps(payload, indent=2)}",
-    )
     return {
         "actions": [
             {
@@ -263,9 +248,6 @@ def example_attachment_callback(container):
     """
     payload = container.payload
     logger.debug("Example attachment callback text: {}".format(payload["text"]))
-    logger.debug(
-        f"Example attachment callback payload: {json.dumps(payload, indent=2)}",
-    )
     return {
         "actions": [
             {

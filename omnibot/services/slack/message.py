@@ -16,6 +16,8 @@ class Message(BaseMessage):
     def __init__(self, bot: Bot, event: dict, event_trace: dict):
         super().__init__(bot, event, event_trace, "message")
         self._payload["ts"] = event["ts"]
+        if action_token := event.get("action_token"):
+            self._payload["action_token"] = action_token
         self._payload["thread_ts"] = event.get("thread_ts")
         self._payload["parent_user_id"] = event.get("parent_user_id")
         self._payload["sender_bot_id"] = event.get("bot_id")
