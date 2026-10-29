@@ -38,7 +38,9 @@ def process_event(event):
     statsd = stats.get_statsd_client()
     team = Team.get_team_by_id(event["team_id"])
     bot = Bot.get_bot_by_bot_id(team, event["api_app_id"])
-    event_info = event["event"]
+    event_info = dict(event["event"])
+    if action_token := event.get("action_token"):
+        event_info.setdefault("action_token", action_token)
     event_type = event_info["type"]
     event_trace = merge_logging_context(
         {
@@ -54,7 +56,6 @@ def process_event(event):
         _process_reaction_event(bot, event_info, event_trace, event_type)
     else:
         logger.debug("Event is not a message or reaction type.", extra=event_trace)
-        logger.debug(event)
 
 
 def _process_message_event(bot, event_info, event_trace, event_type):
@@ -65,7 +66,7 @@ def _process_message_event(bot, event_info, event_trace, event_type):
     try:
         with statsd.timer("process_event"):
             logger.debug(
-                f"Processing event: {json.dumps(event_info, indent=2)}",
+                "Processing Slack event",
                 extra=event_trace,
             )
             try:
@@ -90,7 +91,7 @@ def _process_reaction_event(bot, event_info, event_trace, event_type):
     try:
         with statsd.timer("process_event"):
             logger.debug(
-                f"Processing event: {json.dumps(event_info, indent=2)}",
+                "Processing Slack event",
                 extra=event_trace,
             )
             try:
