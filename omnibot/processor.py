@@ -4,6 +4,7 @@ Core processing logic.
 import importlib
 import json
 import re
+from copy import copy
 from typing import Any
 from typing import Mapping
 
@@ -114,6 +115,7 @@ def _process_message_message_handlers(message: Message):
     command_matched = False
     handler_called = False
     for handler in bot.message_handlers:
+        forward_action_token = handler.get("forward_action_token") is True
         # We only match replies if the handler is set to match them
         if message.thread_ts and not handler.get("match_reply", False):
             continue
@@ -128,7 +130,11 @@ def _process_message_message_handlers(message: Message):
                 command_matched = True
                 message.set_match("command", handler["match"])
                 for callback in handler["callbacks"]:
-                    _handle_message_callback(message, callback)
+                    _handle_message_callback(
+                        message,
+                        callback,
+                        forward_action_token=forward_action_token,
+                    )
                     handler_called = True
         if handler["match_type"] == "regex":
             match = bool(re.search(handler["match"], message.parsed_text))
@@ -139,7 +145,11 @@ def _process_message_message_handlers(message: Message):
             if match != regex_should_not_match:
                 message.set_match("regex", handler["match"])
                 for callback in handler["callbacks"]:
-                    _handle_message_callback(message, callback)
+                    _handle_message_callback(
+                        message,
+                        callback,
+                        forward_action_token=forward_action_token,
+                    )
                     handler_called = True
     if handler_called:
         statsd.incr("event.handled")
@@ -431,7 +441,14 @@ def _handle_action(action, container, kwargs):
                 )
 
 
-def _handle_message_callback(message: BaseMessage, callback: Mapping[str, Any]):
+def _handle_message_callback(
+    message: BaseMessage,
+    callback: Mapping[str, Any],
+    forward_action_token: bool = False,
+):
+    if forward_action_token and (action_token := message.event.get("action_token")):
+        message = copy(message)
+        message._payload = {**message.payload, "action_token": action_token}
     logger.info(
         'Handling callback for message: match_type="{}" match="{}"'.format(
             message.match_type,

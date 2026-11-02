@@ -8,7 +8,6 @@ from flask import Response  # noqa: F401
 from werkzeug.test import Client
 
 from omnibot import processor
-from omnibot.callbacks.network_callbacks import http_callback
 from omnibot.services.slack.message import Message
 from tests.data import get_mock_data
 from tests.integration.routes import get_test_bot
@@ -215,6 +214,8 @@ def test_event_missing_event_block(
         queue.assert_not_called()
 
 
+@pytest.mark.parametrize("handler_opt_in", [None, False, True])
+@pytest.mark.parametrize("match_type", ["command", "regex"])
 @pytest.mark.parametrize("event_type", ["message", "app_mention"])
 @pytest.mark.parametrize("token_location", [None, "event", "envelope"])
 @pytest.mark.parametrize("thread_ts", [None, "1234567.000001"])
@@ -226,6 +227,8 @@ def test_action_token_reaches_callback_without_being_logged(
     event_type,
     token_location,
     thread_ts,
+    handler_opt_in,
+    match_type,
 ):
     with get_mock_data("event/event_callback_test_message.json") as fixture:
         event = json.load(fixture)
@@ -239,20 +242,41 @@ def test_action_token_reaches_callback_without_being_logged(
     original = json.loads(json.dumps(event))
     sqs = mocker.patch("omnibot.routes.api.sqs.get_client").return_value
     mocker.patch("omnibot.routes.api.sqs.get_queue_url", return_value="test-queue")
+    mocker.patch.object(processor.logger, "info")
     mocker.patch("omnibot.services.slack.get_user", return_value={})
     mocker.patch("omnibot.services.slack.get_channel", return_value={})
-    mocker.patch.object(Message, "_parse_payload")
+
+    def parse_message(message):
+        message._payload.update({"command_text": message.text, "directed": True})
+
+    mocker.patch.object(
+        Message,
+        "_parse_payload",
+        autospec=True,
+        side_effect=parse_message,
+    )
     http = mocker.patch(
         "omnibot.callbacks.network_callbacks._get_requests_session",
     ).return_value
     http.post.return_value.status_code = 200
     http.post.return_value.json.return_value = {}
+    handler = {
+        "match": "",
+        "match_type": match_type,
+        "match_reply": True,
+        "callbacks": [
+            {
+                "module": "omnibot.callbacks.network_callbacks:http_callback",
+                "kwargs": {"request_kwargs": {"url": "https://example.com/callback"}},
+            },
+        ],
+    }
+    if handler_opt_in is not None:
+        handler["forward_action_token"] = handler_opt_in
     mocker.patch(
-        "omnibot.processor._process_message_message_handlers",
-        side_effect=lambda message: http_callback(
-            message,
-            request_kwargs={"url": "https://example.com/callback"},
-        ),
+        "omnibot.services.slack.bot.Bot.message_handlers",
+        new_callable=mocker.PropertyMock,
+        return_value=[handler],
     )
     caplog.set_level("DEBUG")
 
@@ -266,7 +290,7 @@ def test_action_token_reaches_callback_without_being_logged(
     payload = http.post.call_args.kwargs["json"]
     assert payload["event_type"] == event_type
     assert payload["thread_ts"] == thread_ts
-    if token_location is None:
+    if token_location is None or handler_opt_in is not True:
         assert "action_token" not in payload
     else:
         assert payload["action_token"] == action_token
