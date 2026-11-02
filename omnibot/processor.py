@@ -115,10 +115,15 @@ def _process_message_message_handlers(message: Message):
     command_matched = False
     handler_called = False
     for handler in bot.message_handlers:
-        forward_action_token = handler.get("forward_action_token") is True
         # We only match replies if the handler is set to match them
         if message.thread_ts and not handler.get("match_reply", False):
             continue
+        handler_message = message
+        if handler.get("forward_action_token") is True and (
+            action_token := message.event.get("action_token")
+        ):
+            handler_message = copy(message)
+            handler_message._payload = {**message.payload, "action_token": action_token}
         # We only match commands against directed messages
         if handler["match_type"] == "command":
             if not _should_handle_command(handler, message):
@@ -128,13 +133,9 @@ def _process_message_message_handlers(message: Message):
                 continue
             if message.command_text.startswith(handler["match"]):
                 command_matched = True
-                message.set_match("command", handler["match"])
+                handler_message.set_match("command", handler["match"])
                 for callback in handler["callbacks"]:
-                    _handle_message_callback(
-                        message,
-                        callback,
-                        forward_action_token=forward_action_token,
-                    )
+                    _handle_message_callback(handler_message, callback)
                     handler_called = True
         if handler["match_type"] == "regex":
             match = bool(re.search(handler["match"], message.parsed_text))
@@ -143,13 +144,9 @@ def _process_message_message_handlers(message: Message):
             # match. An unmatched regex should callback only if the regex is
             # not supposed to match.
             if match != regex_should_not_match:
-                message.set_match("regex", handler["match"])
+                handler_message.set_match("regex", handler["match"])
                 for callback in handler["callbacks"]:
-                    _handle_message_callback(
-                        message,
-                        callback,
-                        forward_action_token=forward_action_token,
-                    )
+                    _handle_message_callback(handler_message, callback)
                     handler_called = True
     if handler_called:
         statsd.incr("event.handled")
@@ -444,11 +441,7 @@ def _handle_action(action, container, kwargs):
 def _handle_message_callback(
     message: BaseMessage,
     callback: Mapping[str, Any],
-    forward_action_token: bool = False,
 ):
-    if forward_action_token and (action_token := message.event.get("action_token")):
-        message = copy(message)
-        message._payload = {**message.payload, "action_token": action_token}
     logger.info(
         'Handling callback for message: match_type="{}" match="{}"'.format(
             message.match_type,

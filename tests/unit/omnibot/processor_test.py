@@ -29,21 +29,25 @@ def test_action_token_is_isolated_to_each_handler(forward_flags, mocker):
         "action_token": "synthetic-action-token",
     }
     message = Message(bot, event, {})
-    payloads = []
+    messages = []
 
     def receive(container, config):
-        payloads.append(container.payload)
+        messages.append(container)
         return {}
 
     mocker.patch.object(processor, "_handle_callback", side_effect=receive)
 
     processor._process_message_message_handlers(message)
 
-    assert len(payloads) == len(forward_flags) * 2
+    assert len(messages) == len(forward_flags) * 2
     for index, flag in enumerate(forward_flags):
-        for payload in (payloads[index * 2], payloads[index * 2 + 1]):
-            assert ("action_token" in payload) is flag
-            if flag:
-                assert payload["action_token"] == event["action_token"]
+        handler_message = messages[index * 2]
+        assert messages[index * 2 + 1] is handler_message
+        assert (handler_message is not message) is flag
+        assert handler_message.match == "test"
+        assert handler_message.payload["match_type"] == "regex"
+        assert ("action_token" in handler_message.payload) is flag
+        if flag:
+            assert handler_message.payload["action_token"] == event["action_token"]
     assert "action_token" not in message.payload
     assert message.event == event
