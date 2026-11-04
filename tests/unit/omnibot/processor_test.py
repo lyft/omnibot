@@ -1,53 +1,83 @@
+from copy import deepcopy
+
 import pytest
 
 from omnibot import processor
 from omnibot.services.slack.message import Message
 
 
-@pytest.mark.parametrize("forward_flags", [[True, False, True], [False, True, False]])
-def test_action_token_is_isolated_to_each_handler(forward_flags, mocker):
-    mocker.patch.object(processor.logger, "info")
+@pytest.mark.parametrize(
+    "forward_flags",
+    [[True, False, True], [False, True, False], [None, "true", 1]],
+)
+@pytest.mark.parametrize("matched", [False, True])
+@pytest.mark.parametrize("headers", [None, {"X-Existing": "keep"}])
+def test_action_token_header_is_isolated_to_each_handler(
+    forward_flags,
+    matched,
+    headers,
+    mocker,
+):
+    log = mocker.patch.object(processor.logger, "info")
     mocker.patch("omnibot.services.slack.get_user", return_value={})
     mocker.patch("omnibot.services.slack.get_channel", return_value={})
     mocker.patch.object(Message, "_parse_payload")
+    http = mocker.patch(
+        "omnibot.callbacks.network_callbacks._get_requests_session",
+    ).return_value
+    http.post.return_value.status_code = 200
+    http.post.return_value.json.return_value = {}
+    callback = {
+        "module": "omnibot.callbacks.network_callbacks:http_callback",
+        "kwargs": {
+            "request_kwargs": {
+                "url": "https://example.com/callback",
+                "headers": headers,
+            },
+        },
+    }
     bot = mocker.Mock()
-    callback = {"module": "test:callback"}
     bot.message_handlers = [
         {
-            "match": "test",
+            "match": "test" if matched else "does-not-match",
             "match_type": "regex",
             "forward_action_token": flag,
             "callbacks": [callback, callback],
         }
         for flag in forward_flags
     ]
+    original_handlers = deepcopy(bot.message_handlers)
+    mocker.patch.object(processor.settings, "HELP_CALLBACK", {"callback": callback})
     event = {
         "type": "app_mention",
         "text": "test",
         "ts": "1234567.000001",
         "channel": "C123456AB",
-        "action_token": "synthetic-action-token",
     }
     message = Message(bot, event, {})
-    messages = []
+    message._payload["directed"] = True
+    expected_flags = (
+        [flag for flag in forward_flags for _ in range(2)] if matched else [False]
+    )
+    for token in ("synthetic-action-token", "next-synthetic-action-token", None):
+        if token:
+            event["action_token"] = token
+        else:
+            event.pop("action_token")
+        original_event = deepcopy(event)
+        http.post.reset_mock()
 
-    def receive(container, config):
-        messages.append(container)
-        return {}
+        processor._process_message_message_handlers(message)
 
-    mocker.patch.object(processor, "_handle_callback", side_effect=receive)
-
-    processor._process_message_message_handlers(message)
-
-    assert len(messages) == len(forward_flags) * 2
-    for index, flag in enumerate(forward_flags):
-        handler_message = messages[index * 2]
-        assert messages[index * 2 + 1] is handler_message
-        assert (handler_message is not message) is flag
-        assert handler_message.match == "test"
-        assert handler_message.payload["match_type"] == "regex"
-        assert ("action_token" in handler_message.payload) is flag
-        if flag:
-            assert handler_message.payload["action_token"] == event["action_token"]
-    assert "action_token" not in message.payload
-    assert message.event == event
+        assert http.post.call_count == len(expected_flags)
+        for call, flag in zip(http.post.call_args_list, expected_flags):
+            expected_headers = headers
+            if flag is True and token:
+                expected_headers = {**(headers or {}), "X-Slack-Action-Token": token}
+            assert call.kwargs["headers"] == expected_headers
+            assert "action_token" not in call.kwargs["json"]
+        assert message.action_token is None
+        assert "action_token" not in message.payload
+        assert event == original_event
+        assert bot.message_handlers == original_handlers
+    assert "synthetic-action-token" not in repr(log.call_args_list)

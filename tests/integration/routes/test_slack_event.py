@@ -219,7 +219,7 @@ def test_event_missing_event_block(
 @pytest.mark.parametrize("event_type", ["message", "app_mention"])
 @pytest.mark.parametrize("token_location", [None, "event", "envelope"])
 @pytest.mark.parametrize("thread_ts", [None, "1234567.000001"])
-def test_action_token_reaches_callback_without_being_logged(
+def test_action_token_reaches_callback_header_without_being_logged(
     client,
     instrument,
     mocker,
@@ -269,6 +269,7 @@ def test_action_token_reaches_callback_without_being_logged(
                 "module": "omnibot.callbacks.network_callbacks:http_callback",
                 "kwargs": {"request_kwargs": {"url": "https://example.com/callback"}},
             },
+            {"module": "omnibot.callbacks.message_callbacks:channel_channel_callback"},
         ],
     }
     if handler_opt_in is not None:
@@ -290,9 +291,12 @@ def test_action_token_reaches_callback_without_being_logged(
     payload = http.post.call_args.kwargs["json"]
     assert payload["event_type"] == event_type
     assert payload["thread_ts"] == thread_ts
+    assert "action_token" not in payload
+    headers = http.post.call_args.kwargs.get("headers", {})
     if token_location is None or handler_opt_in is not True:
-        assert "action_token" not in payload
+        assert "X-Slack-Action-Token" not in headers
     else:
-        assert payload["action_token"] == action_token
+        assert headers["X-Slack-Action-Token"] == action_token
     assert queued == original
     assert action_token not in caplog.text
+    assert "Channel channel callback payload:" in caplog.text

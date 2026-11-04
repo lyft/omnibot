@@ -114,16 +114,17 @@ def _process_message_message_handlers(message: Message):
     statsd = stats.get_statsd_client()
     command_matched = False
     handler_called = False
+    original_message = message
     for handler in bot.message_handlers:
+        message = original_message
         # We only match replies if the handler is set to match them
         if message.thread_ts and not handler.get("match_reply", False):
             continue
-        handler_message = message
         if handler.get("forward_action_token") is True and (
             action_token := message.event.get("action_token")
         ):
-            handler_message = copy(message)
-            handler_message._payload = {**message.payload, "action_token": action_token}
+            message = copy(message)
+            message.action_token = action_token
         # We only match commands against directed messages
         if handler["match_type"] == "command":
             if not _should_handle_command(handler, message):
@@ -133,9 +134,9 @@ def _process_message_message_handlers(message: Message):
                 continue
             if message.command_text.startswith(handler["match"]):
                 command_matched = True
-                handler_message.set_match("command", handler["match"])
+                message.set_match("command", handler["match"])
                 for callback in handler["callbacks"]:
-                    _handle_message_callback(handler_message, callback)
+                    _handle_message_callback(message, callback)
                     handler_called = True
         if handler["match_type"] == "regex":
             match = bool(re.search(handler["match"], message.parsed_text))
@@ -144,14 +145,14 @@ def _process_message_message_handlers(message: Message):
             # match. An unmatched regex should callback only if the regex is
             # not supposed to match.
             if match != regex_should_not_match:
-                handler_message.set_match("regex", handler["match"])
+                message.set_match("regex", handler["match"])
                 for callback in handler["callbacks"]:
-                    _handle_message_callback(handler_message, callback)
+                    _handle_message_callback(message, callback)
                     handler_called = True
     if handler_called:
         statsd.incr("event.handled")
     elif not handler_called:
-        _handle_help(message)
+        _handle_help(original_message)
 
 
 def _process_reaction_message_handlers(reaction: Reaction):
@@ -438,10 +439,7 @@ def _handle_action(action, container, kwargs):
                 )
 
 
-def _handle_message_callback(
-    message: BaseMessage,
-    callback: Mapping[str, Any],
-):
+def _handle_message_callback(message: BaseMessage, callback: Mapping[str, Any]):
     logger.info(
         'Handling callback for message: match_type="{}" match="{}"'.format(
             message.match_type,
@@ -566,5 +564,18 @@ def _handle_callback(container, callback):
     module = importlib.import_module(module_name)
     function = getattr(module, function_name)
     kwargs = callback.get("kwargs", {})
+    if (action_token := getattr(container, "action_token", None)) and (
+        request_kwargs := kwargs.get("request_kwargs")
+    ) is not None:
+        kwargs = {
+            **kwargs,
+            "request_kwargs": {
+                **request_kwargs,
+                "headers": {
+                    **(request_kwargs.get("headers") or {}),
+                    "X-Slack-Action-Token": action_token,
+                },
+            },
+        }
     response = function(container=container, **kwargs)
     return response

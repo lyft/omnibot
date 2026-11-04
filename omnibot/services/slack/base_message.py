@@ -19,6 +19,7 @@ class BaseMessage:
     ):
         self._event_trace = event_trace
         self.event = event
+        self.action_token = None
         self._match = None
         self._payload = {}
         self._payload["omnibot_payload_type"] = omnibot_payload_type
