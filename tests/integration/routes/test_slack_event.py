@@ -219,7 +219,7 @@ def test_event_missing_event_block(
 @pytest.mark.parametrize("event_type", ["message", "app_mention"])
 @pytest.mark.parametrize("token_location", [None, "event", "envelope"])
 @pytest.mark.parametrize("thread_ts", [None, "1234567.000001"])
-def test_action_token_reaches_callback_header_without_being_logged(
+def test_action_token_reaches_callback_header_without_changing_payload(
     client,
     instrument,
     mocker,
@@ -298,5 +298,12 @@ def test_action_token_reaches_callback_header_without_being_logged(
     else:
         assert headers["X-Slack-Action-Token"] == action_token
     assert queued == original
-    assert action_token not in caplog.text
-    assert "Channel channel callback payload:" in caplog.text
+    payload_logs = [
+        record.getMessage()
+        for record in caplog.records
+        if record.getMessage().startswith("Channel channel callback payload:")
+    ]
+    assert len(payload_logs) == 1
+    assert action_token not in payload_logs[0]
+    assert "Event received in API slack_event:" in caplog.text
+    assert "Processing event:" in caplog.text

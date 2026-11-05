@@ -60,14 +60,10 @@ def test_action_token_header_is_isolated_to_each_handler(
         [flag for flag in forward_flags for _ in range(2)] if matched else [False]
     )
     for token in ("synthetic-action-token", "next-synthetic-action-token", None):
-        if token:
-            event["action_token"] = token
-        else:
-            event.pop("action_token")
         original_event = deepcopy(event)
         http.post.reset_mock()
 
-        processor._process_message_message_handlers(message)
+        processor._process_message_message_handlers(message, action_token=token)
 
         assert http.post.call_count == len(expected_flags)
         for call, flag in zip(http.post.call_args_list, expected_flags):
@@ -76,7 +72,7 @@ def test_action_token_header_is_isolated_to_each_handler(
                 expected_headers = {**(headers or {}), "X-Slack-Action-Token": token}
             assert call.kwargs["headers"] == expected_headers
             assert "action_token" not in call.kwargs["json"]
-        assert message.action_token is None
+        assert not hasattr(message, "action_token")
         assert "action_token" not in message.payload
         assert event == original_event
         assert bot.message_handlers == original_handlers

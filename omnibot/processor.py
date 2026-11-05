@@ -4,7 +4,6 @@ Core processing logic.
 import importlib
 import json
 import re
-from copy import copy
 from typing import Any
 from typing import Mapping
 
@@ -39,9 +38,7 @@ def process_event(event):
     statsd = stats.get_statsd_client()
     team = Team.get_team_by_id(event["team_id"])
     bot = Bot.get_bot_by_bot_id(team, event["api_app_id"])
-    event_info = dict(event["event"])
-    if action_token := event.get("action_token"):
-        event_info.setdefault("action_token", action_token)
+    event_info = event["event"]
     event_type = event_info["type"]
     event_trace = merge_logging_context(
         {
@@ -52,14 +49,21 @@ def process_event(event):
     )
     statsd.incr(f"event.process.attempt.{event_type}")
     if event_type == "message" or event_type == "app_mention":
-        _process_message_event(bot, event_info, event_trace, event_type)
+        _process_message_event(
+            bot,
+            event_info,
+            event_trace,
+            event_type,
+            action_token=event_info.get("action_token", event.get("action_token")),
+        )
     elif event_type == "reaction_added" or event_type == "reaction_removed":
         _process_reaction_event(bot, event_info, event_trace, event_type)
     else:
         logger.debug("Event is not a message or reaction type.", extra=event_trace)
+        logger.debug(event)
 
 
-def _process_message_event(bot, event_info, event_trace, event_type):
+def _process_message_event(bot, event_info, event_trace, event_type, action_token=None):
     """
     Process message or app_mention events.
     """
@@ -67,12 +71,12 @@ def _process_message_event(bot, event_info, event_trace, event_type):
     try:
         with statsd.timer("process_event"):
             logger.debug(
-                "Processing Slack event",
+                f"Processing event: {json.dumps(event_info, indent=2)}",
                 extra=event_trace,
             )
             try:
                 message = Message(bot, event_info, event_trace)
-                _process_message_message_handlers(message)
+                _process_message_message_handlers(message, action_token)
             except MessageUnsupportedError:
                 pass
     except Exception:
@@ -92,7 +96,7 @@ def _process_reaction_event(bot, event_info, event_trace, event_type):
     try:
         with statsd.timer("process_event"):
             logger.debug(
-                "Processing Slack event",
+                f"Processing event: {json.dumps(event_info, indent=2)}",
                 extra=event_trace,
             )
             try:
@@ -109,22 +113,18 @@ def _process_reaction_event(bot, event_info, event_trace, event_type):
         )
 
 
-def _process_message_message_handlers(message: Message):
+def _process_message_message_handlers(message: Message, action_token=None):
     bot = message.bot
     statsd = stats.get_statsd_client()
     command_matched = False
     handler_called = False
-    original_message = message
     for handler in bot.message_handlers:
-        message = original_message
+        handler_action_token = (
+            action_token if handler.get("forward_action_token") is True else None
+        )
         # We only match replies if the handler is set to match them
         if message.thread_ts and not handler.get("match_reply", False):
             continue
-        if handler.get("forward_action_token") is True and (
-            action_token := message.event.get("action_token")
-        ):
-            message = copy(message)
-            message.action_token = action_token
         # We only match commands against directed messages
         if handler["match_type"] == "command":
             if not _should_handle_command(handler, message):
@@ -136,7 +136,7 @@ def _process_message_message_handlers(message: Message):
                 command_matched = True
                 message.set_match("command", handler["match"])
                 for callback in handler["callbacks"]:
-                    _handle_message_callback(message, callback)
+                    _handle_message_callback(message, callback, handler_action_token)
                     handler_called = True
         if handler["match_type"] == "regex":
             match = bool(re.search(handler["match"], message.parsed_text))
@@ -147,12 +147,12 @@ def _process_message_message_handlers(message: Message):
             if match != regex_should_not_match:
                 message.set_match("regex", handler["match"])
                 for callback in handler["callbacks"]:
-                    _handle_message_callback(message, callback)
+                    _handle_message_callback(message, callback, handler_action_token)
                     handler_called = True
     if handler_called:
         statsd.incr("event.handled")
     elif not handler_called:
-        _handle_help(original_message)
+        _handle_help(message)
 
 
 def _process_reaction_message_handlers(reaction: Reaction):
@@ -439,7 +439,11 @@ def _handle_action(action, container, kwargs):
                 )
 
 
-def _handle_message_callback(message: BaseMessage, callback: Mapping[str, Any]):
+def _handle_message_callback(
+    message: BaseMessage,
+    callback: Mapping[str, Any],
+    action_token=None,
+):
     logger.info(
         'Handling callback for message: match_type="{}" match="{}"'.format(
             message.match_type,
@@ -456,7 +460,7 @@ def _handle_message_callback(message: BaseMessage, callback: Mapping[str, Any]):
             },
         },
     )
-    response = _handle_callback(message, callback)
+    response = _handle_callback(message, callback, action_token)
     for action in response.get("actions", []):
         if not isinstance(action, dict):
             logger.error("Action in response is not a dict.", extra=message.event_trace)
@@ -559,14 +563,12 @@ def _handle_interactive_component_callback(component, callback, response_type):
             _handle_action(action["action"], component, action["kwargs"])
 
 
-def _handle_callback(container, callback):
+def _handle_callback(container, callback, action_token=None):
     module_name, function_name = callback["module"].split(":")
     module = importlib.import_module(module_name)
     function = getattr(module, function_name)
     kwargs = callback.get("kwargs", {})
-    if (action_token := getattr(container, "action_token", None)) and (
-        request_kwargs := kwargs.get("request_kwargs")
-    ) is not None:
+    if action_token and (request_kwargs := kwargs.get("request_kwargs")) is not None:
         kwargs = {
             **kwargs,
             "request_kwargs": {
