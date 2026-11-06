@@ -113,6 +113,11 @@ def _process_message_message_handlers(message: Message):
     command_matched = False
     handler_called = False
     for handler in bot.message_handlers:
+        handler_action_token = (
+            message.event.get("action_token")
+            if handler.get("forward_action_token") is True
+            else None
+        )
         # We only match replies if the handler is set to match them
         if message.thread_ts and not handler.get("match_reply", False):
             continue
@@ -127,7 +132,7 @@ def _process_message_message_handlers(message: Message):
                 command_matched = True
                 message.set_match("command", handler["match"])
                 for callback in handler["callbacks"]:
-                    _handle_message_callback(message, callback)
+                    _handle_message_callback(message, callback, handler_action_token)
                     handler_called = True
         if handler["match_type"] == "regex":
             match = bool(re.search(handler["match"], message.parsed_text))
@@ -138,7 +143,7 @@ def _process_message_message_handlers(message: Message):
             if match != regex_should_not_match:
                 message.set_match("regex", handler["match"])
                 for callback in handler["callbacks"]:
-                    _handle_message_callback(message, callback)
+                    _handle_message_callback(message, callback, handler_action_token)
                     handler_called = True
     if handler_called:
         statsd.incr("event.handled")
@@ -430,7 +435,11 @@ def _handle_action(action, container, kwargs):
                 )
 
 
-def _handle_message_callback(message: BaseMessage, callback: Mapping[str, Any]):
+def _handle_message_callback(
+    message: BaseMessage,
+    callback: Mapping[str, Any],
+    action_token=None,
+):
     logger.info(
         'Handling callback for message: match_type="{}" match="{}"'.format(
             message.match_type,
@@ -447,7 +456,7 @@ def _handle_message_callback(message: BaseMessage, callback: Mapping[str, Any]):
             },
         },
     )
-    response = _handle_callback(message, callback)
+    response = _handle_callback(message, callback, action_token)
     for action in response.get("actions", []):
         if not isinstance(action, dict):
             logger.error("Action in response is not a dict.", extra=message.event_trace)
@@ -550,10 +559,21 @@ def _handle_interactive_component_callback(component, callback, response_type):
             _handle_action(action["action"], component, action["kwargs"])
 
 
-def _handle_callback(container, callback):
+def _handle_callback(container, callback, action_token=None):
     module_name, function_name = callback["module"].split(":")
     module = importlib.import_module(module_name)
     function = getattr(module, function_name)
     kwargs = callback.get("kwargs", {})
+    if action_token and (request_kwargs := kwargs.get("request_kwargs")) is not None:
+        kwargs = {
+            **kwargs,
+            "request_kwargs": {
+                **request_kwargs,
+                "headers": {
+                    **(request_kwargs.get("headers") or {}),
+                    "X-Slack-Action-Token": action_token,
+                },
+            },
+        }
     response = function(container=container, **kwargs)
     return response

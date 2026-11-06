@@ -195,6 +195,16 @@ All handler configurations are configured through the omnibot configuration file
 Common Handler Configuration
 ============================
 
+Message handlers can opt in to forwarding Slack's ``action_token`` as the
+``X-Slack-Action-Token`` HTTP header with ``forward_action_token: true``.
+Forwarding is disabled by default and applies only to callbacks with
+``request_kwargs`` in that handler, not to other handlers matching the same
+message. Existing request headers are preserved. The header is omitted when
+Slack does not supply a token. The token is never added to the callback payload.
+Receivers and HTTP infrastructure must treat the header as a credential and
+must not log it.
+
+
 Though omnibot has a number of handler configurations, they're all roughly configurations that route something sent from slack, to a function that handles it. There's some common configuration that defines part of this across all handler types. For example, here's a message handler that is routing messages with the text ``@here`` or ``@channel``, to a built-in callback function:
 
 .. code-block:: yaml
