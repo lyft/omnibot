@@ -293,7 +293,7 @@ def test_action_token_reaches_callback_header_without_changing_payload(
     assert payload["thread_ts"] == thread_ts
     assert "action_token" not in payload
     headers = http.post.call_args.kwargs.get("headers", {})
-    if token_location is None or handler_opt_in is not True:
+    if token_location != "event" or handler_opt_in is not True:
         assert "X-Slack-Action-Token" not in headers
     else:
         assert headers["X-Slack-Action-Token"] == action_token

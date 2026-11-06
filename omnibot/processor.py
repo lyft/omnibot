@@ -49,13 +49,7 @@ def process_event(event):
     )
     statsd.incr(f"event.process.attempt.{event_type}")
     if event_type == "message" or event_type == "app_mention":
-        _process_message_event(
-            bot,
-            event_info,
-            event_trace,
-            event_type,
-            action_token=event_info.get("action_token", event.get("action_token")),
-        )
+        _process_message_event(bot, event_info, event_trace, event_type)
     elif event_type == "reaction_added" or event_type == "reaction_removed":
         _process_reaction_event(bot, event_info, event_trace, event_type)
     else:
@@ -63,7 +57,7 @@ def process_event(event):
         logger.debug(event)
 
 
-def _process_message_event(bot, event_info, event_trace, event_type, action_token=None):
+def _process_message_event(bot, event_info, event_trace, event_type):
     """
     Process message or app_mention events.
     """
@@ -76,7 +70,7 @@ def _process_message_event(bot, event_info, event_trace, event_type, action_toke
             )
             try:
                 message = Message(bot, event_info, event_trace)
-                _process_message_message_handlers(message, action_token)
+                _process_message_message_handlers(message)
             except MessageUnsupportedError:
                 pass
     except Exception:
@@ -113,14 +107,16 @@ def _process_reaction_event(bot, event_info, event_trace, event_type):
         )
 
 
-def _process_message_message_handlers(message: Message, action_token=None):
+def _process_message_message_handlers(message: Message):
     bot = message.bot
     statsd = stats.get_statsd_client()
     command_matched = False
     handler_called = False
     for handler in bot.message_handlers:
         handler_action_token = (
-            action_token if handler.get("forward_action_token") is True else None
+            message.event.get("action_token")
+            if handler.get("forward_action_token") is True
+            else None
         )
         # We only match replies if the handler is set to match them
         if message.thread_ts and not handler.get("match_reply", False):
