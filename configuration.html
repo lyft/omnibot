@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Configuration &mdash; omnibot 1.0.3-15e9d7 documentation</title>
+  <title>Configuration &mdash; omnibot 1.0.3-c7ac67 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="_static/css/omnibot.css" />
 
@@ -39,7 +39,7 @@
               <img src="_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.0.3-15e9d7
+                1.0.3-c7ac67
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -420,6 +420,14 @@
 <p>All handler configurations are configured through the omnibot configuration file.</p>
 <section id="common-handler-configuration">
 <h3>Common Handler Configuration<a class="headerlink" href="#common-handler-configuration" title="Permalink to this heading">¶</a></h3>
+<p>Message handlers can opt in to forwarding Slack’s <code class="docutils literal notranslate"><span class="pre">action_token</span></code> as the
+<code class="docutils literal notranslate"><span class="pre">X-Slack-Action-Token</span></code> HTTP header with <code class="docutils literal notranslate"><span class="pre">forward_action_token:</span> <span class="pre">true</span></code>.
+Forwarding is disabled by default and applies only to callbacks with
+<code class="docutils literal notranslate"><span class="pre">request_kwargs</span></code> in that handler, not to other handlers matching the same
+message. Existing request headers are preserved. The header is omitted when
+Slack does not supply a token. The token is never added to the callback payload.
+Receivers and HTTP infrastructure must treat the header as a credential and
+must not log it.</p>
 <p>Though omnibot has a number of handler configurations, they’re all roughly configurations that route something sent from slack, to a function that handles it. There’s some common configuration that defines part of this across all handler types. For example, here’s a message handler that is routing messages with the text <code class="docutils literal notranslate"><span class="pre">&#64;here</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;channel</span></code>, to a built-in callback function:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">message_handlers</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="s">".*(@here|@channel).*"</span>

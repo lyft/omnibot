@@ -13,6 +13,15 @@ Subpackages
 Submodules
 ----------
 
+tests.unit.omnibot.processor\_test module
+-----------------------------------------
+
+.. automodule:: tests.unit.omnibot.processor_test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
 tests.unit.omnibot.settings\_test module
 ----------------------------------------
 
