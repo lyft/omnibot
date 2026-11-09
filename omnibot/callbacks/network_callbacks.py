@@ -1,9 +1,14 @@
+import json
+
 import requests
+from botocore.exceptions import BotoCoreError
+from botocore.exceptions import ClientError
 from requests.adapters import HTTPAdapter
 from requests.exceptions import RequestException
 from requests.packages.urllib3.util.retry import Retry
 
 from omnibot import logging
+from omnibot.services import get_boto_client
 
 logger = logging.getLogger(__name__)
 
@@ -62,3 +67,57 @@ def http_callback(container, request_kwargs=None, client_kwargs=None):
             extra=container.event_trace,
         )
     return response.json()
+
+
+def lambda_callback(container, request_kwargs=None, client_kwargs=None):
+    if client_kwargs is None:
+        client_kwargs = {}
+    if request_kwargs is None:
+        logger.error(
+            "lambda_callback called without request_kwargs",
+            extra=container.event_trace,
+        )
+        return {}
+
+    function_name = request_kwargs.get("FunctionName")
+    kwargs = dict(request_kwargs)
+    kwargs["Payload"] = json.dumps(container.payload).encode("utf-8")
+
+    try:
+        client = get_boto_client("lambda", **client_kwargs)
+        if client is None:
+            return {}
+        response = client.invoke(**kwargs)
+    except (BotoCoreError, ClientError) as e:
+        logger.error(
+            f"Failed to invoke Lambda function {function_name}: {str(e)}",
+            extra=container.event_trace,
+        )
+        return {}
+
+    payload = response.get("Payload")
+    if response.get("FunctionError"):
+        logger.error(
+            f"Lambda function {function_name} failed: {response['FunctionError']}",
+            extra=container.event_trace,
+        )
+        return {}
+    if payload is None:
+        return {}
+
+    try:
+        result = json.loads(payload.read())
+    except (BotoCoreError, TypeError, ValueError) as e:
+        logger.error(
+            f"Lambda function {function_name} returned invalid JSON: {str(e)}",
+            extra=container.event_trace,
+        )
+        return {}
+
+    if not isinstance(result, dict):
+        logger.error(
+            f"Lambda function {function_name} returned a non-dictionary response",
+            extra=container.event_trace,
+        )
+        return {}
+    return result

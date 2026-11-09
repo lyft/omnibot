@@ -68,6 +68,26 @@ Callbacks are part of a handler configuration. When a handler is matched, the de
 
 The handler config specifies the callback module, and the function within the module in format ``path.to.module:function_name``. The config also has a mechanism to pass keyword arguments into the function, from the configuration. In this particular case, the configuration is passing a dictionary into the ``request_kwargs`` keyword argument.
 
+AWS Lambda callbacks
+====================
+
+The built-in Lambda callback sends the handler payload to an AWS Lambda
+function. The function should return the same callback dictionary that an
+in-process or HTTP callback would return::
+
+    callbacks:
+      - module: "omnibot.callbacks.network_callbacks:lambda_callback"
+        kwargs:
+          client_kwargs:
+            region: "us-east-1"
+          request_kwargs:
+            FunctionName: "eventbot"
+
+The Omnibot process needs ``lambda:InvokeFunction`` permission for the target
+function. Invocations use Lambda's synchronous ``RequestResponse`` mode by
+default. Set ``InvocationType`` to ``Event`` in ``request_kwargs`` for an
+asynchronous invocation that does not return callback actions.
+
 A callback is just a function within a python module, which requires a positional argument, which is by convention named ``container``, and can accept any keyword arguments you'd like to define, which are passed in from the configuration.
 
 Callback functions should always return a dictionary. The return format is dependent on the type of handler, and is defined in the :doc:`slack proxying documentation <slack_proxying>`.
