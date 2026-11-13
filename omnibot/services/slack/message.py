@@ -70,10 +70,13 @@ class Message(BaseMessage):
     def _is_allowed_bot_message(self):
         if not self.bot_id or self.subtype not in (None, "bot_message"):
             return False
+        allowed = self.bot.allowed_bot_messages
         channel = self.event.get("channel")
-        if not any(
-            allowed_bot in (self.bot_id, "*") and allowed_channel in (channel, "*")
-            for allowed_bot, allowed_channel in self.bot.allowed_bot_messages
+        if not (
+            (self.bot_id, channel) in allowed
+            or ("*", channel) in allowed
+            or (self.bot_id, "*") in allowed
+            or ("*", "*") in allowed
         ):
             return False
         # Never handle the receiving bot's own messages, to avoid loops.
