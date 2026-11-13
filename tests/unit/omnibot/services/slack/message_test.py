@@ -214,3 +214,47 @@ def test_allowed_bot_message(mocker, settings_override):
     event_copy["user"] = "USLACKBOT"
     with pytest.raises(MessageUnsupportedError):
         Message(_bot, event_copy, event_trace)
+
+
+@pytest.mark.parametrize(
+    ("entry", "bot_id", "channel", "allowed"),
+    [
+        ({"bot_id": "*", "channel": "C123456AB"}, "B87654321", "C123456AB", True),
+        ({"bot_id": "*", "channel": "C123456AB"}, "B87654321", "C999999ZZ", False),
+        ({"bot_id": "B12345678", "channel": "*"}, "B12345678", "C999999ZZ", True),
+        ({"bot_id": "B12345678", "channel": "*"}, "B87654321", "C999999ZZ", False),
+        ({"bot_id": "*", "channel": "*"}, "B87654321", "C999999ZZ", True),
+        ({"bot_id": "*", "channel": "*"}, "BSELF0000", "C999999ZZ", False),
+    ],
+)
+def test_allowed_bot_message_wildcard(
+    mocker,
+    settings_override,
+    entry,
+    bot_id,
+    channel,
+    allowed,
+):
+    settings_override(ALLOWED_BOT_MESSAGES={"testteam": {"echobot": [entry]}})
+    _team = Team.get_team_by_name("testteam")
+    _bot = Bot.get_bot_by_name(_team, "echobot")
+    mocker.patch("omnibot.services.slack.get_user").return_value = {}
+    mocker.patch("omnibot.services.slack.get_channel").return_value = {}
+    mocker.patch(
+        "omnibot.services.slack.get_bot_info",
+    ).side_effect = lambda bot, sender: {
+        "app_id": _bot.bot_id if sender == "BSELF0000" else "A00000000",
+    }
+    event = {
+        "ts": "1234567.12",
+        "bot_id": bot_id,
+        "subtype": "bot_message",
+        "text": "Deploy failed",
+        "channel": channel,
+    }
+
+    if allowed:
+        assert Message(_bot, event, {}).bot_id == bot_id
+    else:
+        with pytest.raises(MessageUnsupportedError):
+            Message(_bot, event, {})
