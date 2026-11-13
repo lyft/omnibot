@@ -71,12 +71,10 @@ class Message(BaseMessage):
         if not self.bot_id or self.subtype not in (None, "bot_message"):
             return False
         channel = self.event.get("channel")
-        senders = {
-            (bot_id, channel_id)
-            for bot_id in (self.bot_id, "*")
-            for channel_id in (channel, "*")
-        }
-        if not senders & self.bot.allowed_bot_messages:
+        if not any(
+            allowed_bot in (self.bot_id, "*") and allowed_channel in (channel, "*")
+            for allowed_bot, allowed_channel in self.bot.allowed_bot_messages
+        ):
             return False
         # Never handle the receiving bot's own messages, to avoid loops.
         bot_info = slack.get_bot_info(self.bot, self.bot_id)
