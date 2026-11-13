@@ -117,7 +117,7 @@ By default, omnibot ignores messages from other bots, and any message with a sub
         - bot_id: "B1234ABCD"
           channel: "C1234ABCD"
 
-Set either field to ``"*"`` to match any bot or any channel. A bot that applies its own gates can accept plain messages from every bot in every channel it is in. The receiving bot never handles its own messages:
+Set either field to ``"*"`` to match any bot or any channel. A bot that applies its own gates can accept plain messages from every bot in every channel it is in. Even with ``"*"``, omnibot drops the messages that the receiving bot posts itself, so the bot never answers its own replies:
 
 .. code-block:: yaml
 
